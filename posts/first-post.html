@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your First Blog Post Title - Sonnet Xu</title>
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 650px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .site-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .site-title {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .site-title a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: var(--link-color);
+        }
+
+        /* Article */
+        article {
+            margin-bottom: 60px;
+        }
+
+        .article-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .article-title {
+            font-size: 36px;
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .article-meta {
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Article Content */
+        .article-content p {
+            margin-bottom: 25px;
+        }
+
+        .article-content h2 {
+            font-size: 28px;
+            font-weight: normal;
+            margin: 40px 0 20px;
+            letter-spacing: -0.3px;
+        }
+
+        .article-content h3 {
+            font-size: 22px;
+            font-weight: normal;
+            margin: 30px 0 15px;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 0 0 25px 30px;
+        }
+
+        .article-content li {
+            margin-bottom: 8px;
+        }
+
+        .article-content blockquote {
+            margin: 30px 0;
+            padding-left: 25px;
+            border-left: 3px solid var(--border-color);
+            color: #666;
+            font-style: italic;
+        }
+
+        .article-content a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .article-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            border-radius: 3px;
+        }
+
+        .article-content pre {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 30px auto;
+        }
+
+        /* Article Footer */
+        .article-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .share {
+            margin-bottom: 30px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            .article-title {
+                font-size: 28px;
+            }
+
+            .article-content h2 {
+                font-size: 24px;
+            }
+
+            .article-content h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <h1 class="site-title"><a href="../index.html">← Sonnet Xu</a></h1>
+        </header>
+
+        <article>
+            <header class="article-header">
+                <h1 class="article-title">Your First Blog Post Title</h1>
+                <div class="article-meta">
+                    <time>December 15, 2025</time> · 5 min read
+                </div>
+            </header>
+
+            <div class="article-content">
+                <p>
+                    This is the opening paragraph of your blog post. It should draw the reader in and give them a reason to continue reading. A good opening sets the tone for the entire piece and establishes what the reader can expect to learn or discover.
+                </p>
+
+                <p>
+                    The beauty of minimalist design is that it puts your words front and center. There are no distracting sidebars, no flashy graphics, no complicated navigation. Just your thoughts, presented clearly and elegantly.
+                </p>
+
+                <h2>A Section Heading</h2>
+
+                <p>
+                    When you need to break up your content into sections, use headings sparingly but effectively. They serve as signposts for your readers, helping them navigate through your ideas.
+                </p>
+
+                <p>
+                    You might want to include a meaningful quote:
+                </p>
+
+                <blockquote>
+                    "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away." — Antoine de Saint-Exupéry
+                </blockquote>
+
+                <p>
+                    This philosophy applies not just to design, but to writing as well. Every word should earn its place on the page.
+                </p>
+
+                <h2>Lists and Structure</h2>
+
+                <p>
+                    Sometimes you need to present information in a structured way. Here are the key principles of minimalist blogging:
+                </p>
+
+                <ul>
+                    <li>Focus on content quality over quantity</li>
+                    <li>Use simple, clean typography</li>
+                    <li>Maintain generous white space</li>
+                    <li>Eliminate unnecessary elements</li>
+                    <li>Prioritize readability above all else</li>
+                </ul>
+
+                <p>
+                    When you're writing code or technical content, you can include formatted code blocks:
+                </p>
+
+                <pre><code>function writeBlogPost() {
+    const ideas = gatherThoughts();
+    const outline = createStructure(ideas);
+    const draft = write(outline);
+    return edit(draft);
+}</code></pre>
+
+                <h2>Conclusion</h2>
+
+                <p>
+                    A good conclusion doesn't just summarize what you've said—it leaves the reader with something to think about. It might pose a question, suggest an action, or simply offer a final thought that resonates.
+                </p>
+
+                <p>
+                    Remember: in minimalist design, every element serves a purpose. The same should be true of your words.
+                </p>
+            </div>
+
+            <footer class="article-footer">
+                <div class="share">
+                    <p>If you enjoyed this post, consider sharing it with others who might find it valuable.</p>
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="../index.html">← Back to Home</a>
+                    <a href="second-post.html">Next Post →</a>
+                </nav>
+            </footer>
+        </article>
+
+        <footer>
+            <p>&copy; 2025 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

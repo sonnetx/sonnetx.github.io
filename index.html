@@ -1,8 +1,225 @@
 <!DOCTYPE html>
-<html>
-  <header>
-  </header>
-  <body>
-    <p> Hi! </p>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonnet Xu</title>
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 650px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: normal;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            color: #666;
+            font-style: italic;
+            font-size: 16px;
+        }
+
+        /* Navigation */
+        nav {
+            margin: 40px 0 60px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--link-color);
+        }
+
+        /* Post List */
+        .post-list {
+            margin-bottom: 60px;
+        }
+
+        .post-item {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-date {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .post-title {
+            font-size: 24px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .post-title a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .post-title a:hover {
+            color: var(--link-color);
+        }
+
+        .post-excerpt {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .post-title {
+                font-size: 20px;
+            }
+
+            nav ul {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sonnet Xu</h1>
+            <!-- <p class="tagline">Brief description or tagline</p> -->
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- <div class="post-list">
+                <article class="post-item">
+                    <div class="post-date">December 15, 2025</div>
+                    <h2 class="post-title">
+                        <a href="posts/first-post.html">Your First Blog Post Title</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        This is a brief excerpt from your blog post. It should give readers a taste of what the full article is about, encouraging them to click through and read more. Keep it concise but engaging.
+                    </p>
+                    <a href="posts/first-post.html" class="read-more">Continue reading →</a>
+                </article>
+
+                <article class="post-item">
+                    <div class="post-date">December 10, 2025</div>
+                    <h2 class="post-title">
+                        <a href="posts/second-post.html">Another Interesting Article</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        Here's another excerpt that introduces a different topic. The clean, minimalist design keeps the focus on your writing, making it easy for readers to engage with your ideas without distraction.
+                    </p>
+                    <a href="posts/second-post.html" class="read-more">Continue reading →</a>
+                </article>
+
+                <article class="post-item">
+                    <div class="post-date">December 5, 2025</div>
+                    <h2 class="post-title">
+                        <a href="posts/third-post.html">Thoughts on Writing</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        Writing is thinking. To write well is to think clearly. That's why it's so hard. This post explores the relationship between clear writing and clear thinking, and why both are essential skills to develop.
+                    </p>
+                    <a href="posts/third-post.html" class="read-more">Continue reading →</a>
+                </article>
+            </div> -->
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>
