@@ -9,7 +9,7 @@
             --text-color: #333;
             --link-color: #0066cc;
             --border-color: #e0e0e0;
-            --max-width: 650px;
+            --max-width: 900px;
         }
 
         * {
@@ -32,104 +32,224 @@
             margin: 0 auto;
         }
 
-        /* Header */
-        header {
-            margin-bottom: 60px;
-            text-align: center;
+        /* Two-column layout */
+        .two-col {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
         }
 
-        h1 {
-            font-size: 32px;
+        .left-col {
+            width: 220px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 40px;
+        }
+
+        .right-col {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Left column */
+        .left-col h1 {
+            font-size: 28px;
             font-weight: normal;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
             letter-spacing: -0.5px;
         }
 
-        .tagline {
+        .left-col .affiliation {
             color: #666;
-            font-style: italic;
-            font-size: 16px;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-bottom: 20px;
         }
 
-        /* Navigation */
-        nav {
-            margin: 40px 0 60px;
-            padding: 20px 0;
-            border-top: 1px solid var(--border-color);
+        .bio {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .bio a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .bio a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .contact-links {
+            list-style: none;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-bottom: 25px;
+        }
+
+        .contact-links li {
+            margin-bottom: 8px;
+        }
+
+        .contact-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .contact-links a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .left-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        nav a {
+        .left-nav a {
+            display: inline-block;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
             text-decoration: none;
-            font-size: 16px;
-            transition: color 0.2s;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: border-color 0.2s, color 0.2s;
         }
 
-        nav a:hover {
+        .left-nav a:hover {
             color: var(--link-color);
+            border-color: var(--link-color);
         }
 
-        /* Post List */
-        .post-list {
-            margin-bottom: 60px;
-        }
-
-        .post-item {
-            margin-bottom: 40px;
-            padding-bottom: 40px;
+        /* Section headings */
+        .section-title {
+            font-size: 14px;
+            font-weight: normal;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
         }
 
-        .post-item:last-child {
-            border-bottom: none;
+        /* Research entries */
+        .research-section {
+            margin-bottom: 50px;
         }
 
-        .post-date {
-            color: #999;
+        .research-entry {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .research-entry:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .research-title {
+            font-size: 19px;
+            font-weight: normal;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+
+        .research-authors {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+        }
+
+        .research-venue {
             font-size: 14px;
-            margin-bottom: 8px;
+            color: #999;
+            margin-bottom: 10px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        .post-title {
-            font-size: 24px;
-            margin-bottom: 12px;
-            line-height: 1.3;
+        .research-venue em {
+            font-style: italic;
         }
 
-        .post-title a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.2s;
+        .research-links {
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        .post-title a:hover {
+        .research-links a {
             color: var(--link-color);
+            text-decoration: none;
+            margin-right: 15px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
         }
 
-        .post-excerpt {
-            color: #555;
-            line-height: 1.7;
+        .research-links a:hover {
+            border-bottom-color: var(--link-color);
         }
 
-        .read-more {
-            display: inline-block;
+        .see-all {
             margin-top: 10px;
-            color: var(--link-color);
-            text-decoration: none;
             font-size: 16px;
         }
 
-        .read-more:hover {
+        .see-all a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .see-all a:hover {
             text-decoration: underline;
+        }
+
+        /* Highlights */
+        .highlights {
+            margin-bottom: 50px;
+        }
+
+        .highlight-list {
+            list-style: none;
+        }
+
+        .highlight-list li {
+            margin-bottom: 12px;
+            padding-left: 0;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .highlight-date {
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-right: 10px;
+        }
+
+        .highlight-list a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .highlight-list a:hover {
+            border-bottom-color: var(--link-color);
         }
 
         /* Footer */
@@ -144,81 +264,118 @@
         }
 
         /* Responsive */
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             body {
                 font-size: 16px;
                 padding: 20px 15px;
             }
 
-            h1 {
-                font-size: 28px;
+            .two-col {
+                flex-direction: column;
+                gap: 40px;
             }
 
-            .post-title {
-                font-size: 20px;
+            .left-col {
+                width: 100%;
+                position: static;
             }
 
-            nav ul {
-                gap: 20px;
+            .left-col h1 {
+                font-size: 26px;
+            }
+
+            .research-title {
+                font-size: 17px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Sonnet Xu</h1>
-            <!-- <p class="tagline">Brief description or tagline</p> -->
-        </header>
+        <div class="two-col">
+            <aside class="left-col">
+                <h1>Sonnet Xu</h1>
+                <p class="affiliation">Stanford University</p>
 
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="archive.html">Archive</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
+                <div class="left-nav">
+                    <a href="research.html">Research</a>
+                    <a href="blog.html">Blog</a>
+                </div>
 
-        <main>
-            <!-- <div class="post-list">
-                <article class="post-item">
-                    <div class="post-date">December 15, 2025</div>
-                    <h2 class="post-title">
-                        <a href="posts/first-post.html">Your First Blog Post Title</a>
-                    </h2>
-                    <p class="post-excerpt">
-                        This is a brief excerpt from your blog post. It should give readers a taste of what the full article is about, encouraging them to click through and read more. Keep it concise but engaging.
-                    </p>
-                    <a href="posts/first-post.html" class="read-more">Continue reading →</a>
-                </article>
+                <p class="bio">
+                    I'm an undergraduate studying computer science and math, advised by <a href="https://cs.stanford.edu/~sanmi/" target="_blank">Sanmi Koyejo</a>. I'm an active member of the <a href="https://daneshjoulab.com" target="_blank">Daneshjou Lab</a>.
+                </p>
+                <p class="bio">
+                    My research interests include LLM measurement science, fairness, explainability, and interpretability. My engineering interests lie in ML infrastructure and distributed systems.
+                </p>
 
-                <article class="post-item">
-                    <div class="post-date">December 10, 2025</div>
-                    <h2 class="post-title">
-                        <a href="posts/second-post.html">Another Interesting Article</a>
-                    </h2>
-                    <p class="post-excerpt">
-                        Here's another excerpt that introduces a different topic. The clean, minimalist design keeps the focus on your writing, making it easy for readers to engage with your ideas without distraction.
-                    </p>
-                    <a href="posts/second-post.html" class="read-more">Continue reading →</a>
-                </article>
+                <ul class="contact-links">
+                    <li><a href="mailto:sonnet@stanford.edu">Email</a></li>
+                    <li><a href="https://github.com/sonnetx" target="_blank">GitHub</a></li>
+                    <li><a href="https://x.com/sonnet_xu" target="_blank">Twitter</a></li>
+                    <li><a href="https://linkedin.com/in/sonnetxu" target="_blank">LinkedIn</a></li>
+                    <li><a href="https://scholar.google.com/citations?user=nslBVGoAAAAJ" target="_blank">Google Scholar</a></li>
+                </ul>
+            </aside>
 
-                <article class="post-item">
-                    <div class="post-date">December 5, 2025</div>
-                    <h2 class="post-title">
-                        <a href="posts/third-post.html">Thoughts on Writing</a>
-                    </h2>
-                    <p class="post-excerpt">
-                        Writing is thinking. To write well is to think clearly. That's why it's so hard. This post explores the relationship between clear writing and clear thinking, and why both are essential skills to develop.
-                    </p>
-                    <a href="posts/third-post.html" class="read-more">Continue reading →</a>
-                </article>
-            </div> -->
-        </main>
+            <main class="right-col">
+                <section class="research-section">
+                    <h2 class="section-title">Selected Research</h2>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">BiasICL: In-Context Learning and Demographic Biases of Vision Language Models</h3>
+                        <p class="research-authors"><strong>S Xu</strong>, JD Janizek, Y Jiang, R Daneshjou</p>
+                        <p class="research-venue"><em>MICCAI</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://arxiv.org/abs/2503.02334" target="_blank">Paper</a>
+                            <a href="https://github.com/DaneshjouLab/BiasICL" target="_blank">Code</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Ethical Obligations to Inform Patients About Use of AI Tools</h3>
+                        <p class="research-authors">MM Mello, D Char, <strong>SH Xu</strong></p>
+                        <p class="research-venue"><em>JAMA</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://jamanetwork.com/journals/jama/fullarticle/2836687" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">SycEval: Evaluating LLM Sycophancy</h3>
+                        <p class="research-authors">A Fanous, J Goldberg, A Agarwal, J Lin, A Zhou, <strong>S Xu</strong>, V Bikia, et al.</p>
+                        <p class="research-venue"><em>AAAI/ACM Conference on AI, Ethics, and Society</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://ojs.aaai.org/index.php/AIES/article/view/36598" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <p class="see-all"><a href="research.html">View all publications &rarr;</a></p>
+                </section>
+
+                <section class="highlights">
+                    <h2 class="section-title">Experience</h2>
+                    <ul class="highlight-list">
+                        <li><span class="highlight-date">2026</span> ML Engineering Intern, <strong>DatologyAI</strong> &mdash; distributed dataloading and ML infrastructure</li>
+                        <li><span class="highlight-date">2025</span> LLM Guardrails SDE Intern, <strong>Amazon</strong> &mdash; Rufus LLM shopping assistant</li>
+                        <li><span class="highlight-date">2025</span> ZK Research Engineering, <strong>Nethermind</strong> &mdash; post-quantum signature schemes</li>
+                        <li><span class="highlight-date">2024</span> Student Research Fellow, <strong>Hoover Institution</strong> &mdash; technology policy and patent analysis</li>
+                    </ul>
+                </section>
+
+                <section class="highlights">
+                    <h2 class="section-title">Projects</h2>
+                    <ul class="highlight-list">
+                        <li><span class="highlight-date">2025</span> <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">TreeTrash</a> &mdash; TreeHacks 2025 OpenAI Winner</li>
+                        <li><span class="highlight-date">2023</span> <a href="https://github.com/sonnetx/PlastiVis" target="_blank">PlastiVis</a> &mdash; IEEE VIS 2023 Award Winner</li>
+                        <li><span class="highlight-date">2023</span> <a href="https://github.com/sonnetx/ai-for-design" target="_blank">Generative AI for Urban Design</a> &mdash; Google Summer of Code</li>
+                    </ul>
+                </section>
+            </main>
+        </div>
 
         <footer>
-            <p>&copy; 2025 Sonnet Xu. All rights reserved.</p>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
         </footer>
     </div>
 </body>

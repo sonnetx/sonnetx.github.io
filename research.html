@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research - Sonnet Xu</title>
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 650px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .site-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .site-title {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .site-title a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: var(--link-color);
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .research-intro {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .scholar-link {
+            font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-bottom: 40px;
+        }
+
+        .scholar-link a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .scholar-link a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        /* Section headings */
+        .section-title {
+            font-size: 14px;
+            font-weight: normal;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .research-section {
+            margin-bottom: 50px;
+        }
+
+        /* Research entries */
+        .research-entry {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .research-entry:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .research-title {
+            font-size: 19px;
+            font-weight: normal;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+
+        .research-authors {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+        }
+
+        .research-venue {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .research-venue em {
+            font-style: italic;
+        }
+
+        .research-links {
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .research-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            margin-right: 15px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .research-links a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        /* Earlier work */
+        .earlier-work {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .earlier-work a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .earlier-work a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .research-title {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <h1 class="site-title"><a href="index.html">&larr; Sonnet Xu</a></h1>
+        </header>
+
+        <main>
+            <h1 class="page-title">Research</h1>
+
+            <div class="content">
+                <p class="scholar-link">
+                    <a href="https://scholar.google.com/citations?user=nslBVGoAAAAJ" target="_blank">Google Scholar profile &rarr;</a>
+                </p>
+
+                <section class="research-section">
+                    <h2 class="section-title">Published</h2>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">BiasICL: In-Context Learning and Demographic Biases of Vision Language Models</h3>
+                        <p class="research-authors"><strong>S Xu</strong>, JD Janizek, Y Jiang, R Daneshjou</p>
+                        <p class="research-venue"><em>MICCAI</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://arxiv.org/abs/2503.02334" target="_blank">Paper</a>
+                            <a href="https://github.com/DaneshjouLab/BiasICL" target="_blank">Code</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Ethical Obligations to Inform Patients About AI Tool Use</h3>
+                        <p class="research-authors">MM Mello, D Char, <strong>SH Xu</strong></p>
+                        <p class="research-venue"><em>JAMA</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://jamanetwork.com/journals/jama/fullarticle/2836687" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">SycEval: Evaluating LLM Sycophancy</h3>
+                        <p class="research-authors">A Fanous, J Goldberg, A Agarwal, J Lin, A Zhou, <strong>S Xu</strong>, V Bikia, et al.</p>
+                        <p class="research-venue"><em>AAAI/ACM Conference on AI, Ethics, and Society</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://ojs.aaai.org/index.php/AIES/article/view/36598" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Automating Pharmacogenomic Annotation: Leveraging Schema Constrained GPT-4 for Variant-Drug Data Extraction</h3>
+                        <p class="research-authors">A Fanous, Z Ansari, <strong>S Xu</strong>, C Thorn, R Daneshjou, T Klein</p>
+                        <p class="research-venue"><em>Genetics in Medicine Open</em>, 2025</p>
+                        <p class="research-links">
+                            <a href="https://www.sciencedirect.com/science/article/pii/S2949774425002328" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">A Framework for Evaluating the Efficacy of Foundation Embedding Models in Healthcare</h3>
+                        <p class="research-authors"><strong>S Xu</strong>, H Gui, V Rotemberg, T Wang, YT Chen, R Daneshjou</p>
+                        <p class="research-venue"><em>medRxiv</em>, 2024</p>
+                        <p class="research-links">
+                            <a href="https://www.medrxiv.org/content/10.1101/2024.04.17.24305983v1" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Directing Generalist Vision-Language Models to Interpret Medical Images Across Populations</h3>
+                        <p class="research-authors">LW Sagers, A Shah, <strong>S Xu</strong>, R Daneshjou, AK Manrai</p>
+                        <p class="research-venue"><em>NeurIPS GenAI for Health Workshop</em>, 2024</p>
+                        <p class="research-links">
+                            <a href="https://openreview.net/forum?id=cO5E57hnfi" target="_blank">Paper</a>
+                        </p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">DREAM: A Framework for Discovering Mechanisms Underlying AI Prediction of Protected Attributes</h3>
+                        <p class="research-authors">SU Gadgil, AJ DeGrave, JD Janizek, <strong>S Xu</strong>, L Nwandu, F Fonjungo, S Lee, R Daneshjou</p>
+                        <p class="research-venue">2024</p>
+                        <p class="research-links">
+                            <a href="https://www.medrxiv.org/content/10.1101/2024.04.09.24305289v2" target="_blank">Paper</a>
+                        </p>
+                    </article>
+                </section>
+
+                <!-- <section class="research-section">
+                    <h2 class="section-title">In Progress</h2>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Automatic Visual Concept Rankings for Large Multimodal Models</h3>
+                        <p class="research-authors">JD Janizek, <strong>S Xu</strong>, J Lateef, R Daneshjou</p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Monopath DAGs: Structuring Patient Trajectories from Clinical Case Reports</h3>
+                        <p class="research-authors">A Zhou, A Fanous, V Bikia, <strong>S Xu</strong>, et al.</p>
+                    </article>
+
+                    <article class="research-entry">
+                        <h3 class="research-title">Finetuning Pretrained Models for Compressed Dermatology Image Analysis</h3>
+                        <p class="research-authors"><strong>S Xu</strong>, E Cui, A Fanous, V Bikia</p>
+                    </article>
+                </section> -->
+
+                <section class="research-section">
+                    <h2 class="section-title">Earlier Work</h2>
+                    <p class="earlier-work">
+                        I started research in high school, where I'm extremely grateful to my mentors for inspiring an enduring love for research. I worked on a smattering of projects, but most notably ML for the environment and ML in biomedical engineering, specifically work on mangrove ecosystem recovery using satellite remote sensing (AGU 2022) and microarray-format digital ELISA biosensor development (Biosensors and Bioelectronics, 2023).
+                    </p>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
