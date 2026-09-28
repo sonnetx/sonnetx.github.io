@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing - Sonnet Xu</title>
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 650px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .site-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .site-title {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .site-title a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: var(--link-color);
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .intro {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .intro a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .intro a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .writing-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: normal;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-note {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 18px;
+        }
+
+        .archive-list {
+            list-style: none;
+        }
+
+        .archive-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .archive-date {
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-width: 80px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .archive-link {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .archive-link:hover {
+            color: var(--link-color);
+        }
+
+        .archive-meta {
+            display: block;
+            font-size: 14px;
+            color: #999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .see-all {
+            font-size: 16px;
+        }
+
+        .see-all a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .see-all a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .archive-item {
+                flex-direction: column;
+            }
+
+            .archive-date {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <h1 class="site-title"><a href="index.html">&larr; Sonnet Xu</a></h1>
+        </header>
+
+        <main>
+            <h1 class="page-title">Writing</h1>
+
+            <p class="intro">
+                Perspectives on AI in medicine, and essays, columns, and reviews for <a href="https://stanforddaily.com/author/sonnetxu1/" target="_blank">The Stanford Daily</a>.
+            </p>
+
+            <section class="writing-section">
+                <h2 class="section-title">Perspectives</h2>
+                <ul class="archive-list">
+                    <li class="archive-item">
+                        <span class="archive-date">Jan 2026</span>
+                        <div>
+                            <a href="https://jamanetwork.com/journals/jama/fullarticle/2841782" target="_blank" class="archive-link">Informing Patients About Use of AI Tools: Reply</a>
+                            <span class="archive-meta"><em>JAMA</em> &middot; with Michelle M. Mello and Danton Char</span>
+                        </div>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">Sep 2025</span>
+                        <div>
+                            <a href="https://jamanetwork.com/journals/jama/fullarticle/2836687" target="_blank" class="archive-link">Ethical Obligations to Inform Patients About Use of AI Tools</a>
+                            <span class="archive-meta"><em>JAMA</em> &middot; with Michelle M. Mello and Danton Char</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="writing-section">
+                <h2 class="section-title">Essays</h2>
+                <ul class="archive-list">
+                    <li class="archive-item">
+                        <span class="archive-date">Oct 2025</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2025/10/23/dear-class-of-1975/" target="_blank" class="archive-link">Dear Class of 1975</a>
+                            <span class="archive-meta">The Stanford Daily &middot; The Grind</span>
+                        </div>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">Apr 2025</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2025/04/08/the-architecture-of-growth/" target="_blank" class="archive-link">The architecture of growth</a>
+                            <span class="archive-meta">The Stanford Daily &middot; The Grind</span>
+                        </div>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">Apr 2024</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2024/04/25/letter-to-an-incoming-cs-student/" target="_blank" class="archive-link">Letter to an incoming CS student</a>
+                            <span class="archive-meta">The Stanford Daily &middot; The Grind</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="writing-section">
+                <h2 class="section-title">TTYL Column</h2>
+                <p class="section-note">Text to Your Life, a column in The Grind on classic books whose messages still apply today.</p>
+                <ul class="archive-list">
+                    <li class="archive-item">
+                        <span class="archive-date">May 2024</span>
+                        <a href="https://stanforddaily.com/2024/05/30/ttyl-what-the-giver-gives/" target="_blank" class="archive-link">What &lsquo;The Giver&rsquo; gives</a>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">May 2024</span>
+                        <a href="https://stanforddaily.com/2024/05/07/ttyl-glory-and-gilgamesh/" target="_blank" class="archive-link">Glory and Gilgamesh</a>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">Apr 2024</span>
+                        <a href="https://stanforddaily.com/2024/04/04/ttyl-machiavelli-today/" target="_blank" class="archive-link">Machiavelli today</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="writing-section">
+                <h2 class="section-title">Food</h2>
+                <ul class="archive-list">
+                    <li class="archive-item">
+                        <span class="archive-date">Nov 2024</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2024/11/05/hummus-mediterranean-kitchen-cooks-up-bold-flavors/" target="_blank" class="archive-link">Hummus Mediterranean Kitchen cooks up bold flavors and thoughtful craftsmanship</a>
+                            <span class="archive-meta">The Stanford Daily &middot; Arts &amp; Life</span>
+                        </div>
+                    </li>
+                    <li class="archive-item">
+                        <span class="archive-date">May 2024</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2024/05/29/rating-coho-sweet-treats/" target="_blank" class="archive-link">Rating CoHo sweet treats</a>
+                            <span class="archive-meta">The Stanford Daily &middot; Arts &amp; Life</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="writing-section">
+                <h2 class="section-title">Reporting</h2>
+                <ul class="archive-list">
+                    <li class="archive-item">
+                        <span class="archive-date">Mar 2024</span>
+                        <div>
+                            <a href="https://stanforddaily.com/2024/03/13/spotlighting-humanities-research/" target="_blank" class="archive-link">Students spring into humanities research over break</a>
+                            <span class="archive-meta">The Stanford Daily &middot; Arts &amp; Life</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <p class="see-all"><a href="https://stanforddaily.com/author/sonnetxu1/" target="_blank">All my Stanford Daily pieces &rarr;</a></p>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
