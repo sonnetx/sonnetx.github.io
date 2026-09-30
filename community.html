@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Sonnet Xu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #fbf8f1;
+            --ink: #3f3a34;
+            --ink-soft: #7a6f63;
+            --sage: #6e9460;
+            --sage-deep: #557a4a;
+            --leaf: #8db27c;
+            --blush: #f4b3c2;
+            --butter: #f6d57f;
+            --link-color: #557a4a;
+            --max-width: 880px;
+            --hand: 'Caveat', 'Bradley Hand', 'Segoe Print', cursive;
+            --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--paper);
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--ink);
+            background:
+                radial-gradient(900px 500px at 0% 0%, rgba(173, 204, 156, 0.22), transparent 70%),
+                radial-gradient(800px 500px at 100% 12%, rgba(244, 179, 194, 0.18), transparent 70%),
+                radial-gradient(900px 600px at 50% 100%, rgba(246, 213, 127, 0.14), transparent 70%),
+                var(--paper);
+            padding: 32px 20px 40px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* Back link */
+        .site-header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .site-title {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .site-title a {
+            color: var(--ink);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .site-title a:hover {
+            color: var(--sage-deep);
+        }
+
+        /* Garland and side vines (drawn by the script at the bottom) */
+        .garland {
+            display: block;
+            width: 100%;
+            height: 150px;
+            margin-top: -6px;
+            overflow: visible;
+        }
+
+        .side-vines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .side-vines svg {
+            position: absolute;
+            top: 0;
+            overflow: visible;
+        }
+
+        .stem {
+            fill: none;
+            stroke: var(--sage);
+            stroke-width: 2.6;
+            stroke-linecap: round;
+        }
+
+        .stem.thin {
+            stroke: #8aae78;
+            stroke-width: 1.5;
+        }
+
+        .bud {
+            transform: scale(0);
+            transform-origin: 0 0;
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .bud.on {
+            transform: scale(1);
+        }
+
+        .instant .bud {
+            transition: none;
+        }
+
+        /* Title */
+        .page-title {
+            font-family: var(--display);
+            font-size: 64px;
+            font-weight: 400;
+            font-style: italic;
+            font-variation-settings: 'SOFT' 100, 'WONK' 1;
+            line-height: 1;
+            text-align: center;
+            color: var(--sage-deep);
+            margin-top: -34px;
+            letter-spacing: -0.5px;
+        }
+
+        .flourish {
+            display: block;
+            width: 220px;
+            height: 40px;
+            margin: 6px auto 60px;
+            overflow: visible;
+        }
+
+        /* Sections */
+        .photo-section {
+            margin-bottom: 72px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: var(--display);
+            font-size: 30px;
+            font-weight: 400;
+            font-variation-settings: 'SOFT' 100, 'WONK' 0;
+            color: var(--ink);
+            margin-bottom: 36px;
+            text-align: center;
+        }
+
+        .section-title svg {
+            width: 44px;
+            height: 22px;
+            flex-shrink: 0;
+            overflow: visible;
+        }
+
+        .section-title svg:last-child {
+            transform: scaleX(-1);
+        }
+
+        /* Polaroids */
+        /* Photos wrap in rows of three; a short last row sits centered. */
+        .wall {
+            --cols: 3;
+            --gap: 34px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 44px var(--gap);
+            padding: 0 6px;
+        }
+
+        .wall > * {
+            flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+            min-width: 0;
+        }
+
+        .wall > .wide {
+            flex-basis: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) * 2 + var(--gap));
+        }
+
+        .snap {
+            --tilt: -2deg;
+            position: relative;
+            background: #fffdf8;
+            padding: 12px 12px 4px;
+            border-radius: 3px;
+            box-shadow:
+                0 1px 2px rgba(63, 58, 52, 0.08),
+                0 8px 22px -8px rgba(85, 122, 74, 0.28);
+            transform: rotate(var(--tilt));
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s;
+        }
+
+        .snap:nth-child(6n+2) { --tilt: 1.6deg; }
+        .snap:nth-child(6n+3) { --tilt: -0.8deg; }
+        .snap:nth-child(6n+4) { --tilt: 2.2deg; }
+        .snap:nth-child(6n+5) { --tilt: -1.6deg; }
+        .snap:nth-child(6n+6) { --tilt: 0.9deg; }
+
+        .snap:hover {
+            transform: rotate(0deg) translateY(-6px) scale(1.02);
+            box-shadow:
+                0 2px 4px rgba(63, 58, 52, 0.08),
+                0 18px 34px -10px rgba(85, 122, 74, 0.38);
+            z-index: 3;
+        }
+
+        .snap.has-photo {
+            cursor: zoom-in;
+        }
+
+        .snap:focus-visible {
+            outline: 2px dashed var(--sage);
+            outline-offset: 6px;
+        }
+
+        .snap .photo {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            background: #eef2e6;
+        }
+
+        .snap figcaption {
+            font-family: var(--hand);
+            font-size: 23px;
+            line-height: 1.15;
+            color: var(--ink);
+            text-align: center;
+            padding: 10px 4px 10px;
+        }
+
+        .snap figcaption small {
+            display: block;
+            font-size: 18px;
+            color: var(--ink-soft);
+        }
+
+        /* Tape and sprigs (added by the script) */
+        .tape {
+            position: absolute;
+            top: -13px;
+            left: 50%;
+            width: 88px;
+            height: 26px;
+            transform: translateX(-50%) rotate(-3deg);
+            background:
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0 6px, transparent 6px 12px),
+                var(--tape, rgba(163, 196, 144, 0.62));
+            clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
+            pointer-events: none;
+        }
+
+        .tape.blush { --tape: rgba(244, 179, 194, 0.62); transform: translateX(-50%) rotate(4deg); }
+        .tape.butter { --tape: rgba(246, 213, 127, 0.62); transform: translateX(-50%) rotate(-5deg); }
+
+        .sprig {
+            position: absolute;
+            width: 84px;
+            height: 84px;
+            overflow: visible;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .sprig.br { right: -26px; bottom: 30px; transform: rotate(8deg); }
+        .sprig.tl { left: -28px; top: -24px; transform: rotate(-100deg) scaleY(-1); }
+        .sprig.tr { right: -28px; top: -22px; transform: rotate(-12deg) scaleX(-1) rotate(-60deg); }
+
+        .snap:hover .sprig.br { transform: rotate(16deg) scale(1.06); }
+        .snap:hover .sprig.tl { transform: rotate(-92deg) scaleY(-1) scale(1.06); }
+        .snap:hover .sprig.tr { transform: rotate(-12deg) scaleX(-1) rotate(-68deg) scale(1.06); }
+
+        /* Stacks: photos from one event, flipped through in place */
+        .stack {
+            display: grid;
+            grid-template-columns: 100%;
+            justify-items: center;
+            align-items: center;
+            touch-action: pan-y;
+            border-radius: 6px;
+        }
+
+        .stack:focus-visible {
+            outline: 2px dashed var(--sage);
+            outline-offset: 10px;
+        }
+
+        .stack > .snap,
+        .stack > .snap:hover {
+            grid-area: 1 / 1;
+            width: calc(var(--w, 1) * 100%);
+            cursor: pointer;
+            z-index: var(--z, 1);
+            transform: translate(var(--x, 0px), var(--y, 0px)) rotate(var(--r, 0deg));
+            transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.35s;
+        }
+
+        .stack > .snap[data-pos="0"] { --r: -1.5deg; --z: 5; }
+        .stack > .snap[data-pos="1"] { --r: 4.5deg; --x: 10px; --y: 6px; --z: 4; }
+        .stack > .snap[data-pos="2"] { --r: -5deg; --x: -12px; --y: 8px; --z: 3; }
+        .stack > .snap[data-pos="3"],
+        .stack > .snap[data-pos="deep"] { --r: 7deg; --x: 14px; --y: 10px; --z: 2; }
+
+        .stack:hover > .snap[data-pos="0"] { --r: -0.5deg; --y: -5px; }
+        .stack:hover > .snap[data-pos="1"] { --r: 8deg; --x: 26px; --y: 4px; }
+        .stack:hover > .snap[data-pos="2"] { --r: -9deg; --x: -28px; --y: 8px; }
+
+        .stack > .snap .sprig {
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stack > .snap[data-pos="0"] .sprig {
+            opacity: 1;
+        }
+
+        .stack > .snap figcaption {
+            transition: opacity 0.25s;
+        }
+
+        .stack > .snap:not([data-pos="0"]) figcaption {
+            opacity: 0;
+        }
+
+        .stack > .snap.tossed {
+            transition: transform 0.24s ease-in;
+        }
+
+        .stack > .snap.tossed.right { --x: 68%; --y: -4%; --r: 13deg; }
+        .stack > .snap.tossed.left { --x: -68%; --y: -4%; --r: -13deg; }
+
+        .stack-controls {
+            grid-area: 2 / 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 6;
+        }
+
+        .stack-btn {
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(110, 148, 96, 0.45);
+            background: #fffdf8;
+            color: var(--sage-deep);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .stack-btn:hover {
+            background: #eef4e8;
+            transform: scale(1.08);
+        }
+
+        .stack-btn:focus-visible {
+            outline: 2px dashed var(--sage);
+            outline-offset: 2px;
+        }
+
+        .lightbox:focus {
+            outline: none;
+        }
+
+        .stack-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .stack-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .stack-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(110, 148, 96, 0.3);
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .stack-dots span.on {
+            background: #e98a9b;
+            transform: scale(1.3);
+        }
+
+        .stack-label {
+            grid-area: 3 / 1;
+            font-family: var(--hand);
+            font-size: 25px;
+            line-height: 1.15;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .stack-label small {
+            display: block;
+            font-size: 19px;
+            color: var(--ink-soft);
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
+
+        /* Program cards */
+        .programs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px 30px;
+            list-style: none;
+        }
+
+        .program {
+            --tilt: 1.2deg;
+            position: relative;
+            width: 250px;
+            padding: 22px 18px 20px;
+            text-align: center;
+            background: #fffdf8;
+            border-radius: 14px;
+            box-shadow:
+                0 1px 2px rgba(63, 58, 52, 0.08),
+                0 8px 22px -8px rgba(85, 122, 74, 0.28);
+            transform: rotate(var(--tilt));
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s;
+        }
+
+        .program::before {
+            content: '';
+            position: absolute;
+            inset: 7px;
+            border: 1.5px dashed rgba(141, 178, 124, 0.45);
+            border-radius: 9px;
+            pointer-events: none;
+        }
+
+        .program:nth-child(5n+2) { --tilt: -1.6deg; }
+        .program:nth-child(5n+3) { --tilt: 0.6deg; }
+        .program:nth-child(5n+4) { --tilt: -0.9deg; }
+        .program:nth-child(5n+5) { --tilt: 1.8deg; }
+
+        .program:hover {
+            transform: rotate(0deg) translateY(-5px);
+            box-shadow:
+                0 2px 4px rgba(63, 58, 52, 0.08),
+                0 16px 30px -10px rgba(85, 122, 74, 0.36);
+        }
+
+        .program svg {
+            display: block;
+            width: 120px;
+            height: 84px;
+            margin: 0 auto 10px;
+            overflow: visible;
+        }
+
+        .program h3 {
+            font-family: var(--display);
+            font-size: 22px;
+            font-weight: 400;
+            font-variation-settings: 'SOFT' 100, 'WONK' 0;
+            line-height: 1.2;
+            color: var(--ink);
+        }
+
+        .program p {
+            font-family: var(--hand);
+            font-size: 20px;
+            line-height: 1.2;
+            color: var(--ink-soft);
+            margin-top: 6px;
+        }
+
+        /* Section divider */
+        .divider {
+            display: block;
+            width: 180px;
+            height: 34px;
+            margin: -24px auto 64px;
+            overflow: visible;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            border: none;
+            padding: 16px 16px 6px;
+            background: #fffdf8;
+            border-radius: 4px;
+            max-width: min(92vw, 900px);
+            max-height: 92vh;
+            margin: auto;
+            box-shadow: 0 30px 60px -20px rgba(63, 58, 52, 0.45);
+            cursor: zoom-out;
+        }
+
+        .lightbox::backdrop {
+            background: rgba(246, 240, 228, 0.78);
+            backdrop-filter: blur(6px);
+        }
+
+        .lightbox img {
+            display: block;
+            max-width: 100%;
+            max-height: calc(92vh - 90px);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .lightbox p {
+            font-family: var(--hand);
+            font-size: 26px;
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .lightbox .stack-btn {
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -38px;
+            background: rgba(255, 253, 248, 0.9);
+            box-shadow: 0 4px 14px -6px rgba(63, 58, 52, 0.4);
+        }
+
+        .lightbox .stack-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .lightbox .prev { left: 24px; }
+        .lightbox .next { right: 24px; }
+
+        .lightbox:not(.gallery) .stack-btn {
+            display: none;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            text-align: center;
+            color: #a39889;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        footer svg {
+            display: block;
+            width: 28px;
+            height: 28px;
+            margin: 0 auto 12px;
+            overflow: visible;
+        }
+
+        @media (max-width: 820px) {
+            .wall {
+                --cols: 2;
+                --gap: 28px;
+                row-gap: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 16px 32px;
+            }
+
+            .garland {
+                height: 120px;
+            }
+
+            .page-title {
+                font-size: 50px;
+                margin-top: -26px;
+            }
+
+            .flourish {
+                margin-bottom: 44px;
+            }
+
+            .section-title {
+                font-size: 25px;
+            }
+
+            .wall {
+                --gap: 18px;
+                row-gap: 30px;
+                padding: 0;
+            }
+
+            .snap {
+                padding: 8px 8px 2px;
+            }
+
+            .snap figcaption {
+                font-size: 19px;
+                padding: 6px 2px 8px;
+            }
+
+            .snap figcaption small {
+                font-size: 16px;
+            }
+
+            .sprig {
+                width: 60px;
+                height: 60px;
+            }
+
+            .sprig.br { right: -16px; }
+            .sprig.tl { left: -18px; top: -18px; }
+            .sprig.tr { right: -18px; top: -16px; }
+        }
+
+        @media (max-width: 480px) {
+            .wall {
+                --cols: 1;
+                row-gap: 34px;
+                padding: 0 10px;
+            }
+
+            .wall > .wide {
+                flex-basis: 100%;
+            }
+
+            .snap figcaption {
+                font-size: 22px;
+            }
+
+            .programs {
+                gap: 18px 16px;
+            }
+
+            .program {
+                width: calc(50% - 8px);
+                padding: 16px 10px 14px;
+            }
+
+            .program svg {
+                width: 88px;
+                height: 62px;
+                margin-bottom: 6px;
+            }
+
+            .program h3 {
+                font-size: 17px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bud,
+            .snap,
+            .sprig {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Shared shapes for the vines, sprigs and dividers -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <g id="leaf">
+                <path d="M0,0 C5,-8 15,-10 24,0 C15,10 5,8 0,0Z"/>
+                <path d="M1.5,0 Q12,-1 21,0" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-linecap="round"/>
+            </g>
+            <g id="bloom">
+                <g>
+                    <ellipse cy="-5.6" rx="3.9" ry="5.6"/>
+                    <ellipse cy="-5.6" rx="3.9" ry="5.6" transform="rotate(72)"/>
+                    <ellipse cy="-5.6" rx="3.9" ry="5.6" transform="rotate(144)"/>
+                    <ellipse cy="-5.6" rx="3.9" ry="5.6" transform="rotate(216)"/>
+                    <ellipse cy="-5.6" rx="3.9" ry="5.6" transform="rotate(288)"/>
+                </g>
+                <circle r="2.7" fill="#f6d57f"/>
+                <circle r="1.1" cx="-0.6" cy="-0.6" fill="#fff6d8"/>
+            </g>
+            <g id="sprig">
+                <path d="M6,78 C18,60 30,48 44,40 C56,33 66,24 72,10" fill="none" stroke="#6e9460" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M58,31 C64,34 70,40 70,46" fill="none" stroke="#8aae78" stroke-width="1.4" stroke-linecap="round"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(20,60) rotate(-100) scale(0.95)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(30,50) rotate(10) scale(0.9)"/>
+                <use href="#leaf" fill="#79a268" transform="translate(48,38) rotate(-120) scale(0.85)"/>
+                <use href="#leaf" fill="#b5d1a2" transform="translate(58,30) rotate(-10) scale(0.8)"/>
+                <use href="#bloom" fill="#f4b3c2" transform="translate(72,10) scale(1.15)"/>
+                <use href="#bloom" fill="#f7c9d4" transform="translate(70,48) scale(0.7)"/>
+            </g>
+            <g id="twig">
+                <path d="M2,11 C12,11 24,9 42,4" fill="none" stroke="#6e9460" stroke-width="2" stroke-linecap="round"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(14,10.4) rotate(-58) scale(0.62)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(24,9) rotate(40) scale(0.58)"/>
+                <use href="#leaf" fill="#79a268" transform="translate(32,7) rotate(-50) scale(0.55)"/>
+                <use href="#bloom" fill="#f4b3c2" transform="translate(42,4) scale(0.8)"/>
+            </g>
+        </defs>
+    </svg>
+
+    <div class="side-vines" aria-hidden="true"></div>
+
+    <div class="container">
+        <header class="site-header">
+            <h1 class="site-title"><a href="index.html">&larr; Sonnet Xu</a></h1>
+        </header>
+
+        <svg class="garland" aria-hidden="true" focusable="false"></svg>
+
+        <main>
+            <h1 class="page-title">Community</h1>
+            <svg class="flourish" viewBox="0 0 220 40" aria-hidden="true" focusable="false">
+                <path d="M10,22 C40,34 70,8 100,20" fill="none" stroke="#6e9460" stroke-width="2" stroke-linecap="round"/>
+                <path d="M210,22 C180,34 150,8 120,20" fill="none" stroke="#6e9460" stroke-width="2" stroke-linecap="round"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(36,26) rotate(-70) scale(0.6)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(64,18) rotate(40) scale(0.55)"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(184,26) rotate(250) scale(0.6)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(156,18) rotate(140) scale(0.55)"/>
+                <circle cx="10" cy="22" r="2.6" fill="#e98a9b"/>
+                <circle cx="210" cy="22" r="2.6" fill="#e98a9b"/>
+                <use href="#bloom" fill="#f4b3c2" transform="translate(110,20) scale(1.25)"/>
+            </svg>
+
+            <section class="photo-section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                    Stanford
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                </h2>
+                <!-- Add a <p> under any name for a one-line note, e.g. your role. -->
+                <ul class="programs">
+                    <li class="program">
+                        <svg viewBox="0 0 120 84" aria-hidden="true" focusable="false">
+                            <path class="stem" d="M60,80 C58,62 46,44 40,28"/>
+                            <path class="stem" d="M60,80 C60,60 60,40 60,18"/>
+                            <path class="stem" d="M60,80 C62,62 74,44 80,28"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(50,50) rotate(-150) scale(0.75)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(70,50) rotate(-30) scale(0.75)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(60,40) rotate(-115) scale(0.6)"/>
+                            <use href="#bloom" fill="#f4b3c2" transform="translate(40,26) scale(1.3)"/>
+                            <use href="#bloom" fill="#e9a6b9" transform="translate(80,26) scale(1.3)"/>
+                            <use href="#bloom" fill="#f7c9d4" transform="translate(60,16) scale(1.45)"/>
+                            <path d="M60,64 C50,55 45,68 60,66 C75,68 70,55 60,64Z" fill="#f6d57f"/>
+                            <path d="M60,66 L54,77 M60,66 L66,77" stroke="#f6d57f" stroke-width="2.4" stroke-linecap="round"/>
+                        </svg>
+                        <h3>Grad Crew</h3>
+                    </li>
+                    <li class="program">
+                        <svg viewBox="0 0 120 84" aria-hidden="true" focusable="false">
+                            <circle class="stem" cx="60" cy="42" r="28"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(88,42) rotate(115) scale(0.6)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(84.2,56) rotate(95) scale(0.6)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(74,66.2) rotate(175) scale(0.6)"/>
+                            <use href="#leaf" fill="#b5d1a2" transform="translate(46,66.2) rotate(235) scale(0.6)"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(35.8,56) rotate(215) scale(0.6)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(32,42) rotate(295) scale(0.6)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(35.8,28) rotate(275) scale(0.6)"/>
+                            <use href="#leaf" fill="#b5d1a2" transform="translate(46,17.8) rotate(355) scale(0.6)"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(60,14) rotate(335) scale(0.6)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(74,17.8) rotate(55) scale(0.6)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(84.2,28) rotate(35) scale(0.6)"/>
+                            <use href="#bloom" fill="#f4b3c2" transform="translate(79.8,22.2) scale(1.05)"/>
+                            <use href="#bloom" fill="#d9c6ee" transform="translate(40.2,22.2) scale(1.05)"/>
+                            <circle cx="88" cy="46" r="2.5" fill="#e98a9b"/>
+                            <circle cx="32" cy="46" r="2.5" fill="#e98a9b"/>
+                            <path d="M60,70 C50,62 45,75 60,72 C75,75 70,62 60,70Z" fill="#f6d57f"/>
+                            <path d="M60,72 L55,82 M60,72 L65,82" stroke="#f6d57f" stroke-width="2.4" stroke-linecap="round"/>
+                        </svg>
+                        <h3>Alumni Reunion</h3>
+                    </li>
+                    <li class="program">
+                        <svg viewBox="0 0 120 84" aria-hidden="true" focusable="false">
+                            <path class="stem" d="M60,55 C60,46 59,38 60,27"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(60,37) rotate(-155) scale(0.95)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(60,33) rotate(-25) scale(0.95)"/>
+                            <circle cx="60" cy="25" r="3.2" fill="#f4b3c2"/>
+                            <path d="M44,58 L76,58 L72,81 L48,81Z" fill="#e8a987"/>
+                            <rect x="41" y="53" width="38" height="8" rx="2.5" fill="#efbb9d"/>
+                            <circle cx="54.5" cy="68" r="1.5" fill="#3f3a34"/>
+                            <circle cx="65.5" cy="68" r="1.5" fill="#3f3a34"/>
+                            <path d="M57,71.5 Q60,74.5 63,71.5" fill="none" stroke="#3f3a34" stroke-width="1.3" stroke-linecap="round"/>
+                            <ellipse cx="51" cy="71.5" rx="2.4" ry="1.4" fill="#f4b3c2"/>
+                            <ellipse cx="69" cy="71.5" rx="2.4" ry="1.4" fill="#f4b3c2"/>
+                            <path d="M84,26 l1.6,4 4,1.6 -4,1.6 -1.6,4 -1.6,-4 -4,-1.6 4,-1.6Z" fill="#f6d57f"/>
+                            <path d="M36,36 l1.1,2.8 2.8,1.1 -2.8,1.1 -1.1,2.8 -1.1,-2.8 -2.8,-1.1 2.8,-1.1Z" fill="#f6d57f"/>
+                        </svg>
+                        <h3>New Student Orientation</h3>
+                    </li>
+                    <li class="program">
+                        <svg viewBox="0 0 120 84" aria-hidden="true" focusable="false">
+                            <path class="stem" d="M36,82 C34,62 42,42 52,28"/>
+                            <path class="stem" d="M84,82 C86,62 78,42 68,28"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(37,62) rotate(-160) scale(0.8)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(40,50) rotate(-60) scale(0.6)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(83,62) rotate(-20) scale(0.8)"/>
+                            <use href="#leaf" fill="#b5d1a2" transform="translate(80,50) rotate(-120) scale(0.6)"/>
+                            <use href="#bloom" fill="#f4b3c2" transform="translate(51,25) scale(1.35)"/>
+                            <use href="#bloom" fill="#d9c6ee" transform="translate(69,25) scale(1.35)"/>
+                        </svg>
+                        <h3>Civic Disagreement</h3>
+                    </li>
+                    <li class="program">
+                        <svg viewBox="0 0 120 84" aria-hidden="true" focusable="false">
+                            <path class="stem" d="M20,74 C44,60 70,42 98,18"/>
+                            <use href="#leaf" fill="#6f9960" transform="translate(34,66) rotate(-95) scale(0.75)"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(36,65) rotate(15) scale(0.75)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(50,57) rotate(-100) scale(0.75)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(52,56) rotate(10) scale(0.75)"/>
+                            <use href="#leaf" fill="#6f9960" transform="translate(65,47) rotate(-105) scale(0.7)"/>
+                            <use href="#leaf" fill="#8db27c" transform="translate(67,46) rotate(5) scale(0.7)"/>
+                            <use href="#leaf" fill="#79a268" transform="translate(80,35) rotate(-110) scale(0.65)"/>
+                            <use href="#leaf" fill="#a3c490" transform="translate(82,34) rotate(0) scale(0.65)"/>
+                            <circle cx="100" cy="16" r="2.8" fill="#e98a9b"/>
+                            <circle cx="95" cy="12" r="2.3" fill="#e98a9b"/>
+                            <circle cx="103" cy="21" r="2.1" fill="#f09aaa"/>
+                        </svg>
+                        <h3>Structured Liberal Education</h3>
+                    </li>
+                </ul>
+            </section>
+
+            <svg class="divider" viewBox="0 0 180 34" aria-hidden="true" focusable="false">
+                <path d="M8,17 C40,4 60,30 90,17 C120,4 140,30 172,17" fill="none" stroke="#8aae78" stroke-width="1.8" stroke-linecap="round"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(38,12) rotate(-60) scale(0.55)"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(58,22) rotate(60) scale(0.55)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(122,12) rotate(-60) scale(0.55)"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(142,22) rotate(60) scale(0.55)"/>
+                <use href="#bloom" fill="#f7c9d4" transform="translate(90,17)"/>
+            </svg>
+
+            <!--
+                To add a photo, save it in photos/ (about 1600px on the long side) and add
+                <figure class="snap"><img class="photo" src="photos/name.jpg" width="W" height="H" alt="Short description" loading="lazy"><figcaption>Caption<small>Date</small></figcaption></figure>
+                Add class "wide" to span two columns. Tape and sprigs are added automatically.
+                For several photos from one event, wrap their figures in <div class="stack"> and
+                end it with <p class="stack-label">Event<small>Date</small></p>. The stack flips
+                on click, swipe or the arrow buttons.
+            -->
+
+            <section class="photo-section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                    Dinners
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                </h2>
+                <div class="wall">
+                    <figure class="snap">
+                        <img class="photo" src="photos/dinner-group.jpg" width="1280" height="853" alt="About a dozen people posing together in a dimly lit restaurant" loading="lazy">
+                        <figcaption>Compute dinner<small>September 2026</small></figcaption>
+                    </figure>
+                    <div class="stack">
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-table.jpg" width="900" height="1200" alt="A long table set with white linens, flowers and handwritten menus in a red dining room" loading="lazy">
+                            <figcaption>The table</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-arrivals.jpg" width="1200" height="900" alt="Guests talking under a chandelier in a red dining room" loading="lazy">
+                            <figcaption>Before dinner</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-menu.jpg" width="1200" height="900" alt="A place setting with flowers and a handwritten menu dated August 17, 2026" loading="lazy">
+                            <figcaption>The menu</figcaption>
+                        </figure>
+                        <p class="stack-label">Compute dinner<small>August 2026</small></p>
+                    </div>
+                    <div class="stack">
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-3.jpg" width="1600" height="1200" alt="A long table of guests talking in a restaurant with wood paneling and pendant lights" loading="lazy">
+                            <figcaption>Around the table</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-2.jpg" width="1200" height="1600" alt="A printed dinner menu at a place setting on a wooden table" loading="lazy">
+                            <figcaption>The menu</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-1.jpg" width="1200" height="1600" alt="Jamun makhan malai in a glass dessert bowl beside the menu" loading="lazy">
+                            <figcaption>Dessert</figcaption>
+                        </figure>
+                        <p class="stack-label">Blockchain dinner<small>July 2026</small></p>
+                    </div>
+                    <figure class="snap">
+                        <img class="photo" src="photos/dinner-appetizers.jpg" width="1200" height="900" alt="Skewers, croquettes and toasts laid out on a kitchen counter" loading="lazy">
+                        <figcaption>Spanish supper</figcaption>
+                    </figure>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <svg viewBox="-14 -14 28 28" aria-hidden="true" focusable="false">
+                <use href="#bloom" fill="#f4b3c2" transform="scale(1.6)"/>
+            </svg>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <dialog class="lightbox" aria-label="Photo" tabindex="-1">
+        <img alt="">
+        <p></p>
+        <button class="stack-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 16 16"><path d="M10 3 5 8l5 5"/></svg></button>
+        <button class="stack-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 16 16"><path d="m6 3 5 5-5 5"/></svg></button>
+    </dialog>
+
+    <script>
+        (function () {
+            var NS = 'http://www.w3.org/2000/svg';
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var LEAVES = ['#8db27c', '#a3c490', '#79a268', '#b5d1a2', '#6f9960'];
+            var BLOOMS = ['#f4b3c2', '#f7c9d4', '#fbd3c4', '#e9a6b9', '#d9c6ee', '#fdf0f3'];
+            var BERRY = '#e98a9b';
+
+            function seeded(seed) {
+                return function () {
+                    seed = (seed + 0x6d2b79f5) | 0;
+                    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+                    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+                    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                };
+            }
+
+            function make(name, attrs, parent) {
+                var node = document.createElementNS(NS, name);
+                for (var key in attrs) node.setAttribute(key, attrs[key]);
+                if (parent) parent.appendChild(node);
+                return node;
+            }
+
+            function pick(list, rand) {
+                return list[Math.floor(rand() * list.length)];
+            }
+
+            // Catmull-Rom spline through the points, written as cubic Beziers.
+            function smoothPath(pts) {
+                var d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+                for (var i = 0; i < pts.length - 1; i++) {
+                    var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+                    d += ' C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) +
+                         ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) +
+                         ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+                }
+                return d;
+            }
+
+            function useShape(id, fill, transform, parent) {
+                return make('use', { href: '#' + id, fill: fill, transform: transform }, parent);
+            }
+
+            // One ornament hanging off the stem. Local +x points away from the stem.
+            function ornament(bud, kind, rand) {
+                if (kind === 'shoot') {
+                    make('path', { d: 'M0,0 C8,-2 16,3 27,-3', class: 'stem thin' }, bud);
+                    useShape('leaf', pick(LEAVES, rand), 'translate(13,0.5) rotate(-55) scale(0.55)', bud);
+                    useShape('bloom', pick(BLOOMS, rand), 'translate(28,-3.5) scale(' + (0.8 + rand() * 0.35).toFixed(2) + ')', bud);
+                } else if (kind === 'tendril') {
+                    make('path', { d: 'M0,0 C10,-3 17,3 14,9 C11,13 5,11 6,7 C7,4 10,5 10,7', class: 'stem thin' }, bud);
+                } else if (kind === 'berries') {
+                    make('path', { d: 'M0,0 C5,-1 9,0 12,1', class: 'stem thin' }, bud);
+                    make('circle', { cx: 14, cy: -2, r: 2.8, fill: BERRY }, bud);
+                    make('circle', { cx: 17, cy: 3, r: 2.5, fill: BERRY }, bud);
+                    make('circle', { cx: 12, cy: 5, r: 2.3, fill: '#f09aaa' }, bud);
+                } else if (kind === 'bloom') {
+                    useShape('leaf', pick(LEAVES, rand), 'rotate(-30) scale(0.7)', bud);
+                    useShape('bloom', pick(BLOOMS, rand), 'translate(7,1) scale(' + (0.95 + rand() * 0.3).toFixed(2) + ')', bud);
+                } else {
+                    useShape('leaf', pick(LEAVES, rand), 'scale(' + (0.7 + rand() * 0.45).toFixed(2) + ')', bud);
+                }
+            }
+
+            // Draw a vine along the points and scatter leaves and flowers on it.
+            function buildVine(svg, pts, opts) {
+                var rand = seeded(opts.seed);
+                var d = smoothPath(pts);
+                var twin = opts.twin ? make('path', { d: smoothPath(opts.twin), class: 'stem thin' }, svg) : null;
+                var stem = make('path', { d: d, class: 'stem' }, svg);
+                var len = stem.getTotalLength();
+                var vine = { stems: [stem], lengths: [len], decor: [], len: len, grown: 0 };
+                if (twin) {
+                    vine.stems.push(twin);
+                    vine.lengths.push(twin.getTotalLength());
+                }
+                vine.stems.forEach(function (path, i) {
+                    path.style.strokeDasharray = vine.lengths[i];
+                    path.style.strokeDashoffset = vine.lengths[i];
+                });
+
+                var s = opts.start || 16, side = rand() < 0.5 ? 1 : -1, n = 0;
+                while (s < len - 8) {
+                    var p = stem.getPointAtLength(s), q = stem.getPointAtLength(Math.min(len, s + 1.5));
+                    var angle = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+                    side = -side;
+                    var roll = rand(), kind = 'leaf';
+                    if (n % 7 === 5) kind = 'shoot';
+                    else if (roll < 0.1) kind = 'bloom';
+                    else if (roll < 0.17) kind = 'tendril';
+                    else if (roll < 0.22) kind = 'berries';
+                    var spread = kind === 'leaf' ? 42 + rand() * 30 : 55 + rand() * 25;
+                    var g = make('g', { transform: 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ') rotate(' + (angle + side * spread).toFixed(1) + ') scale(' + (opts.leafScale || 1) + ')' }, svg);
+                    var bud = make('g', { class: 'bud' }, g);
+                    ornament(bud, kind, rand);
+                    vine.decor.push({ s: s, node: bud });
+                    s += opts.step * (0.75 + rand() * 0.5);
+                    n++;
+                }
+                (opts.extras || []).forEach(function (extra) {
+                    var bud = make('g', { class: 'bud' }, make('g', { transform: extra.transform }, svg));
+                    extra.draw(bud, rand);
+                    vine.decor.push({ s: extra.s, node: bud });
+                });
+                return vine;
+            }
+
+            function setGrown(vine, grown) {
+                vine.grown = grown;
+                vine.stems.forEach(function (path, i) {
+                    var own = vine.lengths[i] * grown / vine.len;
+                    path.style.strokeDashoffset = Math.max(0, vine.lengths[i] - own);
+                });
+                vine.decor.forEach(function (item) {
+                    if (item.s <= grown) item.node.classList.add('on');
+                });
+            }
+
+            // Ease toward the target: quick at first, never slower than minSpeed px/ms.
+            function growTo(vine, target, ease, minSpeed) {
+                if (reduceMotion) {
+                    setGrown(vine, Math.max(vine.grown, target));
+                    return;
+                }
+                vine.target = Math.max(vine.target || 0, target);
+                if (vine.ticking) return;
+                vine.ticking = true;
+                var last = null;
+                requestAnimationFrame(function step(now) {
+                    var dt = last === null ? 16 : Math.min(64, now - last);
+                    last = now;
+                    var gap = vine.target - vine.grown;
+                    var next = vine.grown + Math.max(minSpeed * dt, gap * ease * dt / 16);
+                    setGrown(vine, Math.min(next, vine.target));
+                    if (vine.grown < vine.target) requestAnimationFrame(step);
+                    else vine.ticking = false;
+                });
+            }
+
+            // Garland across the top: two halves that grow out from the middle.
+            var garland = document.querySelector('.garland');
+            var garlandVines = [];
+
+            function drawGarland() {
+                while (garland.firstChild) garland.removeChild(garland.firstChild);
+                var w = garland.clientWidth, dip = w < 500 ? 46 : 58, top = 14;
+                garland.setAttribute('viewBox', '0 0 ' + w + ' ' + garland.clientHeight);
+                function y(t, phase) {
+                    return top + dip * Math.abs(Math.sin(2 * Math.PI * t)) + 3 * Math.sin(t * 19 + phase);
+                }
+                garlandVines = [-1, 1].map(function (dir, k) {
+                    var pts = [], twin = [];
+                    for (var i = 0; i <= 40; i++) {
+                        var t = 0.5 + dir * 0.5 * i / 40;
+                        pts.push([t * w, y(t, 0)]);
+                        twin.push([t * w, y(t, 2.4) + 4 * Math.sin(i * 0.55)]);
+                    }
+                    var lowest = 0.5 + dir * 0.25, half = pts.length - 1;
+                    var anchor = [lowest * w, y(lowest, 0)];
+                    var approxLen = (w / 2) * 1.35;
+                    var extras = [{
+                        s: approxLen * 0.5,
+                        transform: 'translate(' + anchor[0].toFixed(1) + ',' + anchor[1].toFixed(1) + ')',
+                        draw: function (bud, rand) {
+                            make('path', { d: 'M0,0 C-4,10 4,20 0,32', class: 'stem thin' }, bud);
+                            useShape('leaf', pick(LEAVES, rand), 'translate(0,12) rotate(20) scale(0.6)', bud);
+                            useShape('leaf', pick(LEAVES, rand), 'translate(1,20) rotate(160) scale(0.55)', bud);
+                            useShape('bloom', dir < 0 ? '#f4b3c2' : '#f7c9d4', 'translate(0,35) scale(1.2)', bud);
+                        }
+                    }];
+                    if (dir > 0) {
+                        // A ladybug taking a walk along the right swag.
+                        var t = 0.62, bx = t * w, by = y(t, 0), ahead = y(t + 0.01, 0);
+                        var tilt = Math.atan2(ahead - by, 0.01 * w) * 180 / Math.PI;
+                        extras.push({
+                            s: approxLen * 0.28,
+                            transform: 'translate(' + bx.toFixed(1) + ',' + (by - 5).toFixed(1) + ') rotate(' + tilt.toFixed(1) + ')',
+                            draw: function (bud) {
+                                make('circle', { cx: 6, cy: 0, r: 2.8, fill: '#3f3a34' }, bud);
+                                make('ellipse', { cx: 0, cy: 0, rx: 6, ry: 4.6, fill: '#e2606f' }, bud);
+                                make('path', { d: 'M-6,0 L6,0', stroke: '#3f3a34', 'stroke-width': 0.9 }, bud);
+                                make('circle', { cx: -2.5, cy: -2, r: 1.1, fill: '#3f3a34' }, bud);
+                                make('circle', { cx: 2, cy: 2.2, r: 1.1, fill: '#3f3a34' }, bud);
+                                make('circle', { cx: -2, cy: 2.3, r: 0.9, fill: '#3f3a34' }, bud);
+                            }
+                        });
+                    }
+                    return buildVine(garland, pts, { seed: 11 + k * 7, step: 21, start: 8, twin: twin, extras: extras });
+                });
+                // Center knot where the two halves meet.
+                var knot = make('g', { class: 'bud', transform: '' }, make('g', { transform: 'translate(' + (w / 2) + ',' + (top + 1) + ')' }, garland));
+                useShape('leaf', '#8db27c', 'rotate(150) scale(0.8)', knot);
+                useShape('leaf', '#a3c490', 'rotate(30) scale(0.8)', knot);
+                useShape('bloom', '#f4b3c2', 'scale(1.5)', knot);
+                garlandVines.forEach(function (vine) {
+                    vine.decor.push({ s: 0, node: knot });
+                });
+                garlandVines.forEach(function (vine) {
+                    if (reduceMotion || garlandGrown) setGrown(vine, vine.len);
+                    else growTo(vine, vine.len, 0.05, 0.3);
+                });
+                garlandGrown = true;
+            }
+            var garlandGrown = false;
+
+            // Vines climbing down both sides of the page, grown by scrolling.
+            var sideBox = document.querySelector('.side-vines');
+            var sideVines = [];
+            var container = document.querySelector('.container');
+
+            function drawSides() {
+                // Redraws (resize, photos loading) keep however far the vines had grown.
+                var kept = sideVines.map(function (vine) { return vine.grown / vine.len; });
+                sideBox.innerHTML = '';
+                sideVines = [];
+                var pageW = document.documentElement.clientWidth;
+                var margin = (pageW - container.offsetWidth) / 2;
+                // Wide screens get vines in the margins; narrow ones get slim vines hugging the edges.
+                var roomy = margin >= 110;
+                var h = document.body.scrollHeight;
+                sideBox.style.height = h + 'px';
+                [-1, 1].forEach(function (dir, k) {
+                    var boxW = roomy ? 90 : 40, amp = roomy ? 15 : 5, wave = 240 + k * 30, phase = k * 1.7;
+                    var center = boxW / 2;
+                    var inset = roomy ? Math.max(0, margin - boxW - 18) : -boxW / 2 + 6;
+                    var left = dir < 0 ? inset : pageW - inset - boxW;
+                    var svg = make('svg', { width: boxW, height: h, viewBox: '0 0 ' + boxW + ' ' + h }, sideBox);
+                    svg.style.left = left + 'px';
+                    var pts = [], twin = [];
+                    for (var yy = -10; yy <= h + 20; yy += 36) {
+                        var a = 2 * Math.PI * yy / wave + phase;
+                        pts.push([center + amp * Math.sin(a) + 5 * Math.sin(a * 0.37 + 1), yy]);
+                        twin.push([center + amp * 0.9 * Math.sin(a + 2.3) + 4 * Math.sin(a * 0.5), yy]);
+                    }
+                    sideVines.push(buildVine(svg, pts, { seed: 101 + k * 37, step: roomy ? 26 : 32, start: 20, twin: twin, leafScale: roomy ? 1.15 : 0.8 }));
+                });
+                sideBox.classList.add('instant');
+                sideVines.forEach(function (vine, i) {
+                    setGrown(vine, vine.len * (kept[i] || 0));
+                });
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        sideBox.classList.remove('instant');
+                        growSides();
+                    });
+                });
+            }
+
+            function growSides() {
+                var h = document.body.scrollHeight;
+                var bottom = window.scrollY + window.innerHeight;
+                var reach = bottom >= h - 4 ? 1 : (window.scrollY + window.innerHeight * 0.92) / h;
+                sideVines.forEach(function (vine) {
+                    growTo(vine, vine.len * Math.min(1, reach), 0.05, 0.6);
+                });
+            }
+
+            function addSprig(snap, corner) {
+                var sprig = make('svg', { class: 'sprig ' + corner, viewBox: '0 0 84 84', 'aria-hidden': 'true' }, snap);
+                make('use', { href: '#sprig' }, sprig);
+            }
+
+            function captionText(snap) {
+                var caption = snap.querySelector('figcaption');
+                return caption ? caption.firstChild.textContent.trim() : '';
+            }
+
+            var CHEVRON_LEFT = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>';
+            var CHEVRON_RIGHT = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg>';
+            var EXPAND = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>';
+
+            // A stack holds photos from one event. Click, swipe or use the arrows to flip.
+            function setupStack(stack) {
+                var cards = Array.prototype.filter.call(stack.children, function (el) {
+                    return el.classList.contains('snap');
+                });
+                var order = cards.slice();
+                var busy = false;
+                var label = stack.querySelector('.stack-label');
+
+                cards.forEach(function (card) {
+                    var img = card.querySelector('img.photo');
+                    // Give every card about the same area, so portrait shots sit narrower.
+                    var ratio = (+img.getAttribute('height') || 3) / (+img.getAttribute('width') || 4);
+                    card.style.setProperty('--w', Math.min(1, Math.sqrt(0.75 / ratio)).toFixed(3));
+                    addSprig(card, 'br');
+                    img.addEventListener('load', scheduleSides);
+                });
+
+                var controls = document.createElement('div');
+                controls.className = 'stack-controls';
+                controls.innerHTML =
+                    '<button class="stack-btn" type="button" data-flip="-1" aria-label="Previous photo">' + CHEVRON_LEFT + '</button>' +
+                    '<span class="stack-dots" aria-hidden="true">' + cards.map(function () { return '<span></span>'; }).join('') + '</span>' +
+                    '<button class="stack-btn" type="button" data-flip="1" aria-label="Next photo">' + CHEVRON_RIGHT + '</button>' +
+                    '<button class="stack-btn" type="button" data-open aria-label="View larger">' + EXPAND + '</button>' +
+                    '<span class="visually-hidden" aria-live="polite"></span>';
+                stack.insertBefore(controls, label);
+                var dots = controls.querySelectorAll('.stack-dots span');
+                var status = controls.querySelector('[aria-live]');
+
+                stack.tabIndex = 0;
+                stack.setAttribute('role', 'group');
+                stack.setAttribute('aria-roledescription', 'photo stack');
+                if (label) stack.setAttribute('aria-label', label.firstChild.textContent.trim() + ', ' + cards.length + ' photos');
+
+                function layout() {
+                    order.forEach(function (card, i) {
+                        card.dataset.pos = i < 4 ? i : 'deep';
+                        card.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+                    });
+                    var at = cards.indexOf(order[0]);
+                    dots.forEach(function (dot, i) {
+                        dot.classList.toggle('on', i === at);
+                    });
+                    status.textContent = 'Photo ' + (at + 1) + ' of ' + cards.length + ', ' + captionText(order[0]);
+                }
+
+                // Toss the top card out and tuck it underneath, or pull the bottom one back on top.
+                function flip(dir) {
+                    if (busy || order.length < 2) return null;
+                    busy = true;
+                    var mover = dir > 0 ? order[0] : order[order.length - 1];
+                    var next = dir > 0 ? order[1] : mover;
+                    mover.classList.add('tossed', dir > 0 ? 'right' : 'left');
+                    setTimeout(function () {
+                        if (dir > 0) order.push(order.shift());
+                        else order.unshift(order.pop());
+                        layout();
+                        mover.classList.remove('tossed', 'right', 'left');
+                        setTimeout(function () { busy = false; }, reduceMotion ? 0 : 180);
+                    }, reduceMotion ? 0 : 240);
+                    return next;
+                }
+
+                var api = { flip: flip, top: function () { return order[0]; } };
+
+                var startX = null, swiped = false;
+                stack.addEventListener('pointerdown', function (event) {
+                    startX = event.clientX;
+                    swiped = false;
+                });
+                stack.addEventListener('pointerup', function (event) {
+                    if (startX === null) return;
+                    var dx = event.clientX - startX;
+                    startX = null;
+                    if (Math.abs(dx) > 40 && !event.target.closest('.stack-controls')) {
+                        swiped = true;
+                        flip(dx < 0 ? 1 : -1);
+                    }
+                });
+                stack.addEventListener('click', function (event) {
+                    var button = event.target.closest('.stack-btn');
+                    if (button) {
+                        if (button.hasAttribute('data-open')) openPhoto(order[0], api);
+                        else flip(+button.dataset.flip);
+                    } else if (!swiped && event.target.closest('.snap')) {
+                        flip(1);
+                    }
+                    swiped = false;
+                });
+                stack.addEventListener('keydown', function (event) {
+                    if (event.target !== stack) return;
+                    if (event.key === 'ArrowRight') flip(1);
+                    else if (event.key === 'ArrowLeft') flip(-1);
+                    else if (event.key === 'Enter') openPhoto(order[0], api);
+                    else return;
+                    event.preventDefault();
+                });
+
+                layout();
+            }
+
+            // Single photos get tape or a sprig; stacks get their own setup.
+            var tapes = ['', 'blush', 'butter'];
+            var corners = ['br', 'tl', 'tr'];
+            document.querySelectorAll('.wall').forEach(function (wall) {
+                Array.prototype.forEach.call(wall.children, function (item, i) {
+                    if (item.classList.contains('stack')) {
+                        setupStack(item);
+                        return;
+                    }
+                    if (i % 2 === 0) {
+                        var tape = document.createElement('span');
+                        tape.className = 'tape ' + tapes[(i / 2) % 3];
+                        item.appendChild(tape);
+                    } else {
+                        addSprig(item, corners[((i - 1) / 2) % 3]);
+                    }
+                    var img = item.querySelector('img.photo');
+                    if (img) {
+                        item.classList.add('has-photo');
+                        item.tabIndex = 0;
+                        img.addEventListener('load', scheduleSides);
+                    }
+                });
+            });
+
+            // Click a photo to see it bigger. Photos from a stack can be flipped here too.
+            var box = document.querySelector('.lightbox');
+            var gallery = null;
+
+            function showPhoto(snap) {
+                var img = snap.querySelector('img.photo');
+                box.querySelector('img').src = img.currentSrc || img.src;
+                box.querySelector('img').alt = img.alt;
+                box.querySelector('p').textContent = captionText(snap);
+            }
+
+            function openPhoto(snap, stackApi) {
+                if (!snap || !box.showModal) return;
+                gallery = stackApi || null;
+                box.classList.toggle('gallery', !!gallery);
+                showPhoto(snap);
+                box.showModal();
+                box.focus();
+            }
+
+            function flipGallery(dir) {
+                var next = gallery && gallery.flip(dir);
+                if (next) showPhoto(next);
+            }
+
+            document.addEventListener('click', function (event) {
+                var snap = event.target.closest('.snap.has-photo');
+                if (snap) openPhoto(snap);
+            });
+            document.addEventListener('keydown', function (event) {
+                if (event.key !== 'Enter' && event.key !== ' ') return;
+                var snap = event.target.closest && event.target.closest('.snap.has-photo');
+                if (snap) {
+                    event.preventDefault();
+                    openPhoto(snap);
+                }
+            });
+            box.addEventListener('click', function (event) {
+                var button = event.target.closest('.stack-btn');
+                if (button) flipGallery(button.classList.contains('next') ? 1 : -1);
+                else box.close();
+            });
+            box.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowRight') flipGallery(1);
+                else if (event.key === 'ArrowLeft') flipGallery(-1);
+            });
+
+            var pending = null;
+            function scheduleSides() {
+                clearTimeout(pending);
+                pending = setTimeout(drawSides, 150);
+            }
+
+            var lastWidth = window.innerWidth;
+            window.addEventListener('resize', function () {
+                if (window.innerWidth === lastWidth) return;
+                lastWidth = window.innerWidth;
+                drawGarland();
+                scheduleSides();
+            });
+            window.addEventListener('scroll', growSides, { passive: true });
+
+            drawGarland();
+            drawSides();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleSides);
+        })();
+    </script>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
