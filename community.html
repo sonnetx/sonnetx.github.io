@@ -761,6 +761,91 @@
                 <use href="#bloom" fill="#f4b3c2" transform="translate(110,20) scale(1.25)"/>
             </svg>
 
+            <!--
+                To add a photo, save it in photos/ (about 1600px on the long side) and add
+                <figure class="snap"><img class="photo" src="photos/name.jpg" width="W" height="H" alt="Short description" loading="lazy"><figcaption>Caption<small>Date</small></figcaption></figure>
+                Add class "wide" to span two columns. Tape and sprigs are added automatically.
+                For several photos from one event, wrap their figures in <div class="stack"> and
+                end it with <p class="stack-label">Event<small>Date</small></p>. The stack flips
+                on click, swipe or the arrow buttons.
+            -->
+
+            <section class="photo-section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                    Dinners
+                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
+                </h2>
+                <div class="wall">
+                    <div class="stack">
+                        <figure class="snap">
+                            <img class="photo" src="photos/omakase-group.jpg" width="768" height="1024" alt="About fifteen students smiling around a round table under a large yellow lamp" loading="lazy">
+                            <figcaption>Around the table</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/omakase-chef.jpg" width="1024" height="768" alt="A chef serving nigiri to students seated at a round table by tall windows" loading="lazy">
+                            <figcaption>The chef</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/omakase-nigiri.jpg" width="1200" height="1600" alt="A piece of seared nigiri topped with citrus on a slate plate" loading="lazy">
+                            <figcaption>Nigiri</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/omakase-table.jpg" width="1200" height="1600" alt="A round table set with slate plates, chopsticks, name cards and pink roses" loading="lazy">
+                            <figcaption>The table</figcaption>
+                        </figure>
+                        <p class="stack-label">Student omakase dinner<small>October 2026</small></p>
+                    </div>
+                    <figure class="snap">
+                        <img class="photo" src="photos/dinner-group.jpg" width="1280" height="853" alt="About a dozen people posing together in a dimly lit restaurant" loading="lazy">
+                        <figcaption>Compute dinner<small>September 2026</small></figcaption>
+                    </figure>
+                    <div class="stack">
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-table.jpg" width="900" height="1200" alt="A long table set with white linens, flowers and handwritten menus in a red dining room" loading="lazy">
+                            <figcaption>The table</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-arrivals.jpg" width="1200" height="900" alt="Guests talking under a chandelier in a red dining room" loading="lazy">
+                            <figcaption>Before dinner</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/dinner-menu.jpg" width="1200" height="900" alt="A place setting with flowers and a handwritten menu dated August 17, 2026" loading="lazy">
+                            <figcaption>The menu</figcaption>
+                        </figure>
+                        <p class="stack-label">Compute dinner<small>August 2026</small></p>
+                    </div>
+                    <div class="stack">
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-3.jpg" width="1600" height="1200" alt="A long table of guests talking in a restaurant with wood paneling and pendant lights" loading="lazy">
+                            <figcaption>Around the table</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-2.jpg" width="1200" height="1600" alt="A printed dinner menu at a place setting on a wooden table" loading="lazy">
+                            <figcaption>The menu</figcaption>
+                        </figure>
+                        <figure class="snap">
+                            <img class="photo" src="photos/blockchain-1.jpg" width="1200" height="1600" alt="Jamun makhan malai in a glass dessert bowl beside the menu" loading="lazy">
+                            <figcaption>Dessert</figcaption>
+                        </figure>
+                        <p class="stack-label">Blockchain dinner<small>July 2026</small></p>
+                    </div>
+                    <figure class="snap">
+                        <img class="photo" src="photos/dinner-appetizers.jpg" width="1200" height="900" alt="Skewers, croquettes and toasts laid out on a kitchen counter" loading="lazy">
+                        <figcaption>Spanish supper</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <svg class="divider" viewBox="0 0 180 34" aria-hidden="true" focusable="false">
+                <path d="M8,17 C40,4 60,30 90,17 C120,4 140,30 172,17" fill="none" stroke="#8aae78" stroke-width="1.8" stroke-linecap="round"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(38,12) rotate(-60) scale(0.55)"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(58,22) rotate(60) scale(0.55)"/>
+                <use href="#leaf" fill="#a3c490" transform="translate(122,12) rotate(-60) scale(0.55)"/>
+                <use href="#leaf" fill="#8db27c" transform="translate(142,22) rotate(60) scale(0.55)"/>
+                <use href="#bloom" fill="#f7c9d4" transform="translate(90,17)"/>
+            </svg>
+
             <section class="photo-section">
                 <h2 class="section-title">
                     <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
@@ -857,72 +942,6 @@
                         <h3>Structured Liberal Education</h3>
                     </li>
                 </ul>
-            </section>
-
-            <svg class="divider" viewBox="0 0 180 34" aria-hidden="true" focusable="false">
-                <path d="M8,17 C40,4 60,30 90,17 C120,4 140,30 172,17" fill="none" stroke="#8aae78" stroke-width="1.8" stroke-linecap="round"/>
-                <use href="#leaf" fill="#a3c490" transform="translate(38,12) rotate(-60) scale(0.55)"/>
-                <use href="#leaf" fill="#8db27c" transform="translate(58,22) rotate(60) scale(0.55)"/>
-                <use href="#leaf" fill="#a3c490" transform="translate(122,12) rotate(-60) scale(0.55)"/>
-                <use href="#leaf" fill="#8db27c" transform="translate(142,22) rotate(60) scale(0.55)"/>
-                <use href="#bloom" fill="#f7c9d4" transform="translate(90,17)"/>
-            </svg>
-
-            <!--
-                To add a photo, save it in photos/ (about 1600px on the long side) and add
-                <figure class="snap"><img class="photo" src="photos/name.jpg" width="W" height="H" alt="Short description" loading="lazy"><figcaption>Caption<small>Date</small></figcaption></figure>
-                Add class "wide" to span two columns. Tape and sprigs are added automatically.
-                For several photos from one event, wrap their figures in <div class="stack"> and
-                end it with <p class="stack-label">Event<small>Date</small></p>. The stack flips
-                on click, swipe or the arrow buttons.
-            -->
-
-            <section class="photo-section">
-                <h2 class="section-title">
-                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
-                    Dinners
-                    <svg viewBox="0 0 44 16" aria-hidden="true"><use href="#twig"/></svg>
-                </h2>
-                <div class="wall">
-                    <figure class="snap">
-                        <img class="photo" src="photos/dinner-group.jpg" width="1280" height="853" alt="About a dozen people posing together in a dimly lit restaurant" loading="lazy">
-                        <figcaption>Compute dinner<small>September 2026</small></figcaption>
-                    </figure>
-                    <div class="stack">
-                        <figure class="snap">
-                            <img class="photo" src="photos/dinner-table.jpg" width="900" height="1200" alt="A long table set with white linens, flowers and handwritten menus in a red dining room" loading="lazy">
-                            <figcaption>The table</figcaption>
-                        </figure>
-                        <figure class="snap">
-                            <img class="photo" src="photos/dinner-arrivals.jpg" width="1200" height="900" alt="Guests talking under a chandelier in a red dining room" loading="lazy">
-                            <figcaption>Before dinner</figcaption>
-                        </figure>
-                        <figure class="snap">
-                            <img class="photo" src="photos/dinner-menu.jpg" width="1200" height="900" alt="A place setting with flowers and a handwritten menu dated August 17, 2026" loading="lazy">
-                            <figcaption>The menu</figcaption>
-                        </figure>
-                        <p class="stack-label">Compute dinner<small>August 2026</small></p>
-                    </div>
-                    <div class="stack">
-                        <figure class="snap">
-                            <img class="photo" src="photos/blockchain-3.jpg" width="1600" height="1200" alt="A long table of guests talking in a restaurant with wood paneling and pendant lights" loading="lazy">
-                            <figcaption>Around the table</figcaption>
-                        </figure>
-                        <figure class="snap">
-                            <img class="photo" src="photos/blockchain-2.jpg" width="1200" height="1600" alt="A printed dinner menu at a place setting on a wooden table" loading="lazy">
-                            <figcaption>The menu</figcaption>
-                        </figure>
-                        <figure class="snap">
-                            <img class="photo" src="photos/blockchain-1.jpg" width="1200" height="1600" alt="Jamun makhan malai in a glass dessert bowl beside the menu" loading="lazy">
-                            <figcaption>Dessert</figcaption>
-                        </figure>
-                        <p class="stack-label">Blockchain dinner<small>July 2026</small></p>
-                    </div>
-                    <figure class="snap">
-                        <img class="photo" src="photos/dinner-appetizers.jpg" width="1200" height="900" alt="Skewers, croquettes and toasts laid out on a kitchen counter" loading="lazy">
-                        <figcaption>Spanish supper</figcaption>
-                    </figure>
-                </div>
             </section>
         </main>
 
