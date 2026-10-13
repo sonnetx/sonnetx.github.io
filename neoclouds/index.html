@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Neocloud Guide - Sonnet Xu</title>
+    <meta name="description" content="An interactive guide to neoclouds, the cloud companies built to rent GPUs and other AI accelerators. A supply network, a timeline, live GPU prices and sourced profiles of 86 providers, updated October 2026.">
+    <link rel="canonical" href="https://sonnetx.github.io/neoclouds/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sonnetx.github.io/neoclouds/">
+    <meta property="og:title" content="The Neocloud Guide">
+    <meta property="og:description" content="Who supplies AI compute to whom, what a GPU-hour costs today, and sourced profiles of 86 providers. Updated October 2026.">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="guide.css">
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <p class="site-title"><a href="../index.html">&larr; Sonnet Xu</a></p>
+            <span class="updated">Updated October 13, 2026</span>
+        </header>
+
+        <section class="hero" id="hero">
+            <div>
+                <h1>The Neocloud Guide</h1>
+                <p class="lede">Neoclouds are cloud companies built to rent GPUs and other AI accelerators. Explore who supplies compute to whom, how the industry got here, what a GPU-hour costs today, and sourced profiles of <span data-count>86</span> providers.</p>
+            </div>
+            <div class="numbers">
+                <div><div class="v">$104B</div><div class="l">CoreWeave contract backlog at June 30, 2026 <a class="num-src" href="https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Second-Quarter-2026-Results/default.aspx" target="_blank" rel="noopener">Source</a></div></div>
+                <div><div class="v">$3.57</div><div class="l">Median H100 on-demand price per GPU-hour, October 13, 2026 <a class="num-src" href="https://getdeploying.com/reference/cloud-gpu/nvidia-h100" target="_blank" rel="noopener">Source</a></div></div>
+                <div><div class="v">$1.29 to $11.07</div><div class="l">H100 prices today, cheapest spot listing to Google Cloud on-demand <a class="num-src" href="https://getdeploying.com/reference/cloud-gpu/nvidia-h100" target="_blank" rel="noopener">Source</a></div></div>
+                <div><div class="v">56</div><div class="l">Providers listing H100s for rent on GetDeploying today <a class="num-src" href="https://getdeploying.com/reference/cloud-gpu/nvidia-h100" target="_blank" rel="noopener">Source</a></div></div>
+            </div>
+        </section>
+
+        <nav class="tabs" id="tabs" aria-label="Views">
+            <a href="#network" data-view="network">Network</a>
+            <a href="#providers" data-view="directory">Providers<span class="n" data-count>86</span></a>
+            <a href="#timeline" data-view="timeline">Timeline<span class="n" id="tl-count"></span></a>
+            <a href="#prices" data-view="prices">Prices</a>
+            <a href="#guide" data-view="guide">Guide</a>
+        </nav>
+
+        <main>
+            <!-- Network -->
+            <section class="view" id="view-network" data-view="network">
+                <div class="view-intro">
+                    <h2>Who supplies whom</h2>
+                    <p>Each line joins a company to a customer named in its profile, running from power and data center developers on the left to the labs and companies buying compute on the right. Click a company to trace its links, drag to rearrange, and scroll to zoom.</p>
+                </div>
+                <div class="net-wrap">
+                    <div class="net-stage" id="net-stage">
+                        <div class="net-tools">
+                            <input type="search" id="net-search" list="net-names" placeholder="Find a company" aria-label="Find a company in the network" autocomplete="off">
+                            <datalist id="net-names"></datalist>
+                            <div class="legend" id="net-legend"></div>
+                            <button type="button" class="btn small" id="net-reset">Reset</button>
+                        </div>
+                        <svg id="net-svg" role="img" aria-label="Network of neocloud suppliers and their named customers"></svg>
+                        <div class="net-cols" id="net-cols"></div>
+                        <div class="tooltip" id="net-tip"></div>
+                    </div>
+                    <aside class="net-panel" id="net-panel" aria-live="polite"></aside>
+                </div>
+                <p class="small" id="net-note"></p>
+            </section>
+
+            <!-- Providers -->
+            <section class="view" id="view-directory" data-view="directory" hidden>
+                <div class="view-intro">
+                    <h2>Providers</h2>
+                    <p>Sourced profiles of <span data-count>86</span> companies that rent, host or resell AI compute. Browse them by business type, see where they are based, or switch to cards and a table. Every logo opens a full profile with its origin, 2026 position, platform, outlook and sources.</p>
+                </div>
+                <div class="controls">
+                    <input type="search" id="q" placeholder="Search by name, city, customer or chip" autocomplete="off" aria-label="Search providers">
+                    <select id="region" aria-label="Region"><option value="">All regions</option></select>
+                    <select id="accel" aria-label="Accelerator">
+                        <option value="">Any accelerator</option>
+                        <option value="nvidia">NVIDIA</option>
+                        <option value="amd">AMD</option>
+                        <option value="tpu">Google TPU</option>
+                        <option value="other">Other silicon</option>
+                    </select>
+                    <select id="sort" aria-label="Sort">
+                        <option value="featured">Featured</option>
+                        <option value="az">Name, A to Z</option>
+                        <option value="new">Newest founded</option>
+                        <option value="old">Oldest founded</option>
+                    </select>
+                    <span class="layout-toggle" role="group" aria-label="Layout">
+                        <button type="button" data-layout="logos" aria-pressed="true">Logos</button><button type="button" data-layout="map" aria-pressed="false">Map</button><button type="button" data-layout="cards" aria-pressed="false">Cards</button><button type="button" data-layout="table" aria-pressed="false">Table</button>
+                    </span>
+                    <span class="small" id="result-count" aria-live="polite" style="margin:0"></span>
+                </div>
+                <div class="pills" id="cats" role="group" aria-label="Provider type"></div>
+                <p class="cat-blurb" id="cat-blurb"></p>
+                <div id="dir"></div>
+                <div class="map-stage" id="map-stage" hidden>
+                    <svg id="map-svg" role="img" aria-label="World map of provider headquarters"></svg>
+                    <div class="tooltip" id="map-tip"></div>
+                    <div class="map-foot" id="map-foot"></div>
+                </div>
+                <noscript><p class="empty">The provider directory needs JavaScript.</p></noscript>
+            </section>
+
+            <!-- Timeline -->
+            <section class="view" id="view-timeline" data-view="timeline" hidden>
+                <div class="view-intro">
+                    <h2>Timeline</h2>
+                    <p>Events from the first GPU miners to October 2026, sorted into lanes for capacity deals, capital, technology, and market events. Years before 2025 are compressed because most of the activity is recent. Click a dot to read it, or use the arrow keys to step through.</p>
+                </div>
+                <div class="tl-filters" id="tl-filters" role="group" aria-label="Lanes"></div>
+                <div class="tl-wrap">
+                    <div class="tl-chart" id="tl-chart">
+                        <svg id="tl-svg" tabindex="0" role="img" aria-label="Timeline of neocloud events from 2017 to 2026"></svg>
+                        <div class="tooltip" id="tl-tip"></div>
+                    </div>
+                    <aside class="tl-detail" id="tl-detail" aria-live="polite"></aside>
+                </div>
+                <details class="tv"><summary>Show every event as a list</summary><ol class="timeline" id="tl-list"></ol></details>
+            </section>
+
+            <!-- Prices -->
+            <section class="view" id="view-prices" data-view="prices" hidden>
+                <div class="view-intro">
+                    <h2>What a GPU-hour costs</h2>
+                    <p>The same H100 rents for anywhere from $1.29 to $11.07 per GPU-hour depending on how the hour is bought.<sup class="cite" data-s="getdeploying"></sup> Every price below was read on October 13, 2026 unless noted, and each dot names its source.</p>
+                </div>
+                <figure class="viz" id="price-viz" aria-labelledby="pv-title" style="margin-top:0">
+                    <div class="viz-head">
+                        <div>
+                            <p class="viz-title" id="pv-title">H100 price per GPU-hour by how it is bought</p>
+                            <p class="viz-sub">Hover a dot for details. List prices are on-demand unless the label says otherwise.</p>
+                        </div>
+                        <div class="legend" id="pv-legend"></div>
+                    </div>
+                    <div id="pv-rows" role="list"></div>
+                    <div class="pp-axis"><div class="pp-axis-label">US dollars per GPU-hour</div><div class="pp-ticks" id="pv-ticks"></div></div>
+                    <div class="tooltip" id="pv-tip" role="status"></div>
+                    <details class="tv"><summary>Show as a table</summary><div class="table-wrap"><table id="pv-table"></table></div></details>
+                </figure>
+                <div class="split">
+                    <div class="prose">
+                        <p>Market lows and medians sit between $1.29 and $3.57,<sup class="cite" data-s="getdeploying"></sup> neocloud list prices run from $3.90 to $6.16,<sup class="cite" data-s="rcCrusoe rcLambda rcNebius rcCoreweave"></sup> and hyperscaler on-demand runs from $6.88 at AWS to $11.07 at Google Cloud.<sup class="cite" data-s="rcAws getdeploying"></sup> AWS's own three-year reserved price for the same p5 instance is $2.97,<sup class="cite" data-s="getdeploying"></sup> so the commitment matters more than the vendor. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                        <p>Rental prices turned up in 2026. One-year H100 contracts rose 38%, from $1.70 per GPU-hour in October 2025 to $2.35 in March 2026, and SemiAnalysis reported in April that on-demand capacity had sold out across all GPU types.<sup class="cite" data-s="shortage"></sup> GetDeploying's on-demand median has held flat over the last 90 days, and Crusoe's on-demand H100s were sold out on October 13.<sup class="cite" data-s="getdeploying"></sup> CoreWeave advertises up to 60% off on-demand for committed use and Nebius up to 35%,<sup class="cite" data-s="rcCoreweave rcNebius"></sup> so list prices overstate what large committed buyers pay.</p>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Offer</th><th>Per GPU-hour</th><th>Notes</th></tr></thead>
+                            <tbody>
+                                <tr><td>H100 on-demand</td><td class="num">$1.30 to $11.07</td><td>Cheapest in-stock offer to Google Cloud, median $3.57<sup class="cite" data-s="getdeploying"></sup></td></tr>
+                                <tr><td>H100 reserved</td><td class="num">from $1.53</td><td>Median $3.26 across one-month and longer terms<sup class="cite" data-s="getdeploying"></sup></td></tr>
+                                <tr><td>H100 spot</td><td class="num">from $1.29</td><td>Median $2.46<sup class="cite" data-s="getdeploying"></sup></td></tr>
+                                <tr><td>B200</td><td class="num">$2.12 to $6.04</td><td>Spot to specialist on-demand, with 36-month reserved terms from $2.25<sup class="cite" data-s="intuition"></sup></td></tr>
+                                <tr><td>GB200 NVL72</td><td class="num">$10.50 to $27.00</td><td>CoreWeave at the low end, Azure at the high end<sup class="cite" data-s="intuition"></sup></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <h3 class="sub">The rate card is not the cost</h3>
+                <div class="split">
+                    <div class="prose">
+                        <p>Utilization moves the effective price of a GPU-hour by dollars, and reliability moves it by cents. An owned cluster that sits idle 70% of the time costs more than three times its nominal hourly rate for each useful hour. A $2.50 contract that loses 8% of its hours to failures costs about $2.72 per delivered hour. Both figures are simple arithmetic on the stated assumptions.</p>
+                    </div>
+                    <div class="prose">
+                        <p>Buyers who need a steady floor of capacity usually commit for one to three years and rent on-demand or spot hours only for peaks. Short-notice provisioning is where failures hurt most, because that burst capacity is exactly what a buyer cannot wait for. Generation refresh also favors renting, since a five-year owned H100 is still an H100 in 2031 while a rental contract can roll to B300 or Vera Rubin. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                    </div>
+                </div>
+                <div id="pricing-sources"></div>
+            </section>
+
+            <!-- Guide -->
+            <section class="view" id="view-guide" data-view="guide" hidden>
+                <div class="guide-layout">
+                    <nav class="toc-wrap" aria-label="Guide sections">
+                        <p class="toc-label">Contents</p>
+                        <ul class="toc">
+                            <li><a href="#definition">What a neocloud is</a></li>
+                            <li><a href="#origins">Origins</a></li>
+                            <li><a href="#financing">Financing</a></li>
+                            <li><a href="#comparing">Comparing providers</a></li>
+                            <li><a href="#market">The market in 2026</a></li>
+                            <li><a href="#watch">What to watch</a></li>
+                            <li><a href="#risks">Outlook and risks</a></li>
+                            <li><a href="#glossary">Glossary</a></li>
+                            <li><a href="#method">Method</a></li>
+                        </ul>
+                    </nav>
+
+                    <div>
+                        <!-- Definition -->
+                        <section class="guide-section" id="definition">
+                            <header class="sec-head"><span class="sec-num">01</span><h2>What a neocloud is</h2></header>
+                            <div class="split">
+                                <div class="prose">
+                                    <p>A neocloud is a cloud provider built to rent GPU or other AI accelerator capacity. Hyperscalers such as AWS, Azure, Google Cloud and Oracle added GPUs to an existing business in CPUs, storage and software, where accelerators are one line item among hundreds of services.<sup class="cite" data-s="playbook"></sup></p>
+                                    <p>In October 2024 the SemiAnalysis AI Neocloud Playbook described four neocloud giants and a long tail of a couple dozen emerging providers.<sup class="cite" data-s="playbook"></sup> Today GetDeploying lists 56 providers renting H100s,<sup class="cite" data-s="getdeploying"></sup> and several of the largest, including Fluidstack and Nscale, publish no prices because they sell through long-term contracts.<sup class="cite" data-s="fluidstackHome nscaleHome"></sup></p>
+                                </div>
+                                <div class="table-wrap">
+                                    <table>
+                                        <caption class="small">A summary of the business model the SemiAnalysis Playbook describes.<sup class="cite" data-s="playbook"></sup></caption><thead><tr><th></th><th>Neocloud</th><th>Hyperscaler</th></tr></thead>
+                                        <tbody>
+                                            <tr><td>Core product</td><td>GPU compute, networking and storage for AI</td><td>Hundreds of services, with GPUs as one line item</td></tr>
+                                            <tr><td>Customers</td><td>Frontier labs, neolabs, AI startups, quant funds, enterprises</td><td>Enterprises and frontier labs</td></tr>
+                                            <tr><td>Hardware cadence</td><td>Fast adoption of the newest NVIDIA and AMD parts</td><td>Slower, often alongside custom silicon (TPU, Trainium, Maia)</td></tr>
+                                            <tr><td>Revenue model</td><td>Multi-year take-or-pay contracts, reserved and on-demand GPU-hours</td><td>Broad consumption billing</td></tr>
+                                            <tr><td>Capital structure</td><td>GPU-backed debt, vendor and customer financing</td><td>Operating cash flow and investment-grade bonds</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <h3 class="sub">AI factories</h3>
+                            <div class="prose">
+                                <p>NVIDIA defines an AI factory as computing infrastructure that manages the whole AI life cycle, from data ingestion through training to high-volume inference, and it sells the GPUs, NVLink interconnects, networking and software to build one.<sup class="cite" data-s="nvFactory"></sup> Other companies use the same term for different businesses. Firmus sells GPU capacity to Meta in AI factories built on NVIDIA's DSX platform,<sup class="cite" data-s="firmusMeta"></sup> Applied Digital uses it for campuses it leases to a hyperscaler on 15-year take-or-pay terms,<sup class="cite" data-s="apldFactory"></sup> and Deutsche Telekom uses it for an industrial AI cloud that sells GPU capacity to manufacturers, automakers and other industrial companies.<sup class="cite" data-s="telekomFactory"></sup> These businesses depend on one another, with NVIDIA supplying the blueprint, landlords the powered buildings and neoclouds the capacity sold as a service. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                            </div>
+                            <h3 class="sub">Three products</h3>
+                            <div class="prose">
+                                <p>Neoclouds sell three different products, and a provider that leads in one can trail in another. Several of the largest bare-metal operators run thin managed-cluster software, and some polished managed clouds have little bare-metal scale, so a buyer should know which product a quote covers before comparing it with another. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                            </div>
+                            <div class="product-grid">
+                                <div class="card"><h4>Bare metal</h4><p>Racks or nodes, with the customer running the whole software stack.</p><p class="who">Bought by frontier labs such as OpenAI, Anthropic and Meta, in blocks of hundreds of megawatts.</p></div>
+                                <div class="card"><h4>Managed cluster</h4><p>Slurm or Kubernetes, storage, monitoring, health checks and automatic repair.</p><p class="who">Bought by neolabs and startups without large infrastructure teams.</p></div>
+                                <div class="card"><h4>Inference and GPU services</h4><p>Per-token APIs, serverless inference, post-training services and agent sandboxes.</p><p class="who">Bought by application developers and enterprises.</p></div>
+                            </div>
+                        </section>
+
+                        <!-- Origins -->
+                        <section class="guide-section" id="origins">
+                            <header class="sec-head"><span class="sec-num">02</span><h2>Where neoclouds came from</h2></header>
+                            <div class="split">
+                                <div class="prose">
+                                    <p>Most neoclouds started as a different business, and each brought one asset that the AI build-out needed. Every company in the table below links to its sourced profile. The September 2022 Ethereum Merge ended GPU mining on the largest GPU-mined network,<sup class="cite" data-s="merge"></sup> and CoreWeave shut its own mining business at the end of that month.<sup class="cite" data-s="s1"></sup> OpenAI launched ChatGPT two months later.<sup class="cite" data-s="chatgpt"></sup></p>
+                                    <p>The largest hyperscalers also build their own accelerators, including Google's TPU,<sup class="cite" data-s="tpu"></sup> AWS Trainium<sup class="cite" data-s="trainium"></sup> and Microsoft's Maia.<sup class="cite" data-s="maia"></sup> NVIDIA has invested directly in independent clouds, joining CoreWeave's Series B in 2023<sup class="cite" data-s="cw2023"></sup> and putting $2B each into CoreWeave and Nebius in 2026.<sup class="cite" data-s="cwNvidia nebiusNvidia"></sup> The <a href="#timeline">timeline</a> traces these events from 2017 to October 2026, with a source for every event.</p>
+                                </div>
+                                <div class="table-wrap">
+                                    <table>
+                                        <thead><tr><th>Origin</th><th>Examples</th><th>What they brought</th></tr></thead>
+                                        <tbody>
+                                            <tr><td>Ethereum GPU miners</td><td><a href="#/coreweave">CoreWeave (Atlantic Crypto)</a>, <a href="#/buzz-hpc">HIVE Digital (Buzz HPC)</a></td><td>GPU inventory, supplier relationships, experience running dense hardware</td></tr>
+                                            <tr><td>Bitcoin ASIC miners</td><td><a href="#/iren">IREN</a>, <a href="#/core-scientific">Core Scientific</a>, <a href="#/bitdeer">Bitdeer</a>, <a href="#/hut-8">Hut 8</a>, <a href="#/cipher-mining">Cipher</a>, <a href="#/terawulf">TeraWulf</a>, <a href="#/applied-digital">Applied Digital</a></td><td>Powered land, grid interconnects, cheap energy contracts</td></tr>
+                                            <tr><td>Energy-first developers</td><td><a href="#/crusoe">Crusoe (flare gas)</a>, <a href="#/firmus">Firmus (Tasmanian hydro)</a></td><td>Power procurement as the core skill</td></tr>
+                                            <tr><td>ML hardware and HPC resellers</td><td><a href="#/lambda">Lambda (GPU workstations)</a>, <a href="#/cirrascale">Cirrascale</a>, <a href="#/vultr">Vultr</a>, <a href="#/hetzner">Hetzner</a></td><td>Customer base, software, existing data center footprint</td></tr>
+                                            <tr><td>Corporate spinouts and sovereign programs</td><td><a href="#/nebius">Nebius (ex-Yandex)</a>, <a href="#/core42">Core42 (G42)</a>, <a href="#/humain">Humain (PIF)</a>, <a href="#/sk-telecom">SK Telecom</a>, <a href="#/naver-cloud">Naver</a>, <a href="#/yotta">Yotta</a></td><td>Engineering teams and state or conglomerate balance sheets</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Financing -->
+                        <section class="guide-section" id="financing">
+                            <header class="sec-head"><span class="sec-num">03</span><h2>How the money works</h2></header>
+                            <div class="prose" style="margin-bottom:28px">
+                                <p>Neocloud economics run on a loop in which a provider signs a creditworthy customer, borrows against that contract, buys GPUs and delivers capacity on time, so the customer's credit, more than the neocloud's own, sets the cost of capital. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span> The largest builds rest on contracts with large buyers, such as Meta's with CoreWeave and Nebius<sup class="cite" data-s="cwMeta nebiusMeta"></sup> and Microsoft's with Nebius and IREN.<sup class="cite" data-s="nebiusMsft irenMsft"></sup></p>
+                            </div>
+                            <div class="table-wrap">
+                                <table>
+                                    <caption class="small">The Why it matters column is my reading of each mechanism. The facts in the middle column carry their sources.</caption><thead><tr><th>Mechanism</th><th>How it works</th><th>Why it matters</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Investment-grade offtake</td><td>Multi-year take-or-pay contract with a buyer such as Microsoft, Meta, Google, OpenAI or Anthropic</td><td>Unlocks cheaper debt than the neocloud could raise on its own credit<sup class="cite" data-s="hutNotes"></sup></td></tr>
+                                        <tr><td>GPU-backed debt</td><td>Delayed-draw term loans secured by GPUs and contract cash flows, such as CoreWeave's $2.3B facility of August 2023, one of the first secured by H100s<sup class="cite" data-s="cwDebt2023"></sup></td><td>The main source of capex funding. CoreWeave carried $35.6B of debt at June 30, 2026.<sup class="cite" data-s="cwDebt"></sup></td></tr>
+                                        <tr><td>Prepayments</td><td>The customer pays part of the contract up front. Nebius says 70% of its second-quarter 2026 deals included prepayments covering 50 to 60% of the related capex.<sup class="cite" data-s="nebiusLetter"></sup></td><td>Cuts the amount a provider must borrow before revenue starts</td></tr>
+                                        <tr><td>NVIDIA equity</td><td>Direct investments in its own customers, such as $2B each in CoreWeave (January 2026) and Nebius (March 2026)<sup class="cite" data-s="cwNvidia nebiusNvidia"></sup></td><td>Supports financing without a hyperscaler and ties demand to NVIDIA hardware</td></tr>
+                                        <tr><td>Hyperscaler rent backstops</td><td>A hyperscaler guarantees a tenant's lease payments to the landlord. Google backstops Fluidstack leases at TeraWulf's Lake Mariner and Hut 8's River Bend campuses.<sup class="cite" data-s="terawulf hutRiver"></sup></td><td>Lets former miners borrow at investment-grade terms for sites leased to young tenants</td></tr>
+                                        <tr><td>Vendor rack leasing</td><td>Under Broadcom's AI XPV platform, launched in June 2026 with a $35B first tranche, a financial partner buys the racks and leases them to the customer while Broadcom backstops most of the lease<sup class="cite" data-s="broadcom10q"></sup></td><td>Spreads risk, but concentrates correlated exposure on a few labs</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h3 class="sub">What drives unit economics</h3>
+                            <div class="terms">
+                                <div class="term"><h4>Utilization and goodput</h4><p>Revenue accrues per GPU-hour delivered. Failed nodes, stragglers and slow repairs cut revenue directly and trigger SLA credits. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Depreciation life</h4><p>CoreWeave depreciates its GPUs over six years, Lambda over five and Nebius over four.<sup class="cite" data-s="depreciation"></sup> CoreWeave says it has signed an A100 contract running into 2029, nine years after that chip launched.<sup class="cite" data-s="a100"></sup></p></div>
+                                <div class="term"><h4>Power</h4><p>Contracted and energized megawatts are the binding constraint and the headline metric. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span> CoreWeave reported 1.5 GW active and 4.2 GW contracted by August 2026.<sup class="cite" data-s="cwq2 cwCall"></sup></p></div>
+                                <div class="term"><h4>Product mix</h4><p>Managed clusters earn higher margins but are harder to finance. Long-term bare metal is easier to finance and earns less. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Owned or leased buildings</h4><p>Operators that own the facility control technicians, spares and repair procedures. Colocation tenants depend on the landlord's remote hands. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                            </div>
+                        </section>
+
+                        <!-- Comparing -->
+                        <section class="guide-section" id="comparing">
+                            <header class="sec-head"><span class="sec-num">04</span><h2>How to compare providers</h2></header>
+                            <div class="prose" style="margin-bottom:36px">
+                                <p>Two GPU-hours with the same SKU in the same region can deliver very different amounts of work, so the hourly price alone is a poor basis for comparing providers. Electricity gets fungibility from physics and grid codes, which make one megawatt-hour at a node equal to another. Compute has no equivalent, and hours differ along the eight dimensions below, ordered from the silicon out to the contract. The framework is my own, so this section carries no citations.</p>
+                            </div>
+                            <div class="terms">
+                                <div class="term"><h4>Hardware identity and health</h4><p>The SKU and variant (H100 SXM or PCIe, 80 GB or 94 GB) and the condition of the specific card, including ECC error rates, remapped memory rows and thermal throttling. A weak host CPU, thin RAM or a slow disk can starve a healthy GPU.</p></div>
+                                <div class="term"><h4>Interconnect and placement</h4><p>NVLink topology, InfiniBand or Ethernet, oversubscription and where nodes sit in the fabric. Training throughput depends on achieved all-reduce bandwidth, which no spec sheet shows.</p></div>
+                                <div class="term"><h4>Reliability and firmness</h4><p>Failure rates, preemption terms, maintenance windows, GPUs falling off the bus and silent data corruption. Each interruption costs a checkpoint and restart, and that cost grows with job size.</p></div>
+                                <div class="term"><h4>Shape and contiguity</h4><p>When the hours arrive and whether they arrive together. A thousand GPUs for one coherent week is worth far more than the same GPU-hours scattered over a month.</p></div>
+                                <div class="term"><h4>Software and platform</h4><p>Driver and CUDA versions, virtualization overhead, storage throughput, boot reliability and provisioning time. An instance that exists and an instance that trains at the expected model FLOPs utilization are different things.</p></div>
+                                <div class="term"><h4>Location and jurisdiction</h4><p>Latency to data, data residency rules and export controls.</p></div>
+                                <div class="term"><h4>Contract terms</h4><p>SLA credits and whether they pay out, billing granularity, egress fees, support response and whether capacity is reserved or best effort.</p></div>
+                                <div class="term"><h4>Verifiability</h4><p>Whether the buyer can confirm that any of the above was delivered. Providers vary even within their own fleets, benchmarks can be gamed, and no accepted metering standard exists yet.</p></div>
+                            </div>
+                            <h3 class="sub">Questions to ask before signing</h3>
+                            <ul class="questions">
+                                <li>What all-reduce bandwidth does a full-cluster NCCL or RCCL test reach, and can we run our own acceptance tests before the term starts?</li>
+                                <li>How quickly does the provider detect a failed GPU, NIC or link, and how long does a replacement take? Are hot spares on site?</li>
+                                <li>Who owns the building, and who does hands-on repair overnight?</li>
+                                <li>Which driver, CUDA and firmware versions ship, and how quickly do security patches land?</li>
+                                <li>Is the capacity firm or preemptible, and what happens to the contract if delivery slips?</li>
+                                <li>What do SLA credits pay, what caps them, and who measures the outage?</li>
+                                <li>What throughput does shared storage sustain when every node reads at once?</li>
+                                <li>Has an outside party audited the fleet's security, and can we see the report?</li>
+                            </ul>
+                        </section>
+
+                        <!-- Market -->
+                        <section class="guide-section" id="market">
+                            <header class="sec-head"><span class="sec-num">05</span><h2>The market in 2026</h2></header>
+                            <div class="prose" style="margin-bottom:28px">
+                                <p>Demand exceeds supply in 2026, with on-demand capacity sold out across GPU types.<sup class="cite" data-s="shortage"></sup> Frontier labs buy capacity in blocks of hundreds of megawatts, such as the 350 MW Anthropic reportedly contracted from Lambda,<sup class="cite" data-s="lambdaAnthropic"></sup> while a long tail of neolabs, startups and enterprises buys managed clusters and inference. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                            </div>
+                            <div class="table-wrap">
+                                <table id="scale-table">
+                                    <thead><tr><th>Company</th><th>Power</th><th>Contracts</th><th>Capital</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <p class="small">Power figures mix contracted, operating and targeted capacity, so read each row on its own terms.</p>
+                            <h3 class="sub">Forces shaping the market</h3>
+                            <div class="terms">
+                                <div class="term"><h4>Customer concentration</h4><p>The same few buyers appear across most profiles. Anthropic and NVIDIA are each named as a customer by 11 providers in this guide, and Microsoft and OpenAI by 8, as the <a href="#network">network</a> shows from each profile's sourced customer list. Nebius says most of its recent deals include prepayments.<sup class="cite" data-s="nebiusLetter"></sup></p></div>
+                                <div class="term"><h4>Long contracts with large buyers</h4><p>Lenders finance multi-year contracts with investment-grade buyers, so the largest operators sign multi-year blocks with Microsoft, Meta, Anthropic and OpenAI.<sup class="cite" data-s="hutNotes"></sup> Meta's contracts with CoreWeave ($21B expansion) and Nebius (up to $27B) both date from spring 2026.<sup class="cite" data-s="cwMeta nebiusMeta"></sup></p></div>
+                                <div class="term"><h4>A shallow spot market</h4><p>Fluidstack and Nscale sell through long-term contracts and publish no hourly prices,<sup class="cite" data-s="fluidstackHome nscaleHome"></sup> while the cheapest H100 spot listing on GetDeploying costs $1.29 an hour.<sup class="cite" data-s="getdeploying"></sup> Lenders that underwrite cluster debt against multi-year contracts leave little room for revenue that moves with hourly prices, so the spot market stays shallow until sellers run out of better ways to earn from idle GPUs. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Miners keep converting</h4><p>IREN, Hut 8, Bitdeer, Core Scientific, Cipher, TeraWulf and others are turning powered Bitcoin sites into AI capacity, as each profile documents. Hut 8 has leased the full 1 GW of its Beacon Point campus in Texas for $19.6B of base-term value.<sup class="cite" data-s="hutBeacon"></sup></p></div>
+                                <div class="term"><h4>Valuation step-ups</h4><p>Crusoe raised at $30.9B in September 2026,<sup class="cite" data-s="crusoeF"></sup> and Firmus nearly doubled its valuation in four months before withdrawing its planned listing in October 2026.<sup class="cite" data-s="firmusRaise firmusIpo"></sup> Nscale filed for a US listing in September with $103.4B of contracted value.<sup class="cite" data-s="nscaleIpo"></sup></p></div>
+                                <div class="term"><h4>Public-market caution</h4><p>Rothschild &amp; Co Redburn started coverage on September 21, 2026 with Sell ratings on CoreWeave and Nebius, arguing that GPU rental prices will fall.<sup class="cite" data-s="redburn"></sup> Firmus pulled its ASX float weeks later after weak investor demand,<sup class="cite" data-s="firmusIpo"></sup> and CoreWeave's debt reached $35.6B by June 2026.<sup class="cite" data-s="cwDebt"></sup></p></div>
+                                <div class="term"><h4>Security under scrutiny</h4><p>GPU clouds run privileged drivers and container tooling on hardware that many tenants share. In July 2025 Wiz disclosed NVIDIAScape, a critical flaw in the NVIDIA Container Toolkit that let a malicious container take root control of the host and reach other customers' data.<sup class="cite" data-s="wiz"></sup></p></div>
+                            </div>
+                        </section>
+
+                        <!-- Watch -->
+                        <section class="guide-section" id="watch">
+                            <header class="sec-head"><span class="sec-num">06</span><h2>What to watch</h2></header>
+                            <div class="prose" style="margin-bottom:8px">
+                                <p>The next 18 months turn on the Vera Rubin hardware transition, a shift from managed clusters toward inference and post-training services, new financing structures and security. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                            </div>
+                            <h3 class="sub">Technology</h3>
+                            <div class="terms">
+                                <div class="term"><h4>Vera Rubin NVL72</h4><p>An evolution of the Grace Blackwell rack rather than a new design, with rack power rising from about 120 to 140 kW to about 180 to 220 kW and an 800 VDC power option.<sup class="cite" data-s="rubinSa"></sup> ConnectX-9 gives each GPU 1.6 Tb/s of scale-out bandwidth.<sup class="cite" data-s="rubin"></sup> CoreWeave completed the first Vera Rubin NVL72 bring-up in June 2026.<sup class="cite" data-s="cwRubin"></sup></p></div>
+                                <div class="term"><h4>Scale-out networking</h4><p>The largest training clusters now split traffic across several independent network planes.<sup class="cite" data-s="mrc"></sup> OpenAI released its MRC transport protocol for these multiplane networks through the Open Compute Project in May 2026, developed with AMD, Broadcom, Intel, Microsoft and NVIDIA.<sup class="cite" data-s="mrc"></sup></p></div>
+                                <div class="term"><h4>AMD</h4><p>AMD's MI455X Helios rack-scale systems are reaching AMD-focused clouds such as TensorWave,<sup class="cite" data-s="tensorwave"></sup> and Oracle plans a 50,000-GPU MI450 cluster.<sup class="cite" data-s="oracleMi450"></sup> Buyers weigh lower prices against the maturity of AMD's ROCm and RCCL software. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Custom silicon outside the hyperscalers</h4><p>Google now sells TPUs to outside customers,<sup class="cite" data-s="tpuSell"></sup> Blackstone is putting $5B of equity into a TPU cloud with Google for about 500 MW in 2027,<sup class="cite" data-s="blackstoneTpu"></sup> and Anthropic will access about 3.5 GW of TPU capacity through Broadcom from 2027.<sup class="cite" data-s="broadcomTpu"></sup> A hyperscaler's own chip now competes directly with NVIDIA-based neoclouds. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                            </div>
+                            <h3 class="sub">Products</h3>
+                            <div class="terms">
+                                <div class="term"><h4>Inference endpoints</h4><p>Per-token APIs earn a margin on top of the hour and keep capacity busy between training contracts. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span> CoreWeave says booked ARR for managed inference rose from $1M to more than $100M in a few months,<sup class="cite" data-s="cwConvert"></sup> and Crusoe reports over $100M of contracted inference ARR.<sup class="cite" data-s="crusoeF"></sup> Nebius bought Eigen AI and Inferize in 2026 to build out its Token Factory inference platform.<sup class="cite" data-s="nebiusEigen nebiusInferize"></sup></p></div>
+                                <div class="term"><h4>Post-training and reinforcement learning</h4><p>Crusoe launched serverless fine-tuning in July 2026.<sup class="cite" data-s="crusoeFt"></sup> Reinforcement learning also needs CPU-heavy rollout and sandbox capacity next to the GPUs, which gives clouds a product beyond the GPU-hour. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Smaller inference sites</h4><p>Anthropic and OpenAI are looking for 20 to 30 MW deployments in the UK, the Nordics and the US alongside their gigawatt campuses, CNBC reported in September 2026.<sup class="cite" data-s="cnbcSmall"></sup> Inference can serve separate requests on smaller clusters, while training needs many chips working closely together, and a few megawatts at an already powered site can arrive sooner than a large new block.<sup class="cite" data-s="cnbcSmall"></sup> Training rewarded the largest single site, and inference rewards capacity spread across many sites. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                <div class="term"><h4>Reliability tooling</h4><p>NVIDIA open-sourced NVSentinel for GPU fault detection and remediation on Kubernetes in October 2025.<sup class="cite" data-s="nvsentinel"></sup></p></div>
+                            </div>
+                            <h3 class="sub">Capital and policy</h3>
+                            <div class="terms">
+                                <div class="term"><h4>Financing terms</h4><p>Hyperscaler rent backstops,<sup class="cite" data-s="terawulf hutRiver"></sup> vendor rack leasing<sup class="cite" data-s="broadcom10q"></sup> and NVIDIA equity stakes<sup class="cite" data-s="cwNvidia nebiusNvidia"></sup> all appear in major 2025 and 2026 deals.</p></div>
+                                <div class="term"><h4>Price indices and futures</h4><p>SemiAnalysis and Silicon Data both publish H100 rental indices.<sup class="cite" data-s="shortage uvik"></sup> A settlement-grade index would also need a delivery spec and trusted metering, because a GPU-hour is not yet a standard unit. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p></div>
+                                                                <div class="term"><h4>Geography</h4><p>CoreWeave entered Indonesia in August 2026,<sup class="cite" data-s="cwIndonesia"></sup> Firmus added OpenAI as an anchor customer in Malaysia,<sup class="cite" data-s="firmus900"></sup> and state-backed programs are buying at scale in Korea,<sup class="cite" data-s="nvKorea"></sup> India<sup class="cite" data-s="yottaAim"></sup> and Saudi Arabia.<sup class="cite" data-s="humainNv"></sup></p></div>
+                            </div>
+                        </section>
+
+                        <!-- Risks -->
+                        <section class="guide-section" id="risks">
+                            <header class="sec-head"><span class="sec-num">07</span><h2>Outlook and risks</h2></header>
+                            <div class="split">
+                                <div class="prose">
+                                    <p>The base case is a two-tier industry in which a handful of gigawatt-scale operators serve frontier labs on bare metal and a long tail of smaller providers competes on managed clusters, inference and post-training for the same neolab and enterprise demand. A tail that long points to consolidation among the smaller players. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                                </div>
+                                <div class="prose">
+                                    <p>Open-weight models gaining share, or any supply shock that makes labs less willing to run their own infrastructure, would favor managed clusters. Hyperscalers catching up on their own capacity, or a pullback in frontier-lab spending, would hurt neoclouds broadly. <span class="an" title="The author's reading of the sourced facts, not a reported fact">analysis</span></p>
+                                </div>
+                            </div>
+                            <h3 class="sub">Segments</h3>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead><tr><th>Segment</th><th>Direction</th><th>Drivers</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Frontier bare metal</td><td>Growing fastest in megawatts</td><td>OpenAI and Anthropic scale-up, with investment-grade contracts that make it the easiest product to finance</td></tr>
+                                        <tr><td>Managed clusters</td><td>Growing, with margins under pressure</td><td>Neolab and enterprise deals far smaller than frontier-lab blocks, and coding agents that let buyers accept barer clusters</td></tr>
+                                        <tr><td>Inference and post-training services</td><td>A new growth layer</td><td>SemiAnalysis estimates frontier labs earn over $100B per GW per year selling API inference on GB300 clusters, far above the rental cost<sup class="cite" data-s="spacex10gw"></sup></td></tr>
+                                        <tr><td>Power and campus developers</td><td>Gaining leverage</td><td>Energized megawatts are the binding constraint, which favors former miners with grid interconnects</td></tr>
+                                        <tr><td>Sovereign and regional clouds</td><td>Expanding</td><td>Programs in Asia-Pacific, the Gulf, India, Korea and Japan, and data residency rules</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h3 class="sub">Risks</h3>
+                            <div class="table-wrap">
+                                <table>
+                                    <caption class="small">The Mechanism and Signal to watch columns are my reading. Facts about specific companies carry their sources.</caption><thead><tr><th>Risk</th><th>Mechanism</th><th>Most exposed</th><th>Signal to watch</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Customer concentration</td><td>A few buyers make up most revenue</td><td>CoreWeave, where Microsoft was about 67% of 2025 revenue<sup class="cite" data-s="tenk"></sup></td><td>New offtakers in backlog disclosures</td></tr>
+                                        <tr><td>Correlated counterparty risk</td><td>Many loans across the chain depend on the same lab</td><td>Lenders to Anthropic and OpenAI build-outs</td><td>Termination clauses and insurance uptake</td></tr>
+                                        <tr><td>Leverage and cost of capital</td><td>Debt-funded capex ahead of revenue</td><td>CoreWeave, with $35.6B of debt and a $626M second-quarter net loss<sup class="cite" data-s="cwDebt cwq2"></sup></td><td>Interest expense and refinancing spreads</td></tr>
+                                        <tr><td>Residual value</td><td>GPUs depreciated over four to six years, with few sales of old GPUs to price them<sup class="cite" data-s="depreciation"></sup></td><td>All lenders against GPU collateral</td><td>Secondary prices for GPUs four to six years old</td></tr>
+                                        <tr><td>Construction and permitting</td><td>Delays trigger cancellations and impair cash flow</td><td>Large new campuses, such as Nebius in B&eacute;thune, France, and Oracle in New Mexico, where on-site fuel cells still need air permits<sup class="cite" data-s="nebiusBethune oracleQ1"></sup></td><td>Energization dates against contract dates</td></tr>
+                                        <tr><td>Hardware transitions</td><td>Success with Hopper does not guarantee success with rack-scale systems</td><td>Providers new to liquid-cooled NVL72</td><td>Acceptance-test pass rates and SLA credits</td></tr>
+                                        <tr><td>Security</td><td>A breach of a shared GPU fleet spreads laterally and invites regulation</td><td>Providers running stale packages</td><td>Audit results and disclosed incidents</td></tr>
+                                        <tr><td>Policy and trade</td><td>Export rules and data residency laws decide where capacity can sit</td><td>Cross-border and sovereign deployments</td><td>Export-control and licensing changes</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="small">The segment directions and the consolidation call are my own judgments from the sourced data in this guide.</p>
+                        </section>
+
+                        <!-- Glossary -->
+                        <section class="guide-section" id="glossary">
+                            <header class="sec-head"><span class="sec-num">08</span><h2>Glossary</h2></header>
+                            <div class="terms compact">
+                                <div class="term"><h4>Bare metal</h4><p>Physical servers rented whole, with no virtualization layer and no provider software above the operating system.</p></div>
+                                <div class="term"><h4>Colocation</h4><p>Renting space, power and cooling in someone else's data center to house your own hardware.</p></div>
+                                <div class="term"><h4>Delayed-draw term loan (DDTL)</h4><p>A loan the borrower draws down in stages as it buys and installs GPUs, rather than all at once.</p></div>
+                                <div class="term"><h4>Goodput</h4><p>The share of paid GPU time that does useful work, after failures, restarts and stragglers.</p></div>
+                                <div class="term"><h4>Hyperscaler</h4><p>One of the largest general-purpose public clouds, such as AWS, Microsoft Azure, Google Cloud and Oracle Cloud Infrastructure.</p></div>
+                                <div class="term"><h4>Model FLOPs utilization (MFU)</h4><p>The fraction of a GPU's peak arithmetic throughput that a training job actually achieves.</p></div>
+                                <div class="term"><h4>Neolab</h4><p>A newer AI lab, smaller than OpenAI, Anthropic or Google DeepMind, that trains its own models on rented compute.</p></div>
+                                <div class="term"><h4>NVL72</h4><p>An NVIDIA rack that links 72 GPUs with NVLink so they act as one large accelerator, sold as GB200, GB300 and Vera Rubin NVL72.</p></div>
+                                <div class="term"><h4>Offtaker</h4><p>The customer that commits to buy a provider's capacity, usually under a multi-year contract that lenders can borrow against.</p></div>
+                                <div class="term"><h4>Remaining performance obligations (RPO)</h4><p>Contracted revenue a company has not yet recognized, reported in its filings. Hyperscalers report RPO where neoclouds usually say backlog.</p></div>
+                                <div class="term"><h4>SXM and PCIe</h4><p>Two GPU form factors. SXM boards sit on an NVLink baseboard with higher power limits, and PCIe cards plug into ordinary server slots.</p></div>
+                                <div class="term"><h4>Take-or-pay</h4><p>A contract that obliges the customer to pay for committed capacity whether or not it uses it.</p></div>
+                            </div>
+                        </section>
+
+                        <!-- Method -->
+                        <section class="guide-section" id="method">
+                            <header class="sec-head"><span class="sec-num">09</span><h2>Method</h2></header>
+                            <div class="split">
+                                <div class="prose">
+                                    <p>Each provider profile draws on company filings, press releases and reporting through October 13, 2026. Every sentence and key figure carries a numbered citation to a page that states it. I checked each claim against the text of the cited page, and where a page blocked automated checks, against another open source. Claims that no open source supported were cut.</p><p>Key figures use 2026 data, except for facts that do not change, such as founding dates and the value of a signed contract. Lines marked <span class="an">analysis</span> are my own reading of the sourced facts. Profiles marked as a thin public record rest on limited information.</p>
+                                    <p>The network uses the customers each profile names. A customer that matches another company in the guide links to that company, and other customers appear when at least two providers name them. Logos are each company's own site icon, stored with the guide, and the headquarters map places each company at its listed headquarters city.</p>
+                                </div>
+                                <div class="prose">
+                                    <p>Prices come from public rate cards and the GetDeploying tracker, read on October 13, 2026, and they move daily. Sources for each section of this guide sit in a collapsed list at the end of that section.</p>
+                                    <p>Corrections are welcome at <a href="mailto:sonnet@stanford.edu">sonnet@stanford.edu</a>. A change needs a primary source that contradicts the current text.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Provider profile -->
+            <section class="view" id="view-provider" hidden></section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+            <p>Company names and figures belong to their sources. This guide is not investment advice.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="providers.js"></script>
+    <script src="logos.js"></script>
+    <script src="citations.js"></script>
+    <script src="background.js"></script>
+    <script src="guide.js"></script>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
