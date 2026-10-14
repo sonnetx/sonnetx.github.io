@@ -343,13 +343,13 @@
       var svgEl = $('net-svg');
       W = svgEl.clientWidth || stage.clientWidth;
       H = svgEl.clientHeight || 700;
-      // On narrow screens the tools sit above the map instead of over it.
-      topPad = window.matchMedia('(max-width: 900px)').matches ? 16 : 52;
+      // Controls occupy their own row above the map.
+      topPad = 16;
       svg = d3.select(svgEl).attr('viewBox', [0, 0, W, H]);
       gRoot = svg.append('g');
       linkSel = gRoot.append('g').attr('class', 'net-links').selectAll('path').data(links).join('path');
       nodeSel = gRoot.append('g').selectAll('g').data(nodes).join('g')
-        .attr('class', function (d) { return 'net-node' + (d.deg < 3 && d.kind !== 'buyer' ? ' minor' : ''); })
+        .attr('class', function (d) { return 'net-node' + (d.deg < 5 ? ' minor' : ''); })
         .attr('tabindex', 0).attr('role', 'button')
         .attr('aria-label', function (d) { return d.label + ', ' + d.out.length + ' customers, ' + d.inn.length + ' suppliers'; });
       svg.append('defs').html('<clipPath id="net-clip" clipPathUnits="objectBoundingBox"><circle cx="0.5" cy="0.5" r="0.5"/></clipPath>');
@@ -363,9 +363,9 @@
         .attr('width', function (d) { return d.r * 1.48; }).attr('height', function (d) { return d.r * 1.48; })
         .attr('clip-path', 'url(#net-clip)');
       nodeSel.append('text')
-        .attr('x', function (d) { return d.tier === 0 ? -(d.r + 5) : d.r + 5; })
+        .attr('x', function (d) { return d.tier === 0 || d.tier === 3 ? -(d.r + 5) : d.r + 5; })
         .attr('y', 4)
-        .attr('text-anchor', function (d) { return d.tier === 0 ? 'end' : 'start'; })
+        .attr('text-anchor', function (d) { return d.tier === 0 || d.tier === 3 ? 'end' : 'start'; })
         .text(function (d) { return d.label; });
 
       // Seed positions by tier so the layout reads left to right.
@@ -758,7 +758,8 @@
     store('state', state);
     renderPills();
     var list = sorted(PROVIDERS.filter(function (p) { return matches(p); }));
-    $('result-count').textContent = list.length === PROVIDERS.length ? '' : list.length + ' of ' + PROVIDERS.length;
+    $('result-count').textContent = list.length + ' of ' + PROVIDERS.length + ' providers';
+    $('clear-filters').hidden = !(state.q || state.cat || state.region || state.accel);
     layoutButtons.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-layout') === state.layout); });
     var dir = $('dir'), stage = $('map-stage');
     var onMap = state.layout === 'map';
@@ -794,6 +795,14 @@
     var btn = $('show-all');
     if (btn) btn.addEventListener('click', function () { showAll = true; renderDirectory(); });
   }
+
+  $('clear-filters').addEventListener('click', function () {
+    state.q = state.cat = state.region = state.accel = '';
+    qEl.value = regionEl.value = accelEl.value = '';
+    showAll = false;
+    renderDirectory();
+    qEl.focus();
+  });
 
   qEl.addEventListener('input', function () { state.q = qEl.value.trim(); renderDirectory(); });
   regionEl.addEventListener('change', function () { state.region = regionEl.value; renderDirectory(); });
@@ -1093,6 +1102,8 @@
     tabs.forEach(function (a) {
       var on = a.getAttribute('data-view') === r.view || (r.view === 'provider' && a.getAttribute('data-view') === 'directory');
       a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
     });
     document.title = defaultTitle;
 
@@ -1120,6 +1131,13 @@
     }
   }
   window.addEventListener('hashchange', route);
+
+  document.querySelector('.skip-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    var main = $('main');
+    main.focus({ preventScroll: true });
+    main.scrollIntoView();
+  });
 
   // "Show on the network" links from a profile select that company on the map.
   var netSelect = function () {};

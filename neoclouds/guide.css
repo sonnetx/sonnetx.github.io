@@ -1,8 +1,8 @@
 /* The Neocloud Guide. Type, color and rules follow the rest of sonnetx.github.io. */
 :root {
     --text-color: #333;
-    --muted: #777;
-    --faint: #999;
+    --muted: #666;
+    --faint: #737373;
     --link-color: #0066cc;
     --border-color: #e0e0e0;
     --soft: #f7f7f5;
@@ -12,7 +12,7 @@
     --series-1: #2a78d6;
     --series-2: #eb6834;
     --series-3: #1baf7a;
-    --pad: 48px;
+    --pad: 40px;
 }
 
 * {
@@ -66,9 +66,9 @@ select {
 }
 
 .container {
-    max-width: 1680px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 28px var(--pad) 60px;
+    padding: 40px var(--pad) 48px;
 }
 
 /* Header */
@@ -103,17 +103,16 @@ select {
 /* Hero */
 .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 64px;
-    align-items: end;
-    padding: 30px 0 26px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 42px 0 24px;
 }
 
 .hero h1 {
-    font-size: 46px;
+    font-size: 40px;
     font-weight: normal;
     line-height: 1.05;
-    letter-spacing: -1.2px;
+    letter-spacing: -0.8px;
     margin-bottom: 12px;
 }
 
@@ -121,17 +120,17 @@ select {
     font-size: 17px;
     line-height: 1.6;
     color: #444;
-    max-width: 44em;
+    max-width: 65ch;
 }
 
 .numbers {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 36px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 28px;
 }
 
 .numbers > div {
-    padding: 10px 0;
+    padding: 14px 0 0;
     border-top: 1px solid var(--border-color);
 }
 
@@ -158,8 +157,8 @@ select {
     gap: 34px;
     background: #fff;
     border-bottom: 1px solid var(--border-color);
-    margin: 0 calc(-1 * var(--pad));
-    padding: 0 var(--pad);
+    margin: 0;
+    padding: 0;
     overflow-x: auto;
     scrollbar-width: none;
 }
@@ -195,15 +194,15 @@ select {
 }
 
 .view {
-    padding-top: 28px;
+    padding-top: 32px;
 }
 
 .view-intro {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    gap: 56px;
-    align-items: end;
-    margin-bottom: 20px;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: 40px;
+    align-items: start;
+    margin-bottom: 24px;
 }
 
 .view-intro h2 {
@@ -393,7 +392,7 @@ ol.sources .dt {
 /* ---------- Network view ---------- */
 .net-wrap {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-columns: minmax(0, 1fr) 280px;
     gap: 28px;
     align-items: start;
 }
@@ -407,10 +406,10 @@ ol.sources .dt {
 }
 
 .net-tools {
-    position: absolute;
-    top: 12px;
-    left: 14px;
-    right: 14px;
+    position: relative;
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+    background: #fff;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -446,7 +445,7 @@ ol.sources .dt {
 #net-svg {
     display: block;
     width: 100%;
-    height: 760px;
+    height: 640px;
     cursor: grab;
     touch-action: none;
 }
@@ -627,7 +626,7 @@ ol.sources .dt {
 /* ---------- Timeline view ---------- */
 .tl-wrap {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-columns: minmax(0, 1fr) 280px;
     gap: 28px;
     align-items: start;
 }
@@ -1061,8 +1060,8 @@ td:first-child {
 /* ---------- Guide sections ---------- */
 .guide-layout {
     display: grid;
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: 64px;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 48px;
 }
 
 .toc-wrap {
@@ -1376,7 +1375,7 @@ details.tv .table-wrap {
 }
 
 .profile-head h2 {
-    font-size: 52px;
+    font-size: 40px;
     font-weight: normal;
     line-height: 1.1;
     letter-spacing: -1px;
@@ -1399,8 +1398,8 @@ details.tv .table-wrap {
 
 .profile-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 380px;
-    gap: 72px;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 48px;
     align-items: start;
 }
 
@@ -1497,8 +1496,8 @@ details.tv .table-wrap {
 }
 
 footer {
-    margin-top: 80px;
-    padding-top: 40px;
+    margin-top: 64px;
+    padding-top: 24px;
     border-top: 1px solid var(--border-color);
     text-align: center;
     color: var(--faint);
@@ -1511,11 +1510,130 @@ footer p + p {
     font-size: 13px;
 }
 
+/* Reading and navigation */
+.skip-link {
+    position: fixed;
+    left: 20px;
+    top: 12px;
+    transform: translateY(calc(-100% - 20px));
+    z-index: 100;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid var(--link-color);
+    font-family: var(--sans);
+    font-size: 14px;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: 16px;
+    font-family: var(--sans);
+    font-size: 14px;
+}
+
+.chart-hint {
+    padding: 10px 14px 0;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.net-tools input {
+    flex: 1 1 180px;
+    min-width: 0;
+    width: auto;
+}
+
+.net-tools .legend {
+    order: 3;
+    flex-basis: 100%;
+    padding: 0;
+    gap: 8px 16px;
+    background: none;
+    font-size: 12px;
+}
+
+.net-panel,
+.tl-detail {
+    padding: 18px 0 0 22px;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+}
+
+.directory-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 0 18px;
+    margin: 18px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--sans);
+    font-size: 13px;
+}
+
+.directory-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--muted);
+}
+
+.text-btn {
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: none;
+    color: var(--link-color);
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 13px;
+}
+
+.text-btn:hover {
+    border-bottom-color: currentColor;
+}
+
+.pill[aria-pressed="true"] {
+    background: #f1f6fc;
+}
+
+.layout-toggle button[aria-pressed="true"] {
+    background: #f1f6fc;
+    color: var(--link-color);
+}
+
+.controls input[type="search"],
+.controls select,
+.layout-toggle button {
+    min-height: 40px;
+}
+
+.net-wrap > *,
+.tl-wrap > *,
+.profile-grid > *,
+.guide-layout > *,
+.split > * {
+    min-width: 0;
+}
+
+.table-wrap {
+    overscroll-behavior-x: contain;
+}
+
 /* ---------- Responsive ---------- */
-@media (max-width: 1200px) {
-    .hero {
-        grid-template-columns: 1fr;
-        gap: 28px;
+@media (max-width: 1100px) {
+    .numbers {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 28px;
     }
 
     .net-wrap,
@@ -1526,6 +1644,8 @@ footer p + p {
     .net-panel,
     .tl-detail {
         position: static;
+        border-left: none;
+        padding: 20px 0 0;
     }
 
     .split {
@@ -1588,7 +1708,7 @@ footer p + p {
 
     .net-tools {
         position: static;
-        padding: 12px 12px 0;
+        padding: 12px;
     }
 
     .net-tools input {
@@ -1690,7 +1810,66 @@ footer p + p {
     }
 
     .numbers .v {
-        font-size: 24px;
+        font-size: 23px;
+    }
+
+    .site-header {
+        flex-wrap: wrap;
+        gap: 4px 16px;
+    }
+
+    .updated {
+        font-size: 12px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .tabs {
+        gap: 16px;
+    }
+
+    .tabs a {
+        font-size: 14px;
+    }
+
+    .tabs .n {
+        margin-left: 3px;
+        font-size: 11px;
+    }
+
+    .net-node text {
+        opacity: 0;
+    }
+
+    .net-node.show text,
+    .net-node:hover text,
+    .net-node:focus-visible text {
+        opacity: 1;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .controls input[type="search"] {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .controls select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .pill {
+        padding: 8px 12px;
+    }
+
+    .terms {
+        grid-template-columns: 1fr;
     }
 
     ol.timeline li {
@@ -1867,8 +2046,7 @@ footer p + p {
 
 .tile:hover {
     border-color: var(--link-color);
-    box-shadow: 0 2px 10px rgba(0, 102, 204, 0.14);
-    transform: translateY(-2px);
+    background: #fafcff;
 }
 
 .tile .logo {
