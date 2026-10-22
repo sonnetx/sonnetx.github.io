@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compute - Sonnet Xu</title>
+  <meta name="description" content="Sonnet Xu's projects on chip supply chains, datacenter siting, AI campuses, GPU providers and the economics of AI compute. Explore how their questions and research connect.">
+  <link rel="stylesheet" href="compute.css">
+  <script src="compute.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#projects">Skip to projects</a>
+<header class="site-header">
+  <a class="home" href="../">Sonnet Xu</a>
+  <nav aria-label="Main navigation">
+    <a href="./" aria-current="page">Compute</a>
+    <a href="../projects.html">All projects</a>
+    <a href="../research.html">Research</a>
+  </nav>
+</header>
+<main>
+  <header class="intro">
+    <div class="eyebrow">Infrastructure projects</div>
+    <h1>Compute</h1>
+    <p>How AI chips are made, where datacenters get built, who rents the GPUs, and whether the revenue can pay for it.</p>
+  </header>
+
+  <div class="view-bar" id="view-bar" hidden>
+    <div class="views" role="group" aria-label="Project views">
+      <button data-view="map" aria-pressed="true">Project map</button>
+      <button data-view="directory" aria-pressed="false">Directory</button>
+    </div>
+    <span class="project-count">5 projects</span>
+  </div>
+
+  <section class="map-view" id="map-view" aria-label="Project map" hidden>
+    <div class="map-panel">
+      <header class="map-header">
+        <h2>Project connections</h2>
+        <div class="connection-filters" role="group" aria-label="Connection types">
+          <button data-connections="all" aria-pressed="true">All connections</button>
+          <button data-connections="data" aria-pressed="false">Shared data</button>
+        </div>
+      </header>
+      <div class="graph" id="graph" role="group" aria-label="Select a project to inspect its connections">
+        <svg id="connections" aria-hidden="true"></svg>
+        <div id="graph-nodes"></div>
+      </div>
+      <div class="map-key">
+        <span><i class="key-data" aria-hidden="true"></i>Copied research data</span>
+        <span><i class="key-topic" aria-hidden="true"></i>Related question</span>
+      </div>
+      <p class="map-note">Arrows point toward the project that reuses the data.</p>
+    </div>
+    <aside class="project-detail" id="project-detail" aria-labelledby="detail-title"></aside>
+  </section>
+
+  <section class="directory" id="projects" aria-label="Compute projects">
+    <article class="project" id="chip-supply-chain" data-label="Hardware" data-short="Inside an AI Chip" data-question="What does an accelerator depend on?">
+      <div class="project-category">Hardware</div>
+      <h2>Inside an AI Chip</h2>
+      <p class="project-description">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on. An outage model estimates how supply disruptions affect the package.</p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/chip-supply-chain/">Open project <span aria-hidden="true">&nearr;</span></a><a href="https://github.com/sonnetx/chip-supply-chain">Code</a></p>
+    </article>
+    <article class="project" id="datacenter-map" data-label="Locations" data-short="Datacenter Map" data-question="Where can datacenters get built?">
+      <div class="project-category">Locations</div>
+      <h2>Datacenter Map</h2>
+      <p class="project-description">A map of state policy and local opposition to US datacenters. A siting model compares power costs, grid capacity, permitting, water, climate and connectivity across the 50 states.</p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/datacenter-map/">Open project <span aria-hidden="true">&nearr;</span></a><a href="https://github.com/sonnetx/datacenter-map">Code</a></p>
+    </article>
+    <article class="project" id="datacenter-listings" data-label="Facilities" data-short="Datacenter Listings" data-question="What is being built, and what does it cost?">
+      <div class="project-category">Facilities</div>
+      <h2>Datacenter Listings</h2>
+      <p class="project-description">A directory of AI campuses and signed leases, with power, chip counts, construction histories and sources. A calculator compares owning a facility with renting capacity.</p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/datacenter-listings/">Open project <span aria-hidden="true">&nearr;</span></a></p>
+    </article>
+    <article class="project" id="neoclouds" data-label="Providers" data-short="The Neocloud Guide" data-question="Who supplies rented GPU compute?">
+      <div class="project-category">Providers</div>
+      <h2>The Neocloud Guide</h2>
+      <p class="project-description">A guide to GPU and AI accelerator providers, their customers and their supply relationships. Company profiles, rental prices and a timeline document how the market has developed.</p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/neoclouds/">Open project <span aria-hidden="true">&nearr;</span></a><a href="https://github.com/sonnetx/neoclouds">Code</a></p>
+    </article>
+    <article class="project" id="ai-demand-supply" data-label="Economics" data-short="AI Demand and Supply" data-question="Can AI revenue support the buildout?">
+      <div class="project-category">Economics</div>
+      <h2>AI Demand and Supply</h2>
+      <p class="project-description">Linked models of AI lab revenue, infrastructure costs, compute commitments and investor returns. Revenue scenarios show how demand assumptions change the financing of the buildout.</p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/ai-demand-supply/">Open project <span aria-hidden="true">&nearr;</span></a></p>
+    </article>
+  </section>
+</main>
+<footer>
+  <span>Sonnet Xu</span>
+  <a href="../projects.html">All projects <span aria-hidden="true">&rarr;</span></a>
+</footer>
+</body>
+</html>

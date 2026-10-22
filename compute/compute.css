@@ -1,0 +1,149 @@
+:root {
+  color-scheme: light;
+  --ink: #202124;
+  --secondary: #555c66;
+  --muted: #747b86;
+  --line: #e3e7ed;
+  --blue: #315bd8;
+  --blue-soft: #edf2ff;
+  --surface: #f7f8fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: white; color: var(--ink); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.skip { position: absolute; top: -60px; left: 20px; background: white; padding: 10px; z-index: 5; }
+.skip:focus { top: 10px; }
+.site-header, main, footer { max-width: 1280px; margin: auto; padding-left: 40px; padding-right: 40px; }
+.site-header { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.home { color: var(--ink); font-weight: 500; }
+.site-header nav { display: flex; gap: 26px; }
+.site-header nav a { color: var(--muted); }
+.site-header nav a[aria-current] { color: var(--ink); }
+.intro { padding: 35px 0 28px; }
+.eyebrow, .project-category { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: 54px; font-weight: 600; line-height: 1.15; letter-spacing: -.045em; margin: 9px 0 12px; }
+.intro p { color: var(--secondary); font-size: 15px; margin: 0; max-width: 740px; }
+.view-bar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.views { display: flex; gap: 26px; }
+.views button { border: 0; border-bottom: 2px solid transparent; background: none; padding: 10px 0 12px; color: var(--muted); font-size: 12px; }
+.views button[aria-pressed="true"] { border-bottom-color: var(--ink); font-weight: 600; color: var(--ink); }
+.project-count { color: var(--muted); font-size: 11px; }
+.map-view { display: grid; grid-template-columns: minmax(0, 1fr) 330px; border: 1px solid var(--line); }
+.map-panel { min-width: 0; background: var(--surface); padding: 20px 22px 15px; }
+.map-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.map-header h2 { font-size: 12px; font-weight: 500; margin: 0; }
+.connection-filters { display: flex; gap: 2px; }
+.connection-filters button { border: 1px solid transparent; border-radius: 3px; padding: 5px 8px; background: none; font-size: 10px; color: var(--muted); }
+.connection-filters button[aria-pressed="true"] { color: var(--blue); border-color: #d9e2fc; background: var(--blue-soft); }
+.graph { height: 380px; position: relative; margin-top: 18px; }
+#connections { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+#graph-nodes { position: absolute; inset: 0; }
+.node { position: absolute; width: 27%; min-height: 103px; text-align: left; border: 1px solid #d8dee7; border-radius: 4px; padding: 13px 14px; background: white; color: var(--ink); transition: border-color .15s, background .15s; }
+.node .node-category { display: block; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.node strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
+.node .node-question { display: block; font-size: 11px; line-height: 1.45; color: var(--muted); margin-top: 7px; }
+.node:hover { border-color: #8da5ec; }
+.node[aria-pressed="true"] { background: var(--blue-soft); border-color: #7895ea; }
+.node[aria-pressed="true"] strong { color: #2548a8; }
+.node.disconnected { border-color: var(--line); }
+.node.disconnected strong { color: var(--secondary); }
+.node[data-project="chip-supply-chain"] { left: 0; top: 2%; }
+.node[data-project="datacenter-map"] { left: 0; top: 69%; }
+.node[data-project="datacenter-listings"] { left: 36.5%; top: 35%; }
+.node[data-project="neoclouds"] { left: 73%; top: 2%; }
+.node[data-project="ai-demand-supply"] { left: 73%; top: 69%; }
+.edge { fill: none; stroke: #9bb1ed; stroke-width: 1.5; }
+.edge-topic { stroke: #abb3bf; stroke-dasharray: 5 5; }
+.edge.active { stroke: var(--blue); stroke-width: 2; }
+.edge-topic.active { stroke: #858f9f; }
+.edge-label { font-size: 9px; fill: #63779f; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+.edge-topic-label { fill: var(--muted); }
+.map-key { display: flex; gap: 20px; flex-wrap: wrap; font-size: 10px; color: var(--secondary); }
+.map-key span { display: inline-flex; align-items: center; gap: 7px; }
+.map-key i { display: inline-block; width: 20px; border-top: 2px solid #8fa8eb; }
+.map-key .key-topic { border-top: 1px dashed #abb3bf; }
+.map-note { margin: 8px 0 0; font-size: 10px; color: var(--muted); }
+.project-detail { border-left: 1px solid var(--line); padding: 24px; min-width: 0; }
+.project-detail h2 { margin: 10px 0 12px; font-size: 25px; line-height: 1.2; font-weight: 600; letter-spacing: -.035em; }
+.project-description { color: var(--secondary); font-size: 13px; line-height: 1.7; }
+.project-links { display: flex; gap: 18px; align-items: center; font-size: 12px; margin: 18px 0 0; }
+.open-project { color: var(--blue); font-weight: 500; }
+.open-project span { margin-left: 4px; }
+.connection-heading { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin: 20px 0 10px; }
+.related { list-style: none; margin: 0; padding: 0; }
+.related li { padding: 8px 0; border-top: 1px solid var(--line); }
+.related button { display: block; text-align: left; background: none; border: 0; padding: 0; color: var(--blue); font-size: 12px; }
+.related p { margin: 8px 0 0; font-size: 11px; line-height: 1.6; color: var(--secondary); }
+.related summary { margin-top: 4px; font-size: 10px; color: var(--secondary); cursor: pointer; }
+.related summary::marker { color: var(--muted); }
+.no-connections { color: var(--muted); font-size: 12px; }
+.selection-status { margin: 14px 0 0; font-size: 10px; color: var(--muted); }
+.directory { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+.project { min-width: 0; padding: 24px 0 28px; border-top: 1px solid var(--line); }
+.project h2 { margin: 8px 0 10px; font-size: 22px; font-weight: 600; line-height: 1.25; letter-spacing: -.025em; }
+.project-description { margin: 0; }
+footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; color: var(--muted); padding-top: 24px; padding-bottom: 30px; }
+@media (prefers-reduced-motion: reduce) { .node { transition: none; } }
+@media (max-width: 1000px) {
+  .map-view { grid-template-columns: minmax(0, 1fr) 290px; }
+  .map-panel { padding-left: 16px; padding-right: 16px; }
+  .map-header { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .project-detail { padding: 22px; }
+  .node { padding: 10px; }
+  .node strong { font-size: 12px; }
+  .node .node-question { font-size: 10px; }
+  .edge-label { font-size: 8px; }
+}
+@media (max-width: 760px) {
+  .site-header, main, footer { padding-left: 20px; padding-right: 20px; }
+  .site-header { height: 64px; }
+  .site-header nav { gap: 18px; font-size: 11px; }
+  .intro { padding: 28px 0 22px; }
+  h1 { font-size: 42px; }
+  .intro p { font-size: 13px; }
+  .view-bar { margin-bottom: 16px; }
+  .map-view { display: block; }
+  .map-header { flex-direction: row; align-items: center; }
+  .map-header h2 { font-size: 11px; }
+  .connection-filters button { font-size: 9px; padding: 5px; }
+  .map-panel { padding: 16px 14px; }
+  .graph { height: 390px; margin-top: 20px; }
+  .node { width: 44%; min-height: 97px; padding: 10px 11px; }
+  .node .node-category { font-size: 8px; }
+  .node strong { font-size: 13px; }
+  .node .node-question { font-size: 10px; }
+  .node[data-project="chip-supply-chain"] { left: 0; top: 0; }
+  .node[data-project="datacenter-map"] { left: 56%; top: 0; }
+  .node[data-project="datacenter-listings"] { left: 28%; top: 35%; }
+  .node[data-project="neoclouds"] { left: 0; top: 70%; }
+  .node[data-project="ai-demand-supply"] { left: 56%; top: 70%; }
+  .edge-label { display: none; }
+  .map-key { gap: 14px; font-size: 9px; }
+  .map-note { font-size: 9px; }
+  .project-detail { border-left: 0; border-top: 1px solid var(--line); padding: 24px; }
+  .project-detail h2 { font-size: 25px; }
+  .project-description { font-size: 13px; }
+  .directory { grid-template-columns: 1fr; }
+  .project { padding: 22px 0; }
+}
+@media print {
+  .map-view, .view-bar { display: none !important; }
+  .directory[hidden] { display: grid !important; }
+  .directory { grid-template-columns: 1fr; }
+  .project { break-inside: avoid; }
+}
+.edge.inactive { opacity: .35; }
+.edge-label.inactive { opacity: .5; }
+.show-connections { border: 0; border-bottom: 1px solid var(--blue); background: none; color: var(--blue); font-size: 12px; padding: 0 0 2px; }
+@media (min-width: 761px) {
+  .site-header { height: 64px; }
+  .intro { padding-top: 28px; padding-bottom: 22px; }
+  h1 { font-size: 50px; }
+  .intro p { font-size: 14px; }
+  .project-detail { max-height: 520px; overflow-y: auto; overscroll-behavior: contain; }
+}
