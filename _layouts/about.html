@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Sonnet Xu</title>
+    <title>{{ page.title }} - Sonnet Xu</title>
     <style>
         :root {
             --text-color: #333;
             --link-color: #0066cc;
             --border-color: #e0e0e0;
-            --max-width: 650px;
+            --max-width: 760px;
         }
 
         * {
@@ -103,24 +103,10 @@
         </header>
 
         <main>
-            <h1 class="page-title">About</h1>
+            <h1 class="page-title">{{ page.title }}</h1>
 
             <div class="content">
-                <p>
-                    I'm Sonnet, an undergraduate at Stanford studying computer science (AI track) and math, advised by <a href="https://cs.stanford.edu/~sanmi/" target="_blank">Sanmi Koyejo</a> at the Stanford AI Lab. My research spans LLM evaluation and safety, fairness in medical AI, and ML systems.
-                </p>
-
-                <p>
-                    My research spans LLM safety and alignment, fairness in medical AI, and algorithmic decision-making. I collaborate with the <a href="https://daneshjoulab.com" target="_blank">Daneshjou Lab</a> on evaluating vision-language models in clinical settings, and with <a href="https://web.stanford.edu/~iashlagi/" target="_blank">Itai Ashlagi</a> on organ allocation. I've also been getting into ML systems &mdash; most recently working on distributed dataloading infrastructure at DatologyAI.
-                </p>
-
-                <p>
-                    Previously, I interned at Amazon working on LLM guardrails for the Rufus shopping assistant, and at the Hoover Institution researching technology policy with LLMs over patent databases.
-                </p>
-
-                <p>
-                    I grew up in Michigan. In my free time, you can find me reading short stories and memoirs, or eating brunch. I'm always open to connecting &mdash; feel free to <a href="contact.html">reach out</a>.
-                </p>
+{{ content }}
             </div>
         </main>
 
@@ -128,6 +114,10 @@
             <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
         </footer>
     </div>
+    <script>
+        // Markdown links can't set a target, so open outside sites in a new tab here.
+        document.querySelectorAll('.content a[href^="http"]').forEach(a => a.target = '_blank');
+    </script>
     <script data-goatcounter="https://sonnetx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
 </body>
