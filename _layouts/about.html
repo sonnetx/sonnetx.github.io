@@ -74,6 +74,76 @@
             border-bottom-color: var(--link-color);
         }
 
+        .content p:has(+ ul) {
+            margin-bottom: 10px;
+        }
+
+        .content ul {
+            margin: 0 0 25px 1.4em;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        /* Hover popup listing current books (_includes/reading.html) */
+        .reading {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dotted #999;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .reading:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        .reading-popup {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: calc(100% + 8px);
+            z-index: 10;
+            width: min(320px, calc(100vw - 32px));
+            padding: 12px 16px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            cursor: auto;
+        }
+
+        @media (hover: hover) {
+            .reading:hover .reading-popup {
+                display: block;
+            }
+        }
+
+        .reading:focus-visible .reading-popup,
+        .reading.open .reading-popup {
+            display: block;
+        }
+
+        .reading-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        .reading-book {
+            display: block;
+            margin-top: 4px;
+        }
+
         footer {
             margin-top: 80px;
             padding-top: 40px;
@@ -117,6 +187,28 @@
     <script>
         // Markdown links can't set a target, so open outside sites in a new tab here.
         document.querySelectorAll('.content a[href^="http"]').forEach(a => a.target = '_blank');
+
+        // Reading popup. Tapping toggles it on phones. Its left edge is set before it opens so it
+        // never runs off screen, using the same min(320px, 100vw - 32px) width as the CSS.
+        document.querySelectorAll('.reading').forEach(el => {
+            const popup = el.querySelector('.reading-popup');
+            const place = () => {
+                const viewport = document.documentElement.clientWidth;
+                const room = viewport - 16 - el.getBoundingClientRect().left;
+                popup.style.left = `${Math.min(0, room - Math.min(320, viewport - 32))}px`;
+            };
+            el.addEventListener('mouseenter', place);
+            el.addEventListener('focus', place);
+            el.addEventListener('click', () => {
+                place();
+                el.classList.toggle('open');
+            });
+        });
+        document.addEventListener('click', e => {
+            document.querySelectorAll('.reading.open').forEach(el => {
+                if (!el.contains(e.target)) el.classList.remove('open');
+            });
+        });
     </script>
     <script data-goatcounter="https://sonnetx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
