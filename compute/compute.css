@@ -18,13 +18,8 @@ button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 .skip { position: absolute; top: -60px; left: 20px; background: white; padding: 10px; z-index: 5; }
 .skip:focus { top: 10px; }
-.site-header, main, footer { max-width: 1280px; margin: auto; padding-left: 40px; padding-right: 40px; }
-.site-header { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); font-size: 12px; }
-.home { color: var(--ink); font-weight: 500; }
-.site-header nav { display: flex; gap: 26px; }
-.site-header nav a { color: var(--muted); }
-.site-header nav a[aria-current] { color: var(--ink); }
-.intro { padding: 35px 0 28px; }
+main, footer { max-width: 1280px; margin: auto; padding-left: 40px; padding-right: 40px; }
+.intro { padding: 40px 0 28px; }
 .eyebrow, .project-category { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 h1 { font-size: 54px; font-weight: 600; line-height: 1.15; letter-spacing: -.045em; margin: 9px 0 12px; }
 .intro p { color: var(--secondary); font-size: 15px; margin: 0; max-width: 740px; }
@@ -89,7 +84,8 @@ h1 { font-size: 54px; font-weight: 600; line-height: 1.15; letter-spacing: -.045
 .project-description { margin: 0; }
 footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; color: var(--muted); padding-top: 24px; padding-bottom: 30px; }
 @media (prefers-reduced-motion: reduce) { .node { transition: none; } }
-@media (max-width: 1000px) {
+/* Breakpoints allow for the 240px site sidebar, which is beside the page above 860px. */
+@media (max-width: 1240px) {
   .map-view { grid-template-columns: minmax(0, 1fr) 290px; }
   .map-panel { padding-left: 16px; padding-right: 16px; }
   .map-header { align-items: flex-start; flex-direction: column; gap: 8px; }
@@ -99,10 +95,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11
   .node .node-question { font-size: 10px; }
   .edge-label { font-size: 8px; }
 }
-@media (max-width: 760px) {
-  .site-header, main, footer { padding-left: 20px; padding-right: 20px; }
-  .site-header { height: 64px; }
-  .site-header nav { gap: 18px; font-size: 11px; }
+@media (max-width: 760px), (min-width: 861px) and (max-width: 1000px) {
+  main, footer { padding-left: 20px; padding-right: 20px; }
   .intro { padding: 28px 0 22px; }
   h1 { font-size: 42px; }
   .intro p { font-size: 13px; }
@@ -140,10 +134,13 @@ footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11
 .edge.inactive { opacity: .35; }
 .edge-label.inactive { opacity: .5; }
 .show-connections { border: 0; border-bottom: 1px solid var(--blue); background: none; color: var(--blue); font-size: 12px; padding: 0 0 2px; }
-@media (min-width: 761px) {
-  .site-header { height: 64px; }
-  .intro { padding-top: 28px; padding-bottom: 22px; }
+@media (min-width: 761px) and (max-width: 860px), (min-width: 1001px) {
+  .intro { padding-bottom: 22px; }
   h1 { font-size: 50px; }
   .intro p { font-size: 14px; }
   .project-detail { max-height: 520px; overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-width: 860px) {
+  .site-sidebar { padding: 24px 20px 0; margin-bottom: 0; }
+  .intro { padding-top: 28px; }
 }

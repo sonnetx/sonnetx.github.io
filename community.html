@@ -1,9 +1,13 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community - Sonnet Xu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+    <link rel="stylesheet" href="/sidebar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&display=swap" rel="stylesheet">
@@ -54,27 +58,6 @@
             z-index: 1;
             max-width: var(--max-width);
             margin: 0 auto;
-        }
-
-        /* Back link */
-        .site-header {
-            position: relative;
-            z-index: 2;
-        }
-
-        .site-title {
-            font-size: 20px;
-            font-weight: normal;
-        }
-
-        .site-title a {
-            color: var(--ink);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .site-title a:hover {
-            color: var(--sage-deep);
         }
 
         /* Garland and side vines (drawn by the script at the bottom) */
@@ -136,7 +119,6 @@
             font-style: italic;
             font-variation-settings: 'SOFT' 100, 'WONK' 1;
             line-height: 1;
-            text-align: center;
             color: var(--sage-deep);
             margin-top: -34px;
             letter-spacing: -0.5px;
@@ -146,7 +128,7 @@
             display: block;
             width: 220px;
             height: 40px;
-            margin: 6px auto 60px;
+            margin: 6px 0 60px;
             overflow: visible;
         }
 
@@ -740,11 +722,9 @@
 
     <div class="side-vines" aria-hidden="true"></div>
 
-    <div class="container">
-        <header class="site-header">
-            <h1 class="site-title"><a href="index.html">&larr; Sonnet Xu</a></h1>
-        </header>
+    {% include sidebar.html active="community" %}
 
+    <div class="container">
         <svg class="garland" aria-hidden="true" focusable="false"></svg>
 
         <main>
@@ -1180,7 +1160,8 @@
                 var kept = sideVines.map(function (vine) { return vine.grown / vine.len; });
                 sideBox.innerHTML = '';
                 sideVines = [];
-                var pageW = document.documentElement.clientWidth;
+                // The vine layer spans the body, which starts after the site sidebar.
+                var pageW = sideBox.clientWidth;
                 var margin = (pageW - container.offsetWidth) / 2;
                 // Wide screens get vines in the margins; narrow ones get slim vines hugging the edges.
                 var roomy = margin >= 110;

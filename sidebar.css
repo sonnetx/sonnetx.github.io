@@ -1,0 +1,213 @@
+/* Sidebar shared by every page (_includes/sidebar.html). It sits fixed against the left edge
+   of the window and becomes a top bar with horizontal tabs on narrow screens. */
+
+:root {
+    --sidebar-width: 240px;
+}
+
+html body {
+    margin-left: var(--sidebar-width);
+}
+
+.site-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    width: var(--sidebar-width);
+    overflow-y: auto;
+    padding: 40px 24px 32px;
+    border-right: 1px solid #e0e0e0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    text-align: left;
+}
+
+.site-sidebar * {
+    box-sizing: border-box;
+}
+
+.site-sidebar a,
+.site-sidebar a:hover {
+    text-decoration: none;
+}
+
+.sidebar-name {
+    display: inline-block;
+    font-size: 26px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.sidebar-name:hover {
+    color: #0066cc;
+}
+
+.sidebar-affiliation {
+    margin: 2px 0 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #666;
+}
+
+.sidebar-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 22px -10px 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-tabs a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border-left: 2px solid transparent;
+    border-radius: 0 4px 4px 0;
+    font-size: 16px;
+    color: #555;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-tabs a i {
+    font-size: 17px;
+    color: #999;
+}
+
+.sidebar-tabs a:hover {
+    background: #f4f4f4;
+    color: #333;
+}
+
+.sidebar-tabs a[aria-current="page"] {
+    border-left-color: #0066cc;
+    background: #eef4fb;
+    color: #0066cc;
+}
+
+.sidebar-tabs a[aria-current="page"] i {
+    color: #0066cc;
+}
+
+.sidebar-bio {
+    margin: 0 0 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.sidebar-bio a {
+    color: #0066cc;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.sidebar-bio a:hover {
+    border-bottom-color: #0066cc;
+}
+
+.sidebar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+.sidebar-links li {
+    margin: 0 0 8px;
+}
+
+.sidebar-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0066cc;
+}
+
+.sidebar-links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.sidebar-links i {
+    font-size: 16px;
+    color: #999;
+}
+
+@media (max-width: 860px) {
+    html body {
+        margin-left: 0;
+    }
+
+    .site-sidebar {
+        position: static;
+        width: auto;
+        overflow: visible;
+        padding: 0;
+        margin-bottom: 32px;
+        border-right: 0;
+    }
+
+    .sidebar-name {
+        font-size: 24px;
+    }
+
+    .sidebar-tabs {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0 2px;
+        margin: 14px 0 20px;
+        padding-bottom: 0;
+    }
+
+    .sidebar-tabs a {
+        flex: 0 0 auto;
+        gap: 6px;
+        padding: 8px 10px;
+        border-left: 0;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+        font-size: 15px;
+    }
+
+    .sidebar-tabs a i {
+        display: none;
+    }
+
+    .sidebar-tabs a:hover {
+        background: none;
+    }
+
+    .sidebar-tabs a[aria-current="page"] {
+        border-bottom-color: #0066cc;
+        background: none;
+    }
+
+    .sidebar-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+    }
+
+    .sidebar-links li {
+        margin: 0;
+    }
+
+    /* Away from the homepage, keep the top bar to the name and tabs. */
+    .site-sidebar:not([data-page="home"]) .sidebar-affiliation,
+    .site-sidebar:not([data-page="home"]) .sidebar-links {
+        display: none;
+    }
+
+    .site-sidebar:not([data-page="home"]) .sidebar-tabs {
+        margin-bottom: 0;
+    }
+}
