@@ -176,10 +176,16 @@
 
         .news-list li.news-featured {
             background: #fff8e1;
-            border: 1px solid #f1e0ae;
             border-radius: 6px;
-            padding: 12px 14px;
+            padding: 13px 15px;
             margin: 0 -15px 16px;
+        }
+
+        /* Georgia has no medium weight, so a thin stroke on the regular face stands in for one. */
+        .news-list strong,
+        .highlight-list strong {
+            font-weight: normal;
+            -webkit-text-stroke: 0.6px currentColor;
         }
 
         .news-list a {

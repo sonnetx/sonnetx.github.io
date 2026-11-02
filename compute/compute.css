@@ -141,6 +141,9 @@ footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11
   .project-detail { max-height: 520px; overflow-y: auto; overscroll-behavior: contain; }
 }
 @media (max-width: 860px) {
-  .site-sidebar { padding: 24px 20px 0; margin-bottom: 0; }
+  /* The sidebar has no box of its own here (see sidebar.css), so its pieces carry the gutter. */
+  .site-sidebar > * { margin-left: 20px; margin-right: 20px; }
+  .sidebar-name { margin-top: 24px; }
+  .site-sidebar:not([data-page="home"]) .sidebar-tabs { margin-bottom: 0; }
   .intro { padding-top: 28px; }
 }

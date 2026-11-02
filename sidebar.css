@@ -3,6 +3,8 @@
 
 :root {
     --sidebar-width: 240px;
+    /* Background of the sticky tab bar on narrow screens; pages with a tinted body override it. */
+    --sidebar-bg: #fff;
 }
 
 html body {
@@ -143,17 +145,19 @@ html body {
 }
 
 @media (max-width: 860px) {
+    html {
+        /* Keeps in-page anchors clear of the sticky tab bar. */
+        scroll-padding-top: 52px;
+    }
+
     html body {
         margin-left: 0;
     }
 
+    /* The sidebar gives up its own box so the tab bar can stick to the top of the whole page
+       rather than only the sidebar's height. */
     .site-sidebar {
-        position: static;
-        width: auto;
-        overflow: visible;
-        padding: 0;
-        margin-bottom: 32px;
-        border-right: 0;
+        display: contents;
     }
 
     .sidebar-name {
@@ -161,17 +165,24 @@ html body {
     }
 
     .sidebar-tabs {
+        position: sticky;
+        top: 0;
+        z-index: 20;
         flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0 2px;
+        gap: 0 22px;
         margin: 14px 0 20px;
         padding-bottom: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-bottom: 0;
+        /* Paints the bar's background and bottom rule out to both edges of the window. */
+        border-image: linear-gradient(var(--sidebar-bg) calc(100% - 1px), #e0e0e0 0) fill 0 / 0 / 0 100vmax;
     }
 
     .sidebar-tabs a {
         flex: 0 0 auto;
         gap: 6px;
-        padding: 8px 10px;
+        padding: 8px 0;
         border-left: 0;
         border-bottom: 2px solid transparent;
         border-radius: 0;
@@ -197,6 +208,10 @@ html body {
         gap: 6px 18px;
     }
 
+    .sidebar-links {
+        margin-bottom: 32px;
+    }
+
     .sidebar-links li {
         margin: 0;
     }
@@ -208,6 +223,24 @@ html body {
     }
 
     .site-sidebar:not([data-page="home"]) .sidebar-tabs {
-        margin-bottom: 0;
+        margin-bottom: 32px;
+    }
+}
+
+/* On phones the six tabs spread across one row, shrinking a step on the narrowest screens. */
+@media (max-width: 480px) {
+    .sidebar-tabs {
+        justify-content: space-between;
+        gap: 0 8px;
+    }
+
+    .sidebar-tabs a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 380px) {
+    .sidebar-tabs a {
+        font-size: 13px;
     }
 }
