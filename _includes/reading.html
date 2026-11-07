@@ -1,1 +1,7 @@
-<span class="reading" tabindex="0">{{ include.text }}<span class="reading-popup" role="tooltip"><span class="reading-label">Currently reading</span>{% for book in page.currently_reading %}<span class="reading-book"><cite>{{ book.title }}</cite> by {{ book.author }}</span>{% endfor %}</span></span>
+{%- assign books = site.data.reading.current -%}
+{%- assign label = "Currently reading" -%}
+{%- unless books.size > 0 -%}
+{%- assign books = site.data.reading.finished | slice: 0, 3 -%}
+{%- assign label = "Recently finished" -%}
+{%- endunless -%}
+<span class="hover-note" tabindex="0">{{ include.text }}<span class="hover-note-card"><span class="reading-label">{{ label }}</span>{% for book in books %}<span class="reading-book"><cite>{{ book.title }}</cite> by {{ book.author }}</span>{% endfor %}<a class="reading-more" href="/reading.html">Reading list &rarr;</a></span></span>

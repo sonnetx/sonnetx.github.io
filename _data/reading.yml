@@ -1,0 +1,13 @@
+# Books on the Reading page (reading.html) and in the popup over "reading" on About.
+# Move a book from current to the top of finished when you finish it. Newest first in both lists.
+# While current is empty, the About popup shows the three most recent finished books instead.
+
+current: []
+
+finished:
+  - title: Lolita
+    author: Vladimir Nabokov
+  - title: 25th Hour
+    author: David Benioff
+  - title: The Painted Veil
+    author: W. Somerset Maugham

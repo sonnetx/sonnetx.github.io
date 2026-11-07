@@ -46,7 +46,9 @@ html body {
     transition: color 0.2s;
 }
 
-.sidebar-name:hover {
+/* The name links to About, so it takes the tab highlight color there. */
+.sidebar-name:hover,
+.sidebar-name[aria-current="page"] {
     color: #0066cc;
 }
 
@@ -227,7 +229,7 @@ html body {
     }
 }
 
-/* On phones the six tabs spread across one row, shrinking a step on the narrowest screens. */
+/* On phones the four tabs spread across one row, shrinking a step on the narrowest screens. */
 @media (max-width: 480px) {
     .sidebar-tabs {
         justify-content: space-between;

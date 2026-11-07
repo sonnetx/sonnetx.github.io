@@ -68,21 +68,22 @@
             padding-left: 4px;
         }
 
-        /* Hover popup listing current books (_includes/reading.html) */
-        .reading {
+        /* Hover popups on words in the text: the book list (_includes/reading.html) and short
+           notes (_includes/note.html). */
+        .hover-note {
             position: relative;
             cursor: pointer;
             border-bottom: 1px dotted #999;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .reading:focus-visible {
+        .hover-note:focus-visible {
             outline: 2px solid var(--link-color);
             outline-offset: 2px;
             border-radius: 2px;
         }
 
-        .reading-popup {
+        .hover-note-card {
             display: none;
             position: absolute;
             left: 0;
@@ -100,14 +101,24 @@
             cursor: auto;
         }
 
+        /* Covers the gap above the popup so the pointer can reach its link without closing it. */
+        .hover-note-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100%;
+            height: 10px;
+        }
+
         @media (hover: hover) {
-            .reading:hover .reading-popup {
+            .hover-note:hover .hover-note-card {
                 display: block;
             }
         }
 
-        .reading:focus-visible .reading-popup,
-        .reading.open .reading-popup {
+        .hover-note:focus-visible .hover-note-card,
+        .hover-note.open .hover-note-card {
             display: block;
         }
 
@@ -123,6 +134,12 @@
         .reading-book {
             display: block;
             margin-top: 4px;
+        }
+
+        .content .reading-more {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 13px;
         }
 
         footer {
@@ -167,10 +184,10 @@
         // Markdown links can't set a target, so open outside sites in a new tab here.
         document.querySelectorAll('.content a[href^="http"]').forEach(a => a.target = '_blank');
 
-        // Reading popup. Tapping toggles it on phones. Its left edge is set before it opens so it
+        // Hover popups. Tapping toggles one on phones. Its left edge is set before it opens so it
         // never runs off screen, using the same min(320px, 100vw - 32px) width as the CSS.
-        document.querySelectorAll('.reading').forEach(el => {
-            const popup = el.querySelector('.reading-popup');
+        document.querySelectorAll('.hover-note').forEach(el => {
+            const popup = el.querySelector('.hover-note-card');
             const place = () => {
                 const viewport = document.documentElement.clientWidth;
                 const room = viewport - 16 - el.getBoundingClientRect().left;
@@ -184,7 +201,7 @@
             });
         });
         document.addEventListener('click', e => {
-            document.querySelectorAll('.reading.open').forEach(el => {
+            document.querySelectorAll('.hover-note.open').forEach(el => {
                 if (!el.contains(e.target)) el.classList.remove('open');
             });
         });
