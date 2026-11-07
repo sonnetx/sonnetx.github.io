@@ -103,25 +103,21 @@
         <main>
             <h1 class="page-title">Reading</h1>
 
-            {%- comment -%} The book lists live in _data/reading.yml. {%- endcomment -%}
-            {% if site.data.reading.current.size > 0 %}
-            <section class="reading-section">
-                <h2 class="section-title">Currently reading</h2>
-                <ul class="book-list">
-                    {%- for book in site.data.reading.current %}
-                    <li class="book">
-                        <cite class="book-title">{{ book.title }}</cite>
-                        <span class="book-author">{{ book.author }}</span>
-                    </li>
-                    {%- endfor %}
-                </ul>
-            </section>
-            {% endif %}
+            {%- comment -%}
+                The book lists live in _data/reading.yml. Each entry below pairs a list name there
+                with its heading here, in page order. Empty lists are skipped.
+            {%- endcomment -%}
+            {%- assign lists = "current:Currently reading|to_read:To read|finished:Finished|shelved:Shelved" | split: "|" -%}
+            {%- for list in lists -%}
+            {%- assign parts = list | split: ":" -%}
+            {%- assign key = parts[0] -%}
+            {%- assign books = site.data.reading[key] -%}
+            {%- if books.size > 0 %}
 
             <section class="reading-section">
-                <h2 class="section-title">Finished</h2>
+                <h2 class="section-title">{{ parts[1] }}</h2>
                 <ul class="book-list">
-                    {%- for book in site.data.reading.finished %}
+                    {%- for book in books %}
                     <li class="book">
                         <cite class="book-title">{{ book.title }}</cite>
                         <span class="book-author">{{ book.author }}</span>
@@ -129,6 +125,8 @@
                     {%- endfor %}
                 </ul>
             </section>
+            {%- endif -%}
+            {%- endfor %}
         </main>
 
         <footer>

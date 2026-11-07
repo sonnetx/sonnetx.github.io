@@ -1,8 +1,16 @@
 # Books on the Reading page (reading.html) and in the popup over "reading" on About.
-# Move a book from current to the top of finished when you finish it. Newest first in both lists.
+# Move a book from current to the top of finished when you finish it, or to shelved if you
+# abandon it. Newest first in each list.
 # While current is empty, the About popup shows the three most recent finished books instead.
+# to_read and shelved only appear on the Reading page.
 
 current: []
+
+to_read:
+  - title: The Prize
+    author: Daniel Yergin
+  - title: Fight Club
+    author: Chuck Palahniuk
 
 finished:
   - title: Lolita
@@ -11,3 +19,7 @@ finished:
     author: David Benioff
   - title: The Painted Veil
     author: W. Somerset Maugham
+
+shelved:
+  - title: The New Jim Crow
+    author: Michelle Alexander
