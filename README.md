@@ -6,4 +6,6 @@ Books live in `_data/reading.yml`, split into `current`, `to_read`, `finished` a
 
 There is no Writing page for now, and the old `writing.html` and `blog.html` URLs redirect to the homepage. Community (`community.html`) has no tab either, and About links to it.
 
-Every page shares the sidebar in `_includes/sidebar.html`, styled by `sidebar.css`. Each page pulls it in with `{% include sidebar.html active="research" %}`, where `active` names the highlighted tab. The homepage bio sits in a `capture` block at the top of `index.html` and only shows on the homepage. Pages need the empty `---` front matter at the top so GitHub Pages runs the include.
+Every page shares the editorial masthead in `_includes/sidebar.html` (the legacy filename is retained), styled by `sidebar.css`. Each page pulls it in with `{% include sidebar.html active="research" %}`, where `active` names the highlighted tab. The homepage layout is in `index.html` and `editorial.css`; the compute hub adds `compute/editorial-compute.css` without changing its interactive project map. Pages need the empty `---` front matter at the top so GitHub Pages runs the include. Each page's main element uses `id="main-content"` for the shared skip link.
+
+Build locally with `jekyll build --destination /tmp/sonnetx-site`, or serve with `jekyll serve --host 0.0.0.0 --port 4000 --destination /tmp/sonnetx-site`. No new dependencies are required for the editorial redesign.

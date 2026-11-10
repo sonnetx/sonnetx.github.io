@@ -1,21 +1,19 @@
-<aside class="site-sidebar" data-page="{{ include.active }}">
-    <a class="sidebar-name" href="/about.html"{% if include.active == "about" %} aria-current="page"{% endif %}>Sonnet Xu</a>
-    <p class="sidebar-affiliation">Stanford University</p>
-
-    <nav class="sidebar-tabs" aria-label="Pages">
-        <a href="/"{% if include.active == "home" %} aria-current="page"{% endif %}><i class="ri-home-5-line" aria-hidden="true"></i>Home</a>
-        <a href="/research.html"{% if include.active == "research" %} aria-current="page"{% endif %}><i class="ri-flask-line" aria-hidden="true"></i>Research</a>
-        <a href="/projects.html"{% if include.active == "projects" %} aria-current="page"{% endif %}><i class="ri-folder-3-line" aria-hidden="true"></i>Projects</a>
-        <a href="/reading.html"{% if include.active == "reading" %} aria-current="page"{% endif %}><i class="ri-book-open-line" aria-hidden="true"></i>Reading</a>
-    </nav>
-
-    {{ include.intro }}
-
-    <ul class="sidebar-links">
-        <li><a href="mailto:sonnet@stanford.edu"><i class="ri-mail-line" aria-hidden="true"></i>Email</a></li>
-        <li><a href="https://github.com/sonnetx" target="_blank"><i class="ri-github-line" aria-hidden="true"></i>GitHub</a></li>
-        <li><a href="https://x.com/sonnet_xu" target="_blank"><i class="ri-twitter-x-line" aria-hidden="true"></i>Twitter</a></li>
-        <li><a href="https://linkedin.com/in/sonnetxu" target="_blank"><i class="ri-linkedin-box-line" aria-hidden="true"></i>LinkedIn</a></li>
-        <li><a href="https://scholar.google.com/citations?user=nslBVGoAAAAJ" target="_blank"><i class="ri-graduation-cap-line" aria-hidden="true"></i>Google Scholar</a></li>
-    </ul>
-</aside>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header" data-page="{{ include.active }}">
+    <div class="masthead">
+        <a class="masthead-name" href="/" aria-label="Sonnet Xu home">Sonnet Xu<span aria-hidden="true">.</span></a>
+        <p class="masthead-note">An ongoing exploration of<br>intelligence, infrastructure & being human.</p>
+        <a class="masthead-contact" href="mailto:sonnet@stanford.edu">Stanford, California<br><span>Say hello <span aria-hidden="true">↗</span></span></a>
+    </div>
+    <div class="navigation-rule">
+        <nav class="editorial-nav" aria-label="Main navigation">
+            <a href="/"{% if include.active == "home" %} aria-current="page"{% endif %}>Home</a>
+            <a href="/research.html"{% if include.active == "research" %} aria-current="page"{% endif %}>Research</a>
+            <a href="/compute/"{% if include.active == "compute" %} aria-current="page"{% endif %}>Compute</a>
+            <a href="/projects.html"{% if include.active == "projects" %} aria-current="page"{% endif %}>Projects</a>
+            <a href="/reading.html"{% if include.active == "reading" %} aria-current="page"{% endif %}>Reading</a>
+            <a href="/about.html"{% if include.active == "about" %} aria-current="page"{% endif %}>About</a>
+        </nav>
+        <span class="navigation-note">A personal collection · Est. in curiosity</span>
+    </div>
+</header>

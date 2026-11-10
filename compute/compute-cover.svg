@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="460" viewBox="0 0 800 460" fill="none">
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" stroke="#272820" stroke-opacity=".12" stroke-width=".6"/></pattern>
+    <pattern id="rack" width="76" height="14" patternUnits="userSpaceOnUse"><path d="M0 13H76" stroke="#dab28d" stroke-opacity=".5"/><path d="M7 6H38M55 6H62M67 6H70" stroke="#dab28d" stroke-width="1.4"/></pattern>
+    <pattern id="chip" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M0 0H9V9" stroke="#dab28d" stroke-width="1"/></pattern>
+  </defs>
+  <path fill="#dab28d" d="M0 0H800V460H0z"/><path fill="url(#grid)" d="M0 0H800V460H0z"/>
+  <circle cx="485" cy="214" r="150" fill="#a83927"/><circle cx="485" cy="214" r="170" stroke="#a83927" stroke-opacity=".4"/><circle cx="485" cy="214" r="190" stroke="#a83927" stroke-opacity=".2"/>
+  <path d="M-40 357 243 194 577 387 293 550z" fill="#c09876"/>
+  <g stroke="#272820" stroke-width="1.2">
+    <path d="m173 210 66-38 77 45-66 38z" fill="#efe3ca"/><path d="M173 210v147l77 45V255z" fill="#272820"/><path d="M250 255v147l66-38V217z" fill="#62604e"/><path d="M173 210v147l77 45V255z" fill="url(#rack)"/>
+    <path d="m273 152 66-38 77 45-66 38z" fill="#efe3ca"/><path d="M273 152v147l77 45V197z" fill="#272820"/><path d="M350 197v147l66-38V159z" fill="#62604e"/><path d="M273 152v147l77 45V197z" fill="url(#rack)"/>
+    <path d="m374 94 66-38 77 45-66 38z" fill="#efe3ca"/><path d="M374 94v147l77 45V139z" fill="#272820"/><path d="M451 139v147l66-38V101z" fill="#62604e"/><path d="M374 94v147l77 45V139z" fill="url(#rack)"/>
+  </g>
+  <g stroke="#efe3ca" stroke-width="1.2"><path d="m112 398 122-70 87 50 91-52 116 67 123-71"/><path d="m76 377 158-91 87 50 91-52 116 67 123-71"/><path d="m40 356 194-112 87 50 91-52 116 67 123-71"/><path d="m112 398 37 21 85-49 87 50 91-52 116 67 123-71"/></g>
+  <g transform="translate(579 249) rotate(30) skewX(-30)"><path fill="#272820" stroke="#efe3ca" stroke-width="2" d="M-55-55H55V55H-55z"/><path fill="url(#chip)" stroke="#dab28d" stroke-width="1.5" d="M-35-35H35V35H-35z"/><path stroke="#efe3ca" stroke-width="3" stroke-dasharray="2 6" d="M-56-43V43M56-43V43M-43-56H43M-43 56H43"/></g>
+  <g fill="#efe3ca"><circle cx="112" cy="398" r="3"/><circle cx="76" cy="377" r="3"/><circle cx="40" cy="356" r="3"/><circle cx="651" cy="322" r="3"/><circle cx="651" cy="280" r="3"/><circle cx="651" cy="238" r="3"/></g>
+  <path d="M39 68H75M57 50V86M728 372h25m-12-12v25" stroke="#272820" stroke-opacity=".45"/>
+  <g font-family="monospace" font-size="8" letter-spacing="1" fill="#272820"><text x="32" y="433">SILICON → INFRASTRUCTURE → ECONOMICS</text><text x="700" y="90" transform="rotate(90 700 90)">THE PHYSICAL LAYER OF AI</text></g>
+</svg>
