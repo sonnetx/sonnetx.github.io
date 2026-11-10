@@ -20,6 +20,7 @@ html:root {
     scroll-padding-top: 24px;
 }
 * { box-sizing: border-box; }
+html:has(.side-vines) { overflow-x: clip; }
 [hidden] { display: none !important; }
 html body {
     margin: 0;
