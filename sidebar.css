@@ -68,4 +68,11 @@ html body > .container > footer { color: var(--editorial-muted); border-top-colo
     html .research-title { font-size: 23px; }
     html .book-list { grid-template-columns: 1fr; }
 }
+@media (max-width: 360px) {
+    .editorial-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 15px; }
+    .editorial-nav a { text-align: center; font-size: 10px; padding: 12px 0; }
+}
+.community-page .site-header { background: var(--editorial-paper); }
+.community-page .garland { overflow: hidden; }
+.community-page .side-vines { contain: paint; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
