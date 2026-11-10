@@ -13,8 +13,8 @@ html body { margin: 0; padding: 0 48px; background: var(--editorial-paper); colo
 * { box-sizing: border-box; }
 ::selection { background: #e5b398; color: #272820; }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--editorial-red); outline-offset: 5px; }
-.skip-link { position: absolute; left: 20px; top: -100px; z-index: 100; padding: 10px 18px; background: var(--editorial-ink); color: white; font: 14px var(--editorial-sans); }
-.skip-link:focus { top: 10px; }
+html body > .skip-link, html body > .skip-link:hover { position: absolute; left: 20px; top: -100px; z-index: 100; padding: 10px 18px; background: var(--editorial-ink); color: white; font: 14px var(--editorial-sans); }
+html body > .skip-link:focus { top: 10px; }
 .site-header { max-width: 1320px; margin: 0 auto; color: var(--editorial-ink); }
 .site-header a { text-decoration: none; color: inherit; }
 .masthead { display: flex; gap: 40px; align-items: center; justify-content: space-between; padding: 29px 0 23px; }
