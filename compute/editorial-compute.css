@@ -28,6 +28,7 @@
 .compute-page .connection-filters button[aria-pressed="true"] { border-color: #d1aa96; }
 .compute-page .edge { stroke: #bd8c75; }
 .compute-page .edge.active { stroke: var(--blue); }
+.compute-page #data-arrow path { fill: var(--blue); }
 .compute-page .edge-topic { stroke: #999a89; }
 .compute-page .edge-label { fill: #7f4938; }
 .compute-page .map-key .key-data { border-color: #bd8c75; }

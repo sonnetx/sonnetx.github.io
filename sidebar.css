@@ -75,4 +75,5 @@ html body > .container > footer { color: var(--editorial-muted); border-top-colo
 .community-page .site-header { background: var(--editorial-paper); }
 .community-page .garland { overflow: hidden; }
 .community-page .side-vines { contain: paint; }
+.community-page .photo-section { overflow-x: clip; overflow-clip-margin: 12px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
