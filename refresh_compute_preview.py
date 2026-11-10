@@ -94,6 +94,7 @@ def main():
         'attribution': 'Sonnet Xu / Datacenter Map, CC BY 4.0; geometry US Atlas / US Census (public domain)',
         'price_year': 2024,
         'median': round(statistics.median(s['p'] for s in states), 2),
+        'max_price': high,
         'default': next(s for s in states if s['a'] == 'VA'),
         'states': states,
     }
