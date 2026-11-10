@@ -3,365 +3,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonnet Xu</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
-    <link rel="stylesheet" href="/sidebar.css">
-    <style>
-        :root {
-            --text-color: #333;
-            --link-color: #0066cc;
-            --border-color: #e0e0e0;
-            --max-width: 760px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Georgia, 'Times New Roman', serif;
-            font-size: 18px;
-            line-height: 1.6;
-            color: var(--text-color);
-            background: #fff;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-        }
-
-        /* Section headings */
-        .section-title {
-            font-size: 24px;
-            font-weight: normal;
-            color: var(--text-color);
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Research entries */
-        .research-section {
-            margin-bottom: 50px;
-        }
-
-        .research-entry {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .research-entry:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .research-title {
-            font-size: 19px;
-            font-weight: normal;
-            line-height: 1.4;
-            margin-bottom: 6px;
-            color: var(--text-color);
-        }
-
-        .research-authors {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 4px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.5;
-        }
-
-        .research-venue {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 10px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        .research-venue em {
-            font-style: italic;
-        }
-
-        .research-links {
-            font-size: 14px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        .research-links a {
-            color: var(--link-color);
-            text-decoration: none;
-            margin-right: 15px;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .research-links a:hover {
-            border-bottom-color: var(--link-color);
-        }
-
-        .see-all {
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        .see-all a {
-            color: var(--link-color);
-            text-decoration: none;
-        }
-
-        .see-all a:hover {
-            text-decoration: underline;
-        }
-
-        /* Highlights */
-        .highlights {
-            margin-bottom: 50px;
-        }
-
-        .highlight-list {
-            list-style: none;
-        }
-
-        .highlight-list li {
-            margin-bottom: 12px;
-            padding-left: 0;
-            line-height: 1.6;
-            font-size: 16px;
-        }
-
-        .highlight-date {
-            color: #999;
-            font-size: 14px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            margin-right: 10px;
-        }
-
-        .highlight-list a {
-            color: var(--link-color);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .highlight-list a:hover {
-            border-bottom-color: var(--link-color);
-        }
-
-        /* News */
-        .news-list {
-            list-style: none;
-        }
-
-        .news-list li {
-            display: flex;
-            align-items: baseline;
-            gap: 14px;
-            margin-bottom: 12px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .news-list .highlight-date {
-            flex: 0 0 64px;
-            margin-right: 0;
-            white-space: nowrap;
-        }
-
-        .news-list li.news-featured {
-            background: #fff8e1;
-            border-radius: 6px;
-            padding: 13px 15px;
-            margin: 0 -15px 16px;
-        }
-
-        /* Georgia has no medium weight, so a thin stroke on the regular face stands in for one. */
-        .news-list strong,
-        .highlight-list strong {
-            font-weight: normal;
-            -webkit-text-stroke: 0.6px currentColor;
-        }
-
-        .news-list a {
-            color: var(--link-color);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .news-list a:hover {
-            border-bottom-color: var(--link-color);
-        }
-
-        .celebrate {
-            display: inline-block;
-            transform-origin: 70% 70%;
-            color: #d99a00;
-        }
-
-        .news-featured:hover .celebrate {
-            animation: wiggle 0.6s ease-in-out;
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-12deg) scale(1.15); }
-            50% { transform: rotate(10deg) scale(1.15); }
-            75% { transform: rotate(-6deg) scale(1.05); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .news-featured:hover .celebrate {
-                animation: none;
-            }
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 80px;
-            padding-top: 40px;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        /* Responsive */
-        @media (max-width: 700px) {
-            body {
-                font-size: 16px;
-                padding: 20px 15px;
-            }
-
-            .research-title {
-                font-size: 17px;
-            }
-
-            .news-list li.news-featured {
-                margin: 0 0 16px;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sonnet Xu — Following the threads of intelligence</title>
+  <meta name="description" content="Sonnet Xu at Stanford. Exploring AI through research in model evaluation and safety, and interactive projects on the infrastructure behind it.">
+  <meta property="og:title" content="Sonnet Xu — Following the threads of intelligence">
+  <meta property="og:description" content="From the behavior of models to the infrastructure that makes them possible. Research, compute, and a few human things.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sonnetx.github.io/">
+  <meta name="theme-color" content="#f3f2e9">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/story.css">
+  <script src="/story.js" defer></script>
 </head>
 <body>
-    {% capture intro %}
-    <p class="sidebar-bio">
-        I'm an undergraduate studying computer science and math, advised by <a href="https://cs.stanford.edu/~sanmi/" target="_blank">Sanmi Koyejo</a>. I'm an active member of the <a href="https://daneshjoulab.com" target="_blank">Daneshjou Lab</a>.
-    </p>
-    <p class="sidebar-bio">
-        My research interests include LLM evaluations, fairness, explainability, and interpretability. I've recently started exploring a lot in <a href="compute/">compute</a>.
-    </p>
-    {% endcapture %}
-    {% include sidebar.html active="home" intro=intro %}
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Sonnet Xu, home"><span class="brand-mark" aria-hidden="true">✳</span> Sonnet Xu</a>
+    <nav aria-label="Story chapters">
+      <a href="#research" data-chapter="research"><span>01</span> Research</a>
+      <a href="#compute" data-chapter="compute"><span>02</span> Compute</a>
+      <a href="#human" data-chapter="human"><span>03</span> Human</a>
+    </nav>
+    <a class="header-contact" href="mailto:sonnet@stanford.edu">Say hello <span aria-hidden="true">↗</span></a>
+    <div class="reading-progress" aria-hidden="true"></div>
+  </header>
 
-    <div class="container">
-        <main>
-            <section class="highlights">
-                <h2 class="section-title">News</h2>
-                <ul class="news-list">
-                    <li class="news-featured">
-                        <span class="highlight-date">Sep 2026</span>
-                        <span><i class="celebrate ri-sparkling-2-fill" aria-hidden="true"></i> Our paper <strong>Receptivity and Resistance: Factual Sycophancy Across Post-Training</strong> was accepted to NeurIPS 2026! <a href="https://github.com/sonnetx/tracing-sycophancy" target="_blank">Code</a></span>
-                    </li>
-                    <li>
-                        <span class="highlight-date">Sep 2026</span>
-                        <span>Med-REDUCE is out in <a href="https://doi.org/10.1016/j.media.2026.104305" target="_blank">Medical Image Analysis</a>.</span>
-                    </li>
-                    <li>
-                        <span class="highlight-date">Sep 2026</span>
-                        <span>Monopath DAGs, on structured patient trajectories from clinical case reports, was accepted to PSB 2027.</span>
-                    </li>
-                </ul>
-            </section>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-topline"><span class="eyebrow"><i class="status-dot" aria-hidden="true"></i> A work in curiosity</span><span class="eyebrow">Stanford, California</span></div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 id="hero-title">Following the<br>threads of<br><em>intelligence.</em></h1>
+          <p>I’m Sonnet. I study how AI behaves,<br class="desktop-break"> how we build it, and what comes next.</p>
+          <a class="text-link hero-link" href="#research">Let’s follow the thread <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="thread-figure">
+          <svg class="thread-art" viewBox="0 0 540 540" role="img" aria-labelledby="thread-title thread-desc">
+            <title id="thread-title">One thread, many questions</title>
+            <desc id="thread-desc">An orbiting thread connects model behavior, systems, and the physical world.</desc>
+            <defs>
+              <pattern id="hero-grid" width="27" height="27" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#9ba18c" opacity=".4"/></pattern>
+              <radialGradient id="orb-light" cx="35%" cy="30%"><stop stop-color="#c6d3a7"/><stop offset=".7" stop-color="#7d9266"/><stop offset="1" stop-color="#4d6544"/></radialGradient>
+            </defs>
+            <rect width="540" height="540" fill="url(#hero-grid)"/>
+            <g class="orbital-lines" fill="none" stroke="#9ca38c" stroke-width=".8">
+              <circle cx="270" cy="270" r="210" stroke-dasharray="2 7"/>
+              <ellipse cx="270" cy="270" rx="212" ry="91" transform="rotate(-34 270 270)"/>
+              <ellipse cx="270" cy="270" rx="212" ry="91" transform="rotate(34 270 270)"/>
+              <ellipse cx="270" cy="270" rx="95" ry="210" transform="rotate(15 270 270)"/>
+              <path d="M18 270h504M270 18v504" stroke-dasharray="3 8" opacity=".5"/>
+            </g>
+            <circle cx="270" cy="270" r="80" fill="url(#orb-light)"/>
+            <g fill="none" stroke="#e3e9cc" stroke-width=".7" opacity=".55">
+              <ellipse cx="270" cy="270" rx="80" ry="28"/><ellipse cx="270" cy="270" rx="80" ry="56"/>
+              <ellipse cx="270" cy="270" rx="28" ry="80"/><ellipse cx="270" cy="270" rx="56" ry="80"/>
+              <path d="M190 270h160M270 190v160"/>
+            </g>
+            <g class="orbit-points" fill="#465b3b" stroke="#f3f2e9" stroke-width="5">
+              <circle cx="96" cy="170" r="9"/><circle cx="441" cy="168" r="9"/><circle cx="345" cy="455" r="9"/>
+            </g>
+            <g class="diagram-labels" fill="#526047"><text x="24" y="144">MODEL BEHAVIOR</text><text x="397" y="142">SYSTEMS</text><text x="363" y="482">THE PHYSICAL WORLD</text></g>
+            <g fill="#627451"><circle cx="91" cy="385" r="3"/><circle cx="300" cy="62" r="3"/><circle cx="477" cy="298" r="3"/></g>
+          </svg>
+          <figcaption><span>Fig. 01</span> Everything is connected.</figcaption>
+        </figure>
+      </div>
+      <div class="hero-bottom"><span>Computer science + math at Stanford</span><span>Research → infrastructure → people</span><a href="#research" aria-label="Scroll to research">Scroll to explore <span aria-hidden="true">↓</span></a></div>
+    </section>
 
-            <section class="research-section">
-                <h2 class="section-title">Selected Research</h2>
+    <section class="research chapter" id="research" aria-labelledby="research-title">
+      <div class="section-label"><span>01 / The questions</span><span>Selected research · 2025–2026</span></div>
+      <div class="section-intro">
+        <h2 id="research-title">First, ask<br><em>better questions.</em></h2>
+        <div class="intro-copy"><p>When should we trust a model? What changes its mind? Who does it work for?</p><p>I research LLM evaluation and safety with <a href="https://cs.stanford.edu/~sanmi/">Sanmi Koyejo</a> at the Stanford AI Lab and the <a href="https://daneshjoulab.com">Daneshjou Lab</a>.</p></div>
+      </div>
+      <div class="research-list">
+        <article class="paper">
+          <div class="paper-index">01 <span>Model behavior</span></div>
+          <div><p class="paper-venue">NeurIPS 2026</p><h3>Receptivity and Resistance: Factual Sycophancy Across Post-Training</h3><p class="paper-authors">S Xu, K Singh, S Jafry, R Daneshjou, S Koyejo</p></div>
+          <a class="circle-link" href="https://github.com/sonnetx/tracing-sycophancy" aria-label="Code for Receptivity and Resistance"><span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="paper">
+          <div class="paper-index">02 <span>Trust &amp; fairness</span></div>
+          <div><p class="paper-venue">AAAI/ACM AIES 2026</p><h3>When Reasoning Hurts Confidence: Demographic Calibration of Vision-Language Models in Medicine</h3><p class="paper-authors">S Xu, R Daneshjou</p></div>
+          <a class="circle-link" href="https://doi.org/10.1609/aies.v9i4.43348" aria-label="Read When Reasoning Hurts Confidence"><span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="paper">
+          <div class="paper-index">03 <span>Efficient systems</span></div>
+          <div><p class="paper-venue">Medical Image Analysis 2026</p><h3>Med-REDUCE: Representation Transfer and Efficiency Under Resolution Constraints</h3><p class="paper-authors">V Bikia*, S Xu*, A Skrika, R Park, A Fanous, R Daneshjou · *equal contribution</p></div>
+          <a class="circle-link" href="https://doi.org/10.1016/j.media.2026.104305" aria-label="Read Med-REDUCE"><span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+      <div class="research-footer"><p>Also exploring demographic bias in vision-language models with <a href="https://arxiv.org/abs/2503.02334">BiasICL</a> (MICCAI 2025).</p><a class="text-link" href="/research.html">All publications <span aria-hidden="true">↗</span></a></div>
+    </section>
 
-                <article class="research-entry">
-                    <h3 class="research-title">Receptivity and Resistance: Factual Sycophancy Across Post-Training</h3>
-                    <p class="research-authors"><strong>S Xu</strong>, K Singh, S Jafry, R Daneshjou, S Koyejo</p>
-                    <p class="research-venue"><em>Neural Information Processing Systems (NeurIPS)</em>, 2026</p>
-                    <p class="research-links">
-                        <a href="https://github.com/sonnetx/tracing-sycophancy" target="_blank">Code</a>
-                    </p>
-                </article>
+    <section class="compute chapter" id="compute" aria-labelledby="compute-title">
+      <div class="section-label"><span>02 / The infrastructure</span><span>A five-part exploration</span></div>
+      <div class="section-intro compute-intro">
+        <h2 id="compute-title">Intelligence isn’t<br><em>weightless.</em></h2>
+        <div class="intro-copy"><p>Behind every model is a physical world.</p><p>Chips. Power. Land. Capital. I’m building interactive tools to understand how the pieces fit together. Follow the stack, from silicon to economics.</p><a class="text-link" href="/compute/">Open the compute hub <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="compute-story">
+        <div class="compute-stage" aria-hidden="true">
+          <div class="stage-topline"><span>The compute stack</span><span class="stage-count">01 / 05</span></div>
+          <div class="scenes">{% include compute-scenes.html %}</div>
+          <div class="stage-caption"><span class="stage-category">Hardware</span><span>Illustrative schematic</span></div>
+          <div class="stack-track"><span class="is-active"></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="compute-steps">
+          <article class="compute-step" id="silicon" data-scene="chip" data-category="Hardware">
+            <span class="step-number">01 / Hardware</span><h3>It starts with<br><em>a chip.</em></h3>
+            <p>An AI accelerator is a global supply chain in a single package. Take apart the NVIDIA B200 to trace its components, countries, and dependencies.</p>
+            <a class="project-link" href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip <span aria-hidden="true">↗</span></a>
+            <div class="step-tags"><span>3D teardown</span><span>Supply chains</span></div>
+          </article>
+          <article class="compute-step" id="locations" data-scene="map" data-category="Locations">
+            <span class="step-number">02 / Locations</span><h3>Then it needs<br><em>a place.</em></h3>
+            <p>Cheap power is only the beginning. Explore how grid capacity, policy, water, and local opposition shape where US datacenters can get built.</p>
+            <a class="project-link" href="https://sonnetx.github.io/datacenter-map/">Datacenter Map <span aria-hidden="true">↗</span></a>
+            <div class="step-tags"><span>50 states</span><span>Siting model</span></div>
+          </article>
+          <article class="compute-step" id="facilities" data-scene="racks" data-category="Facilities">
+            <span class="step-number">03 / Facilities</span><h3>A building becomes<br><em>a machine.</em></h3>
+            <p>Follow the AI campuses being built: their power, chips, construction histories, and signed leases. Compare owning a facility with renting capacity.</p>
+            <a class="project-link" href="https://sonnetx.github.io/datacenter-listings/">Datacenter Listings <span aria-hidden="true">↗</span></a>
+            <div class="step-tags"><span>AI campuses</span><span>Build vs. rent</span></div>
+          </article>
+          <article class="compute-step" id="providers" data-scene="network" data-category="Providers">
+            <span class="step-number">04 / Providers</span><h3>Compute becomes<br><em>a service.</em></h3>
+            <p>Who rents the GPUs, and who relies on them? Map the accelerator providers, their customers, prices, and supply relationships.</p>
+            <a class="project-link" href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide <span aria-hidden="true">↗</span></a>
+            <div class="step-tags"><span>GPU providers</span><span>Market networks</span></div>
+          </article>
+          <article class="compute-step" id="economics" data-scene="chart" data-category="Economics">
+            <span class="step-number">05 / Economics</span><h3>Can the numbers<br><em>add up?</em></h3>
+            <p>Connect AI revenue to infrastructure costs, compute commitments, and investor returns. Change the assumptions. See what has to be true.</p>
+            <a class="project-link" href="https://sonnetx.github.io/ai-demand-supply/">AI Demand and Supply <span aria-hidden="true">↗</span></a>
+            <div class="step-tags"><span>Revenue scenarios</span><span>Capital &amp; costs</span></div>
+          </article>
+        </div>
+      </div>
+      <nav class="compute-shortcuts" aria-label="Jump to a compute project"><span>Follow the stack</span><a href="#silicon">01 Silicon</a><a href="#locations">02 Place</a><a href="#facilities">03 Facility</a><a href="#providers">04 Service</a><a href="#economics">05 Economics</a></nav>
+    </section>
 
-                <article class="research-entry">
-                    <h3 class="research-title">When Reasoning Hurts Confidence: Demographic Calibration of Vision-Language Models in Medicine</h3>
-                    <p class="research-authors"><strong>S Xu</strong>, R Daneshjou</p>
-                    <p class="research-venue"><em>AAAI/ACM Conference on AI, Ethics, and Society</em>, 2026</p>
-                    <p class="research-links">
-                        <a href="https://doi.org/10.1609/aies.v9i4.43348" target="_blank">Paper</a>
-                        <a href="https://github.com/sonnetx/demographic-calibration" target="_blank">Code</a>
-                    </p>
-                </article>
+    <section class="human chapter" id="human" aria-labelledby="human-title">
+      <div class="section-label"><span>03 / The human part</span><span>Not everything is a research question.</span></div>
+      <div class="human-grid">
+        <div><h2 id="human-title">Still, the best<br>connections<br>are <em>human.</em></h2><p>I grew up in Michigan. These days, when I’m not following an AI rabbit hole, I’m usually reading a short story, looking for a good brunch spot, or bringing people together.</p><a class="text-link" href="/about.html">A little more about me <span aria-hidden="true">↗</span></a></div>
+        <figure class="human-photo"><img src="/photos/dinner-table.jpg" width="900" height="1200" loading="lazy" alt="A restaurant dinner table set with flowers, glassware, and handwritten menus"><figcaption><span>Off-screen</span> Making room for good conversations.</figcaption></figure>
+      </div>
+      <div class="elsewhere"><span class="eyebrow">Other threads</span><a href="/projects.html">Things I’ve built <span aria-hidden="true">↗</span></a><a href="/reading.html">On my bookshelf <span aria-hidden="true">↗</span></a><a href="/community.html">Around the table <span aria-hidden="true">↗</span></a></div>
+      <div class="experience-strip"><span class="eyebrow">Along the way</span><p>DatologyAI <span>ML infrastructure</span></p><p>Amazon <span>LLM guardrails</span></p><p>Nethermind <span>ZK research</span></p><p>Hoover Institution <span>Tech policy</span></p></div>
+    </section>
+  </main>
 
-                <article class="research-entry">
-                    <h3 class="research-title">Med-REDUCE: Representation Transfer and Efficiency Under Resolution Constraints</h3>
-                    <p class="research-authors">V Bikia*, <strong>S Xu*</strong>, A Skrika, R Park, A Fanous, R Daneshjou</p>
-                    <p class="research-venue"><em>Medical Image Analysis</em>, 2026 &middot; *equal contribution</p>
-                    <p class="research-links">
-                        <a href="https://doi.org/10.1016/j.media.2026.104305" target="_blank">Paper</a>
-                        <a href="https://github.com/DaneshjouLab/med-reduce" target="_blank">Code</a>
-                    </p>
-                </article>
-
-                <article class="research-entry">
-                    <h3 class="research-title">BiasICL: In-Context Learning and Demographic Biases of Vision Language Models</h3>
-                    <p class="research-authors"><strong>S Xu*</strong>, JD Janizek*, Y Jiang, R Daneshjou</p>
-                    <p class="research-venue"><em>MICCAI</em>, 2025 &middot; *equal contribution</p>
-                    <p class="research-links">
-                        <a href="https://arxiv.org/abs/2503.02334" target="_blank">Paper</a>
-                        <a href="https://github.com/DaneshjouLab/BiasICL" target="_blank">Code</a>
-                    </p>
-                </article>
-
-                <article class="research-entry">
-                    <h3 class="research-title">A Framework for Evaluating the Efficacy of Foundation Embedding Models in Healthcare</h3>
-                    <p class="research-authors"><strong>S Xu</strong>, H Gui, V Rotemberg, T Wang, YT Chen, R Daneshjou</p>
-                    <p class="research-venue"><em>medRxiv</em>, 2024</p>
-                    <p class="research-links">
-                        <a href="https://www.medrxiv.org/content/10.1101/2024.04.17.24305983v1" target="_blank">Paper</a>
-                    </p>
-                </article>
-
-                <p class="see-all"><a href="research.html">View all publications &rarr;</a></p>
-            </section>
-
-            <section class="highlights">
-                <h2 class="section-title">Experience</h2>
-                <ul class="highlight-list">
-                    <li><span class="highlight-date">2026</span> ML Engineering Intern, <strong>DatologyAI</strong> &mdash; distributed dataloading and ML infrastructure</li>
-                    <li><span class="highlight-date">2025</span> LLM Guardrails SDE Intern, <strong>Amazon</strong> &mdash; Rufus LLM shopping assistant</li>
-                    <li><span class="highlight-date">2025</span> ZK Research Engineering, <strong>Nethermind</strong> &mdash; post-quantum signature schemes</li>
-                    <li><span class="highlight-date">2024</span> Student Research Fellow, <strong>Hoover Institution</strong> &mdash; technology policy and patent analysis</li>
-                </ul>
-            </section>
-
-            <section class="highlights">
-                <h2 class="section-title">Selected Projects</h2>
-                <ul class="highlight-list">
-                    <li><span class="highlight-date">2026</span> <a href="compute/">Compute projects</a>, interactive tools for chip supply chains, datacenters, GPU providers and AI economics</li>
-                    <li><span class="highlight-date">2025</span> <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">TreeTrash</a> &mdash; TreeHacks 2025 OpenAI Winner</li>
-                    <li><span class="highlight-date">2024</span> Pacific Nurse Shark Conservation, <strong>Stanford Student Robotics</strong> &mdash; scaling conservation data for an endangered species with autonomous drones</li>
-                    <li><span class="highlight-date">2023</span> <a href="https://github.com/sonnetx/PlastiVis" target="_blank">PlastiVis</a> &mdash; IEEE VIS 2023 Award Winner</li>
-                </ul>
-                <p class="see-all"><a href="projects.html">View all projects &rarr;</a></p>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
-        </footer>
-    </div>
-    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
+  <footer class="site-footer">
+    <div class="footer-top"><span class="eyebrow">There’s always another thread.</span><a href="mailto:sonnet@stanford.edu">Let’s talk.<span aria-hidden="true">↗</span></a></div>
+    <div class="footer-bottom"><span>© 2026 Sonnet Xu</span><nav aria-label="Find me elsewhere"><a href="https://github.com/sonnetx">GitHub</a><a href="https://scholar.google.com/citations?user=nslBVGoAAAAJ">Scholar</a><a href="https://x.com/sonnet_xu">X / Twitter</a><a href="https://linkedin.com/in/sonnetxu">LinkedIn</a></nav><a href="#main">Back to top ↑</a></div>
+  </footer>
+  <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
