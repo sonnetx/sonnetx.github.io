@@ -5,7 +5,7 @@ title: About
 # _includes/note.html, as on "brunch".
 ---
 
-I'm Sonnet, an undergraduate at Stanford studying computer science (AI track) and math, advised by [Sanmi Koyejo](https://cs.stanford.edu/~sanmi/) at the Stanford AI Lab. My research spans LLM evaluation and safety with the [Daneshjou Lab](https://daneshjoulab.com) and ML systems.
+I'm Sonnet, an undergraduate at Stanford studying computer science (AI track) and math, advised by [Sanmi Koyejo](https://cs.stanford.edu/~sanmi/) at the Stanford AI Lab. My research spans LLM evaluation and safety with the [Daneshjou Lab](https://daneshjoulab.com) and ML systems. I also build [interactive tools exploring AI compute infrastructure](compute/), from chip supply chains to datacenter economics.
 
 Some fun tangents during my time here have been:
 

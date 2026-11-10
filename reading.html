@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reading - Sonnet Xu</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
-    <link rel="stylesheet" href="/sidebar.css">
     <style>
         :root {
             --text-color: #333;
@@ -95,13 +94,17 @@
             }
         }
     </style>
+    {% include site-meta.html title="Reading — Sonnet Xu" description="Sonnet Xu’s reading list: books to read, finished books, and things left for another day." %}
+    <link rel="stylesheet" href="/sidebar.css">
 </head>
-<body>
+<body class="reading-page">
     {% include sidebar.html active="reading" %}
 
     <div class="container">
-        <main>
+        <main id="main-content">
+            <p class="page-kicker">03 / Reading</p>
             <h1 class="page-title">Reading</h1>
+            <p class="page-intro">A reading list. Some finished, some waiting, some set aside.</p>
 
             {%- comment -%}
                 The book lists live in _data/reading.yml. Each entry below pairs a list name there
@@ -129,9 +132,7 @@
             {%- endfor %}
         </main>
 
-        <footer>
-            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
-        </footer>
+        {% include footer.html %}
     </div>
     <script data-goatcounter="https://sonnetx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>

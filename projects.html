@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - Sonnet Xu</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
-    <link rel="stylesheet" href="/sidebar.css">
     <style>
         :root {
             --text-color: #333;
@@ -304,16 +303,20 @@
             }
         }
     </style>
+    {% include site-meta.html title="Projects — Sonnet Xu" description="Interactive research tools and open-source projects by Sonnet Xu, from AI infrastructure to conservation." %}
+    <link rel="stylesheet" href="/sidebar.css">
 </head>
-<body>
+<body class="projects-page">
     {% include sidebar.html active="projects" %}
 
     <div class="container">
-        <main>
+        <main id="main-content" class="projects-main">
+            <p class="page-kicker">02 / Projects</p>
             <h1 class="page-title">Projects</h1>
+            <p class="page-intro">Ideas made tangible. Tools, experiments, and open-source work.</p>
 
             <p class="profile-link">
-                <a href="https://github.com/sonnetx" target="_blank">GitHub profile &rarr;</a>
+                <a href="https://github.com/sonnetx" target="_blank" rel="noopener noreferrer">GitHub profile &rarr;</a>
             </p>
 
             <section class="project-section" aria-labelledby="compute-heading">
@@ -331,7 +334,7 @@
                     <p class="project-desc">An interactive guide to the companies that rent GPUs and other AI accelerators. It maps who supplies compute to whom, traces the industry on a timeline from 2017 to today, tracks current H100 prices, and profiles 97 providers with sources.</p>
                     <p class="project-links">
                         <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
-                        <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
+                        <a href="https://github.com/sonnetx/neoclouds" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
 
@@ -340,8 +343,8 @@
                     <p class="project-venue">2026</p>
                     <p class="project-desc">An interactive map that compares the 50 states as sites for hyperscale and AI training datacenters. Pick a project size and a set of priorities, and it ranks states on power cost, solar resource, grid headroom, policy, permitting, water, hazards, cooling climate and connectivity.</p>
                     <p class="project-links">
-                        <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
-                        <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
+                        <a href="https://sonnetx.github.io/datacenter-map/" target="_blank" rel="noopener noreferrer">Live site</a>
+                        <a href="https://github.com/sonnetx/datacenter-map" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
 
@@ -350,7 +353,7 @@
                     <p class="project-venue">2026</p>
                     <p class="project-desc">A listings site for AI data centers, laid out like a real estate search. It maps 94 frontier AI campuses with an estimated cost, power, chips and a satellite photo for each, and 30 signed AI leases priced as rent per kW a month. Each listing has a monthly cost to own calculator, a construction history and the policy of its state.</p>
                     <p class="project-links">
-                        <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
+                        <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank" rel="noopener noreferrer">Live site</a>
                     </p>
                 </article>
 
@@ -359,7 +362,7 @@
                     <p class="project-venue">2026</p>
                     <p class="project-desc">An interactive model that asks whether AI revenue can pay for the AI buildout. It forecasts OpenAI and Anthropic revenue through 2030 from reported run-rates, with an 80% range drawn from 2,000 simulated paths. It then compares that revenue with the yearly cost of the AI hardware in service, the labs' compute contracts and the returns their investors need. Every figure cites a source.</p>
                     <p class="project-links">
-                        <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
+                        <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank" rel="noopener noreferrer">Live site</a>
                     </p>
                 </article>
 
@@ -369,7 +372,6 @@
                     <p class="project-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on. An outage model estimates how supply disruptions affect the package.</p>
                     <p class="project-links">
                         <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
-                        <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
                     </p>
                 </article>
 
@@ -378,8 +380,8 @@
                     <p class="project-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
                     <p class="project-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
                     <p class="project-links">
-                        <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
-                        <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
+                        <a href="https://devpost.com/software/treetrash" target="_blank" rel="noopener noreferrer">Devpost</a>
+                        <a href="https://github.com/sonnetx/treehacks-2025" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
 
@@ -394,7 +396,7 @@
                     <p class="project-venue">CS 109, Stanford, 2024</p>
                     <p class="project-desc">An interactive simulation of how people update their beliefs from private information and the choices of others. It compares a model where each person sees every earlier choice with one where they see only a random sample.</p>
                     <p class="project-links">
-                        <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
+                        <a href="https://github.com/sonnetx/rational-learning" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
 
@@ -403,7 +405,7 @@
                     <p class="project-venue">National Security Hackathon, 2023</p>
                     <p class="project-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
                     <p class="project-links">
-                        <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
+                        <a href="https://github.com/sonnetx/scarecrow" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
 
@@ -412,9 +414,9 @@
                     <p class="project-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
                     <p class="project-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity. Built as a Clark Summer Research Scholars project.</p>
                     <p class="project-links">
-                        <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
-                        <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
-                        <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
+                        <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank" rel="noopener noreferrer">Paper</a>
+                        <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank" rel="noopener noreferrer">Video</a>
+                        <a href="https://github.com/sonnetx/PlastiVis" target="_blank" rel="noopener noreferrer">Code</a>
                     </p>
                 </article>
             </section>
@@ -426,7 +428,7 @@
                     <symbol id="icon-fork" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/></symbol>
                 </svg>
                 <div class="repo-grid">
-                    <a class="repo-card" href="https://github.com/aims-foundations/torch_measure" target="_blank" data-repo="aims-foundations/torch_measure">
+                    <a class="repo-card" href="https://github.com/aims-foundations/torch_measure" target="_blank" rel="noopener noreferrer" data-repo="aims-foundations/torch_measure">
                         <span class="repo-name"><span class="repo-owner">aims-foundations/</span>torch_measure</span>
                         <span class="repo-desc">A package for AI measurement science</span>
                         <span class="repo-meta">
@@ -435,7 +437,7 @@
                             <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>32</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/sonnetx/tracing-sycophancy" target="_blank" data-repo="sonnetx/tracing-sycophancy">
+                    <a class="repo-card" href="https://github.com/sonnetx/tracing-sycophancy" target="_blank" rel="noopener noreferrer" data-repo="sonnetx/tracing-sycophancy">
                         <span class="repo-name"><span class="repo-owner">sonnetx/</span>tracing-sycophancy</span>
                         <span class="repo-desc">Code for our NeurIPS 2026 paper on factual sycophancy across post-training</span>
                         <span class="repo-meta">
@@ -444,7 +446,7 @@
                             <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/sonnetx/demographic-calibration" target="_blank" data-repo="sonnetx/demographic-calibration">
+                    <a class="repo-card" href="https://github.com/sonnetx/demographic-calibration" target="_blank" rel="noopener noreferrer" data-repo="sonnetx/demographic-calibration">
                         <span class="repo-name"><span class="repo-owner">sonnetx/</span>demographic-calibration</span>
                         <span class="repo-desc">Code for our AIES 2026 paper on demographic calibration of vision-language models in medicine</span>
                         <span class="repo-meta">
@@ -453,7 +455,7 @@
                             <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/NethermindEth/condor-rs" target="_blank" data-repo="NethermindEth/condor-rs">
+                    <a class="repo-card" href="https://github.com/NethermindEth/condor-rs" target="_blank" rel="noopener noreferrer" data-repo="NethermindEth/condor-rs">
                         <span class="repo-name"><span class="repo-owner">NethermindEth/</span>condor-rs</span>
                         <span class="repo-desc">Falcon post-quantum signature aggregation with LaBRADOR in Rust, built at Nethermind</span>
                         <span class="repo-meta">
@@ -462,7 +464,7 @@
                             <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>4</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/DaneshjouLab/BiasICL" target="_blank" data-repo="DaneshjouLab/BiasICL">
+                    <a class="repo-card" href="https://github.com/DaneshjouLab/BiasICL" target="_blank" rel="noopener noreferrer" data-repo="DaneshjouLab/BiasICL">
                         <span class="repo-name"><span class="repo-owner">DaneshjouLab/</span>BiasICL</span>
                         <span class="repo-desc">In-context learning and demographic biases of vision-language models (MICCAI 2025)</span>
                         <span class="repo-meta">
@@ -471,7 +473,7 @@
                             <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>1</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/DaneshjouLab/med-reduce" target="_blank" data-repo="DaneshjouLab/med-reduce">
+                    <a class="repo-card" href="https://github.com/DaneshjouLab/med-reduce" target="_blank" rel="noopener noreferrer" data-repo="DaneshjouLab/med-reduce">
                         <span class="repo-name"><span class="repo-owner">DaneshjouLab/</span>med-reduce</span>
                         <span class="repo-desc">Representation transfer and efficiency under resolution constraints (Medical Image Analysis 2026)</span>
                         <span class="repo-meta">
@@ -480,7 +482,7 @@
                             <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
                         </span>
                     </a>
-                    <a class="repo-card" href="https://github.com/OETBoston/ai-for-design" target="_blank" data-repo="OETBoston/ai-for-design">
+                    <a class="repo-card" href="https://github.com/OETBoston/ai-for-design" target="_blank" rel="noopener noreferrer" data-repo="OETBoston/ai-for-design">
                         <span class="repo-name"><span class="repo-owner">OETBoston/</span>ai-for-design</span>
                         <span class="repo-desc">Generative AI for urban design, Google Summer of Code with the City of Boston</span>
                         <span class="repo-meta">
@@ -494,7 +496,7 @@
 
             <section class="project-section" id="github-activity" hidden>
                 <h2 class="section-title">GitHub Activity</h2>
-                <p class="activity-summary"><a href="https://github.com/sonnetx" target="_blank"><span id="contrib-total"></span> contributions in the last year</a></p>
+                <p class="activity-summary"><a href="https://github.com/sonnetx" target="_blank" rel="noopener noreferrer"><span id="contrib-total"></span> contributions in the last year</a></p>
                 <div class="contrib-scroll" id="contrib-scroll">
                     <div class="contrib-grid" id="contrib-grid" role="img"></div>
                 </div>
@@ -510,9 +512,7 @@
             </section>
         </main>
 
-        <footer>
-            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
-        </footer>
+        {% include footer.html %}
     </div>
     <script>
         // Refresh star and fork counts from the GitHub API. The static
