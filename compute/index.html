@@ -10,16 +10,21 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
   <link rel="stylesheet" href="/sidebar.css">
   <link rel="stylesheet" href="compute.css">
+  <link rel="stylesheet" href="editorial-compute.css">
   <script src="compute.js" defer></script>
 </head>
-<body>
+<body class="compute-page">
 <a class="skip" href="#projects">Skip to projects</a>
-{% include sidebar.html active="projects" %}
-<main>
+{% include sidebar.html active="compute" %}
+<main id="main-content">
   <header class="intro">
-    <div class="eyebrow">Infrastructure projects</div>
-    <h1>Compute</h1>
-    <p>How AI chips are made, where datacenters get built, who rents the GPUs, and whether the revenue can pay for it.</p>
+    <div class="compute-intro-copy">
+      <div class="eyebrow">A field guide / 5 interactive projects</div>
+      <h1>Compute<span>.</span></h1>
+      <p>How AI chips are made, where datacenters get built, who rents the GPUs, and whether the revenue can pay for it.</p>
+      <p class="compute-intro-note">Follow the connections. Explore the physical layer of AI.</p>
+    </div>
+    <img class="compute-intro-art" src="compute-cover.svg" width="800" height="460" alt="An illustrated chip connected to three datacenter towers">
   </header>
 
   <div class="view-bar" id="view-bar" hidden>
