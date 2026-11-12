@@ -1,0 +1,67 @@
+<svg class="scene is-active" data-art="chip" viewBox="0 0 560 460" fill="none">
+  <defs><pattern id="chip-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" stroke="#b5cb91" stroke-opacity=".09"/></pattern><linearGradient id="chip-face" x1="150" y1="100" x2="400" y2="330" gradientUnits="userSpaceOnUse"><stop stop-color="#71885b"/><stop offset="1" stop-color="#364e37"/></linearGradient></defs>
+  <rect width="560" height="460" fill="url(#chip-grid)"/>
+  <g stroke="#657a54" stroke-width="1.2"><path d="M280 40v45M200 80V40h-60M360 80V40h60M110 180H42v-60M450 180h68v-60M110 290H42v60M450 290h68v60M200 370v50h-60M360 370v50h60M280 380v50"/><path d="M280 55l180 100v150L280 407 100 305V155Z" stroke-dasharray="3 8"/></g>
+  <path d="m120 179 160-91 160 91v123l-160 91-160-91Z" fill="#273a2b" stroke="#7c9460"/>
+  <path d="m120 179 160 92 160-92M280 271v122" stroke="#7c9460"/>
+  <path d="m143 166 137-78 137 78-137 79Z" fill="url(#chip-face)" stroke="#a7be82"/>
+  <path d="m143 166 137 79v26l-137-79Zm137 79 137-79v26l-137 79Z" fill="#41563c" stroke="#8ba86a"/>
+  <g fill="#bacd98" stroke="#d1e4a2" stroke-width=".6"><path d="m215 145 64-36 38 22-64 37Z"/><path d="m257 171 64-36 38 22-64 37Z"/></g>
+  <g fill="#6e8956" stroke="#a6bf83"><path d="m169 165 23-13 25 14-23 13Z"/><path d="m201 183 23-13 25 14-23 13Z"/><path d="m233 202 23-13 25 14-23 13Z"/><path d="m303 114 23-13 25 14-23 13Z"/><path d="m335 132 23-13 25 14-23 13Z"/><path d="m367 151 23-13 25 14-23 13Z"/></g>
+  <g stroke="#b3c992" stroke-width="1.5">{% for i in (0..11) %}<path d="m{{ i | times: 10 | plus: 143 }} {{ i | times: 6 | plus: 231 }} 0 21m{{ i | times: 10 | plus: 307 }} {{ i | times: -6 | plus: 298 }} 0 21"/>{% endfor %}</g>
+  <g class="svg-label" fill="#b7c8a7"><text x="35" y="78">HBM MEMORY</text><text x="421" y="78">COMPUTE DIES</text><text x="33" y="399">ADVANCED PACKAGING</text></g>
+  <g stroke="#91ab72"><path d="M115 84v35l78 46M455 84v30l-143 45M130 382l53-65"/></g>
+  <g fill="#d1e4a2"><circle cx="193" cy="165" r="3"/><circle cx="312" cy="159" r="3"/><circle cx="183" cy="317" r="3"/></g>
+</svg>
+
+<svg class="scene" data-art="map" viewBox="0 0 560 460" fill="none">
+  <defs><pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" stroke="#b5cb91" stroke-opacity=".09"/></pattern></defs>
+  <rect width="560" height="460" fill="url(#map-grid)"/>
+  <g stroke="#8ca773"><path d="m64 115 55 13 50 9 80 5 78-1 28 14 29-6 22-25 11 15 33 1 9-26 17 11 9 37-14 28-20 9-1 22-22 15-4 25-40 8-9 26-24 10-15-11-18 18 11 16 9 30 21 36-6 14-17-12-24-42-31-3-24 3-27-16-16 5-10 35-17-8-18-35-34-2-12-18-35-9-6-23-20-21-10-37Z" fill="#314532" stroke-width="1.5"/>
+    <path d="m101 125-12 81 28 75m40-147-15 97-25 50m82-142-7 124-36-2m80-118-3 142m49-143 1 140m47-140 2 116m-213-73 224 11m-212 43 250 9m-159 41 152-2m-56-106 7 83m36-82 1 64m27-89-6 63m-38-35 52 1" stroke-opacity=".55"/>
+  </g>
+  <g stroke="#c5dd93" stroke-opacity=".5"><path d="M105 193Q250 85 390 209M105 193Q250 330 301 240M301 240Q365 90 434 163M301 240l89-31" stroke-dasharray="4 6"/></g>
+  <g fill="#d1e4a2"><circle cx="105" cy="193" r="5"/><circle cx="301" cy="240" r="6"/><circle cx="390" cy="209" r="5"/><circle cx="434" cy="163" r="4"/></g>
+  <g stroke="#d1e4a2" opacity=".3"><circle cx="105" cy="193" r="15"/><circle cx="301" cy="240" r="21"/><circle cx="390" cy="209" r="15"/></g>
+  <path d="M301 261v107h80M105 178V65h75M438 163h57v112" stroke="#91ab72"/>
+  <g class="svg-label" fill="#b7c8a7"><text x="113" y="57">POWER + GRID</text><text x="387" y="372">LAND + WATER</text><text x="411" y="300">POLICY</text><text x="54" y="420">A PHYSICAL FOOTPRINT. A LOCAL QUESTION.</text></g>
+</svg>
+
+<svg class="scene" data-art="racks" viewBox="0 0 560 460" fill="none">
+  <defs><pattern id="rack-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" stroke="#b5cb91" stroke-opacity=".09"/></pattern></defs>
+  <rect width="560" height="460" fill="url(#rack-grid)"/>
+  <path d="m45 349 236-138 236 138-236 103Z" stroke="#6e8656" stroke-dasharray="3 6"/>
+  {% for i in (0..2) %}{% assign x = i | times: 142 | plus: 67 %}
+  <g transform="translate({{ x }} {{ i | times: -16 | plus: 112 }})">
+    <path d="m0 20 37-20 87 31v217l-37 21-87-31Z" fill="#283c2b" stroke="#9ab978"/>
+    <path d="m0 20 87 31 37-20M87 51v218" stroke="#9ab978"/>
+    {% for j in (0..7) %}{% assign y = j | times: 23 | plus: 35 %}<path d="m9 {{ y }} 69 24v16l-69-24Z" fill="#405a3a" stroke="#75995b"/><path d="m16 {{ y | plus: 7 }} 37 13" stroke="#a8c18a"/><circle cx="70" cy="{{ y | plus: 26 }}" r="2" fill="#d1e4a2"/>{% endfor %}
+  </g>
+  {% endfor %}
+  <path d="M150 82V48h77M434 346v62h-72" stroke="#91ab72"/>
+  <g class="svg-label" fill="#b7c8a7"><text x="230" y="52">POWER IN</text><text x="219" y="412">COMPUTE OUT</text><text x="38" y="438">FROM A LEASE TO A CAMPUS</text></g>
+</svg>
+
+<svg class="scene" data-art="network" viewBox="0 0 560 460" fill="none">
+  <defs><pattern id="network-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" stroke="#b5cb91" stroke-opacity=".09"/></pattern></defs>
+  <rect width="560" height="460" fill="url(#network-grid)"/>
+  <g stroke="#91ab72" stroke-opacity=".65"><path d="m85 230 130-118 134 25 128 93-128 106-134 11-130-117 194 0 70-93M215 112l64 118-64 117m64-117 70 106M85 230l264 106M215 112l262 118-262 117M279 230h198"/></g>
+  <g fill="#283c2b" stroke="#b2ce89"><circle cx="85" cy="230" r="29"/><circle cx="215" cy="112" r="31"/><circle cx="349" cy="137" r="23"/><circle cx="477" cy="230" r="29"/><circle cx="349" cy="336" r="30"/><circle cx="215" cy="347" r="23"/></g>
+  <circle cx="279" cy="230" r="49" fill="#46633d" stroke="#d1e4a2"/><circle cx="279" cy="230" r="63" stroke="#8ba86a" stroke-dasharray="2 6"/>
+  <g stroke="#d1e4a2"><rect x="261" y="212" width="36" height="36" rx="3"/><path d="M270 221h18v18h-18ZM267 205v7m12-7v7m12-7v7m-24 36v7m12-7v7m12-7v7m-37-37h7m-7 12h7m-7 12h7m36-24h7m-7 12h7m-7 12h7"/></g>
+  <g fill="#d1e4a2"><circle cx="85" cy="230" r="5"/><circle cx="215" cy="112" r="5"/><circle cx="349" cy="137" r="5"/><circle cx="477" cy="230" r="5"/><circle cx="349" cy="336" r="5"/><circle cx="215" cy="347" r="5"/></g>
+  <g class="svg-label" fill="#b7c8a7"><text x="173" y="57">PROVIDERS</text><text x="378" y="411">CUSTOMERS</text><text x="36" y="411">CAPACITY, CONNECTED.</text></g>
+</svg>
+
+<svg class="scene" data-art="chart" viewBox="0 0 560 460" fill="none">
+  <defs><pattern id="chart-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" stroke="#b5cb91" stroke-opacity=".09"/></pattern><linearGradient id="area-fill" x1="0" y1="100" x2="0" y2="350" gradientUnits="userSpaceOnUse"><stop stop-color="#d1e4a2" stop-opacity=".18"/><stop offset="1" stop-color="#d1e4a2" stop-opacity="0"/></linearGradient></defs>
+  <rect width="560" height="460" fill="url(#chart-grid)"/>
+  <g stroke="#8ba86a" stroke-opacity=".3"><path d="M70 100h420M70 170h420M70 240h420M70 310h420" stroke-dasharray="3 5"/><path d="M70 65v305h430"/></g>
+  <path d="M70 341c100-10 152-18 218-71S406 165 490 85v285H70Z" fill="url(#area-fill)"/>
+  <path d="M70 341c100-10 152-18 218-71S406 165 490 85" stroke="#d1e4a2" stroke-width="3"/>
+  <path d="M70 303c150-100 247-118 420-112" stroke="#a4b798" stroke-width="2" stroke-dasharray="6 6"/>
+  <circle cx="365" cy="205" r="5" fill="#d1e4a2"/><circle cx="365" cy="205" r="17" stroke="#d1e4a2" stroke-opacity=".4"/>
+  <path d="M365 188V90h-70" stroke="#91ab72"/>
+  <g class="svg-label" fill="#b7c8a7"><text x="164" y="84">WHAT HAS TO BE TRUE?</text><text x="70" y="402">TODAY</text><text x="424" y="402">TOMORROW</text><text x="89" y="49">ILLUSTRATIVE SCENARIOS · NOT A FORECAST</text></g>
+  <g class="svg-label"><path d="M70 438h24" stroke="#d1e4a2" stroke-width="2"/><text x="105" y="442" fill="#d1e4a2">REVENUE</text><path d="M290 438h24" stroke="#a4b798" stroke-dasharray="4 4"/><text x="325" y="442" fill="#b7c8a7">INFRASTRUCTURE COST</text></g>
+</svg>
