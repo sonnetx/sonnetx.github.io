@@ -4,9 +4,13 @@
 # While current is empty, the About popup shows the three most recent finished books instead.
 # to_read and shelved only appear on the Reading page.
 
-current: []
+current:
+  - title: Orange Is the New Black
+    author: Piper Kerman
 
 to_read:
+  - title: Discipline and Punish
+    author: Michel Foucault
   - title: The Prize
     author: Daniel Yergin
   - title: Fight Club
