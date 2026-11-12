@@ -1,248 +1,122 @@
-/* Sidebar shared by every page (_includes/sidebar.html). It sits fixed against the left edge
-   of the window and becomes a top bar with horizontal tabs on narrow screens. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
 
-:root {
-    --sidebar-width: 240px;
-    /* Background of the sticky tab bar on narrow screens; pages with a tinted body override it. */
-    --sidebar-bg: #fff;
+html:root {
+    --paper: #f5f5ed;
+    --ink: #252c25;
+    --muted: #687064;
+    --green: #3c613b;
+    --line: #d8ddcf;
+    --lime: #d6f68a;
+    --mono: 'DM Mono', 'Courier New', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --text-color: var(--ink);
+    --link-color: var(--green);
+    --border-color: var(--line);
+    --max-width: 100%;
+    --sidebar-width: 0px;
+    --blue: #3c613b;
+    --blue-soft: #e7eddb;
+    --surface: #eef1e6;
+    scroll-padding-top: 24px;
 }
-
+* { box-sizing: border-box; }
+html:has(.side-vines), html body:has(.side-vines) { overflow-x: clip; }
+[hidden] { display: none !important; }
 html body {
-    margin-left: var(--sidebar-width);
-}
-
-.site-sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-    width: var(--sidebar-width);
-    overflow-y: auto;
-    padding: 40px 24px 32px;
-    border-right: 1px solid #e0e0e0;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-    text-align: left;
-}
-
-.site-sidebar * {
-    box-sizing: border-box;
-}
-
-.site-sidebar a,
-.site-sidebar a:hover {
-    text-decoration: none;
-}
-
-.sidebar-name {
-    display: inline-block;
-    font-size: 26px;
-    line-height: 1.3;
-    letter-spacing: -0.5px;
-    color: #333;
-    transition: color 0.2s;
-}
-
-/* The name links to About, so it takes the tab highlight color there. */
-.sidebar-name:hover,
-.sidebar-name[aria-current="page"] {
-    color: #0066cc;
-}
-
-.sidebar-affiliation {
-    margin: 2px 0 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 14px;
-    color: #666;
-}
-
-.sidebar-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    margin: 22px -10px 22px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.sidebar-tabs a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px 10px;
-    border-left: 2px solid transparent;
-    border-radius: 0 4px 4px 0;
-    font-size: 16px;
-    color: #555;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.sidebar-tabs a i {
-    font-size: 17px;
-    color: #999;
-}
-
-.sidebar-tabs a:hover {
-    background: #f4f4f4;
-    color: #333;
-}
-
-.sidebar-tabs a[aria-current="page"] {
-    border-left-color: #0066cc;
-    background: #eef4fb;
-    color: #0066cc;
-}
-
-.sidebar-tabs a[aria-current="page"] i {
-    color: #0066cc;
-}
-
-.sidebar-bio {
-    margin: 0 0 16px;
-    font-size: 15px;
-    line-height: 1.6;
-    color: #555;
-}
-
-.sidebar-bio a {
-    color: #0066cc;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-}
-
-.sidebar-bio a:hover {
-    border-bottom-color: #0066cc;
-}
-
-.sidebar-links {
-    list-style: none;
     margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 14px;
+    padding: 0 48px;
+    color: var(--ink);
+    background: var(--paper);
+    font: 16px/1.75 var(--sans);
+    -webkit-font-smoothing: antialiased;
 }
+::selection { background: var(--lime); color: var(--ink); }
+body a { color: var(--green); text-underline-offset: 4px; }
+body a:hover { color: #263f25; }
+body :focus-visible { outline: 2px solid var(--green); outline-offset: 5px; }
+.muted { color: var(--muted); }
+.skip-link { position: absolute; top: -80px; left: 24px; z-index: 100; background: var(--lime); padding: 10px 18px; }
+.skip-link:focus { top: 10px; }
+.workspace-header, .workspace-nav, body > .container, body > main, body > footer { max-width: 1160px; margin-left: auto; margin-right: auto; }
+.workspace-header { display: flex; align-items: center; height: 100px; gap: 28px; font: 13px var(--mono); }
+.workspace-brand { display: inline-flex; gap: 13px; align-items: center; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.brand-mark { display: grid; place-content: center; width: 35px; height: 35px; background: var(--ink); color: var(--paper); font-size: 20px; position: relative; }
+.brand-mark span { color: var(--lime); position: absolute; right: 5px; bottom: 7px; }
+.workspace-label { padding-left: 26px; border-left: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.command-trigger { margin-left: auto; border: 1px solid var(--line); background: transparent; padding: 8px 10px; color: var(--green); font: 12px var(--mono); cursor: pointer; }
+.command-trigger[hidden] { display: none; }
+.command-trigger span { margin: 0 16px 0 6px; color: var(--muted); }
+kbd { font: 10px var(--mono); background: #e8eade; padding: 3px 5px; border-radius: 2px; }
+.workspace-nav { display: flex; gap: 30px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font: 12px var(--mono); }
+.workspace-nav a { padding: 16px 0; color: var(--muted); text-decoration: none; position: relative; white-space: nowrap; }
+.workspace-nav a[aria-current] { color: var(--ink); }
+.workspace-nav a[aria-current]::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: var(--green); }
+.workspace-nav a:hover { color: var(--green); }
+.workspace-nav .nav-contact { margin-left: auto; color: var(--green); }
+.nav-extension { color: #7c8576; }
+#workspace-content:focus { outline: none; }
+body > .container { padding: 54px 0 0; }
+body:not(:has(.home-workspace)) > .container { max-width: 880px; }
+body .page-title { font: 500 clamp(32px, 5vw, 52px)/1.2 var(--mono); letter-spacing: -2px; margin: 0 0 30px; }
+body .page-title::before { content: '# '; color: var(--green); }
+body .section-title { font: 500 17px/1.5 var(--mono); border-bottom: 1px solid var(--line); padding-bottom: 14px; color: var(--ink); margin-bottom: 24px; }
+body .research-title, body .project-title { font: 500 20px/1.5 var(--mono); color: var(--ink); }
+body .research-authors, body .research-venue, body .project-venue, body .research-links, body .project-links, body .scholar-link, body .profile-link, body .book-author { font-family: var(--mono); font-size: 12px; }
+body .research-authors, body .project-desc, body .book-title, body .earlier-work { color: var(--ink); }
+body .research-venue, body .project-venue, body .book-author { color: var(--muted); }
+body .research-entry, body .project-entry { border-color: var(--line); padding: 6px 0 28px; }
+body .repo-card { background: #f9faf3; border: 1px solid var(--line); border-radius: 0; }
+body .repo-card:hover { border-color: var(--green); box-shadow: 3px 3px 0 #e1e6d5; }
+body .repo-name { font-family: var(--mono); font-size: 13px; }
+body .repo-desc, body .repo-meta { color: var(--muted); }
+body:has(.map-view) > main { padding-inline: 0; }
+body .intro h1 { font: 500 48px/1.2 var(--mono); letter-spacing: -2px; }
+body .project h2 { font: 500 20px/1.4 var(--mono); }
+body .node[aria-pressed="true"] { background: var(--blue-soft); border-color: var(--green); }
+body .node[aria-pressed="true"] strong { color: var(--green); }
+body .connection-filters button[aria-pressed="true"] { border-color: var(--line); }
+body .hover-note-card { color: var(--ink); background: var(--paper); border-radius: 0; border-color: var(--line); }
+body footer { border-top: 1px solid var(--line); padding: 26px 0; margin-top: 70px; color: var(--muted); text-align: left; font: 11px/1.7 var(--mono); }
 
-.sidebar-links li {
-    margin: 0 0 8px;
+.command-dialog { width: min(560px, calc(100% - 32px)); margin: auto; padding: 26px; border: 1px solid var(--green); background: var(--paper); color: var(--ink); box-shadow: 10px 10px 0 #252c2526; }
+.command-dialog::backdrop { background: #1925199e; backdrop-filter: blur(4px); }
+.dialog-heading { display: flex; align-items: center; justify-content: space-between; }
+.dialog-heading h2 { font: 500 23px var(--mono); margin: 0; }
+.dialog-heading button { background: transparent; border: 0; color: var(--muted); cursor: pointer; font: 12px var(--mono); padding: 8px; }
+.command-dialog > p { color: var(--muted); font-size: 14px; margin: 14px 0; }
+.command-form { display: flex; align-items: center; gap: 10px; font: 12px var(--mono); }
+.command-dialog .command-form { border: 1px solid var(--line); padding: 13px; }
+.command-form label { white-space: nowrap; }
+.command-form input { min-width: 0; flex: 1; border: 0; background: transparent; color: inherit; font: inherit; outline-offset: 3px; padding: 5px 0; }
+.command-form button { background: transparent; border: 0; color: inherit; font-size: 18px; padding: 2px 5px; cursor: pointer; }
+.command-destinations { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 18px; }
+.command-destinations a { padding: 10px; font: 13px var(--mono); text-decoration: none; }
+.command-destinations a::before { content: './'; color: var(--muted); }
+.command-destinations a:hover { background: #e6ebd9; }
+.command-response { white-space: pre-line; }
+
+@media (max-width: 800px) {
+    html body { padding: 0 24px; }
+    .workspace-header { height: 84px; }
+    .workspace-label { display: none; }
+    .workspace-nav { gap: 22px; }
+    .workspace-nav a { font-size: 11px; }
+    .nav-extension { display: none; }
+    body > .container { padding-top: 35px; }
 }
-
-.sidebar-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #0066cc;
-}
-
-.sidebar-links a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.sidebar-links i {
-    font-size: 16px;
-    color: #999;
-}
-
-@media (max-width: 860px) {
-    html {
-        /* Keeps in-page anchors clear of the sticky tab bar. */
-        scroll-padding-top: 52px;
-    }
-
-    html body {
-        margin-left: 0;
-    }
-
-    /* The sidebar gives up its own box so the tab bar can stick to the top of the whole page
-       rather than only the sidebar's height. */
-    .site-sidebar {
-        display: contents;
-    }
-
-    .sidebar-name {
-        font-size: 24px;
-    }
-
-    .sidebar-tabs {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        flex-direction: row;
-        gap: 0 22px;
-        margin: 14px 0 20px;
-        padding-bottom: 0;
-        overflow-x: auto;
-        scrollbar-width: none;
-        border-bottom: 0;
-        /* Paints the bar's background and bottom rule out to both edges of the window. */
-        border-image: linear-gradient(var(--sidebar-bg) calc(100% - 1px), #e0e0e0 0) fill 0 / 0 / 0 100vmax;
-    }
-
-    .sidebar-tabs a {
-        flex: 0 0 auto;
-        gap: 6px;
-        padding: 8px 0;
-        border-left: 0;
-        border-bottom: 2px solid transparent;
-        border-radius: 0;
-        font-size: 15px;
-    }
-
-    .sidebar-tabs a i {
-        display: none;
-    }
-
-    .sidebar-tabs a:hover {
-        background: none;
-    }
-
-    .sidebar-tabs a[aria-current="page"] {
-        border-bottom-color: #0066cc;
-        background: none;
-    }
-
-    .sidebar-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px 18px;
-    }
-
-    .sidebar-links {
-        margin-bottom: 32px;
-    }
-
-    .sidebar-links li {
-        margin: 0;
-    }
-
-    /* Away from the homepage, keep the top bar to the name and tabs. */
-    .site-sidebar:not([data-page="home"]) .sidebar-affiliation,
-    .site-sidebar:not([data-page="home"]) .sidebar-links {
-        display: none;
-    }
-
-    .site-sidebar:not([data-page="home"]) .sidebar-tabs {
-        margin-bottom: 32px;
-    }
-}
-
-/* On phones the four tabs spread across one row, shrinking a step on the narrowest screens. */
 @media (max-width: 480px) {
-    .sidebar-tabs {
-        justify-content: space-between;
-        gap: 0 8px;
-    }
-
-    .sidebar-tabs a {
-        font-size: 14px;
-    }
+    html body { padding: 0 18px; }
+    .workspace-header { gap: 10px; height: 74px; font-size: 11px; }
+    .brand-mark { width: 30px; height: 30px; font-size: 17px; }
+    .command-trigger span, .command-trigger kbd { display: none; }
+    .command-trigger { padding: 8px; }
+    .workspace-nav { gap: 0; justify-content: space-between; flex-wrap: wrap; }
+    .workspace-nav a { font-size: 10px; }
+    .workspace-nav .nav-contact { margin-left: 0; }
+    body .research-title, body .project-title { font-size: 17px; }
+    body .page-title { letter-spacing: -1px; }
+    .command-dialog { padding: 18px; }
 }
-
-@media (max-width: 380px) {
-    .sidebar-tabs a {
-        font-size: 13px;
-    }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
