@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} - Sonnet Xu</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
-    <link rel="stylesheet" href="/sidebar.css">
     <style>
         :root {
             --text-color: #333;
@@ -163,22 +162,24 @@
             }
         }
     </style>
+    {% include site-meta.html title="About — Sonnet Xu" description="About Sonnet Xu, a Stanford computer science and mathematics undergraduate working on AI evaluation, safety, systems, and compute." %}
+    <link rel="stylesheet" href="/sidebar.css">
 </head>
-<body>
+<body class="about-page">
     {% include sidebar.html active="about" %}
 
     <div class="container">
-        <main>
+        <main id="main-content">
+            <p class="page-kicker">04 / About</p>
             <h1 class="page-title">{{ page.title }}</h1>
+            <p class="page-intro">A little context behind the work.</p>
 
             <div class="content">
 {{ content }}
             </div>
         </main>
 
-        <footer>
-            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
-        </footer>
+        {% include footer.html %}
     </div>
     <script>
         // Markdown links can't set a target, so open outside sites in a new tab here.

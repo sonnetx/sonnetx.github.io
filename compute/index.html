@@ -6,16 +6,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Compute - Sonnet Xu</title>
-  <meta name="description" content="Sonnet Xu's projects on chip supply chains, datacenter siting, AI campuses, GPU providers and the economics of AI compute. Explore how their questions and research connect.">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
-  <link rel="stylesheet" href="/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
   <link rel="stylesheet" href="compute.css">
   <script src="compute.js" defer></script>
+    {% include site-meta.html title="Compute — Sonnet Xu" description="Five interactive projects on AI chips, datacenter locations, GPU providers, and the economics of compute." %}
+    <link rel="stylesheet" href="/sidebar.css">
 </head>
-<body>
+<body class="compute-page">
 <a class="skip" href="#projects">Skip to projects</a>
-{% include sidebar.html active="projects" %}
-<main>
+{% include sidebar.html active="compute" %}
+<main id="main-content">
   <header class="intro">
     <div class="eyebrow">Infrastructure projects</div>
     <h1>Compute</h1>
@@ -57,7 +57,7 @@
       <div class="project-category">Hardware</div>
       <h2>Inside an AI Chip</h2>
       <p class="project-description">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on. An outage model estimates how supply disruptions affect the package.</p>
-      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/chip-supply-chain/">Open project <span aria-hidden="true">&nearr;</span></a><a href="https://github.com/sonnetx/chip-supply-chain">Code</a></p>
+      <p class="project-links"><a class="open-project" href="https://sonnetx.github.io/chip-supply-chain/">Open project <span aria-hidden="true">&nearr;</span></a></p>
     </article>
     <article class="project" id="datacenter-map" data-label="Locations" data-short="Datacenter Map" data-question="Where can datacenters get built?">
       <div class="project-category">Locations</div>
@@ -85,9 +85,7 @@
     </article>
   </section>
 </main>
-<footer>
-  <span>Sonnet Xu</span>
-  <a href="../projects.html">All projects <span aria-hidden="true">&rarr;</span></a>
-</footer>
+{% include footer.html %}
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
