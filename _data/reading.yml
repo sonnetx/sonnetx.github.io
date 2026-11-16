@@ -5,8 +5,8 @@
 # to_read and shelved only appear on the Reading page.
 
 current:
-  - title: Orange Is the New Black
-    author: Piper Kerman
+  - title: "Surely You're Joking, Mr. Feynman!"
+    author: Richard Feynman
 
 to_read:
   - title: The History of Sexuality, Volume 1
@@ -19,6 +19,8 @@ to_read:
     author: Chuck Palahniuk
 
 finished:
+  - title: Orange Is the New Black
+    author: Piper Kerman
   - title: Lolita
     author: Vladimir Nabokov
   - title: 25th Hour
