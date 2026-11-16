@@ -1,33 +1,45 @@
 # Books on the Reading page (reading.html) and in the popup over "reading" on About.
 # Move a book from current to the top of finished when you finish it, or to shelved if you
 # abandon it. Newest first in each list.
+# added is the date (YYYY-MM-DD) the book went into its list, so set it to today when you
+# add or move a book. The Reading page shows it next to the author.
 # While current is empty, the About popup shows the three most recent finished books instead.
 # to_read and shelved only appear on the Reading page.
 
 current:
   - title: "Surely You're Joking, Mr. Feynman!"
     author: Richard Feynman
+    added: 2026-11-15
 
 to_read:
   - title: The History of Sexuality, Volume 1
     author: Michel Foucault
+    added: 2026-11-12
   - title: Discipline and Punish
     author: Michel Foucault
+    added: 2026-11-12
   - title: The Prize
     author: Daniel Yergin
+    added: 2026-11-07
   - title: Fight Club
     author: Chuck Palahniuk
+    added: 2026-11-07
 
 finished:
   - title: Orange Is the New Black
     author: Piper Kerman
+    added: 2026-11-15
   - title: Lolita
     author: Vladimir Nabokov
+    added: 2026-11-07
   - title: 25th Hour
     author: David Benioff
+    added: 2026-11-07
   - title: The Painted Veil
     author: W. Somerset Maugham
+    added: 2026-11-07
 
 shelved:
   - title: The New Jim Crow
     author: Michelle Alexander
+    added: 2026-11-07
