@@ -56,17 +56,84 @@
             margin-bottom: 50px;
         }
 
-        /* Project gallery. Each card's title link stretches over the whole card, and the
-           links underneath sit above it so they stay clickable. */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 44px 28px;
-            margin-bottom: 70px;
+        /* Project carousel. The title shares a row with the arrow buttons, which the script
+           shows once it runs. */
+        .page-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
         }
 
+        .page-head .page-title {
+            margin-bottom: 0;
+        }
+
+        .carousel-nav {
+            display: flex;
+            gap: 8px;
+            padding-bottom: 6px;
+        }
+
+        .carousel-nav[hidden] {
+            display: none;
+        }
+
+        .carousel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            background: #fff;
+            color: #555;
+            font-size: 20px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+        }
+
+        .carousel-btn:hover:not(:disabled) {
+            border-color: var(--link-color);
+            color: var(--link-color);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        .carousel-btn:focus-visible,
+        .carousel-track:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 4px;
+        }
+
+        /* One row of cards that scrolls sideways and snaps to each card. A slice of the next
+           card shows at the right edge so it reads as a row that keeps going. */
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 70px;
+            padding: 2px 0 8px;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Each card's title link stretches over the whole card, and the links underneath sit
+           above it so they stay clickable. */
         .card {
             position: relative;
+            flex: 0 0 300px;
+            scroll-snap-align: start;
         }
 
         .card-thumb {
@@ -259,10 +326,13 @@
                 font-size: 28px;
             }
 
-            .gallery {
-                grid-template-columns: 1fr;
-                gap: 36px;
+            .carousel-track {
+                gap: 16px;
                 margin-bottom: 56px;
+            }
+
+            .card {
+                flex-basis: 82%;
             }
 
             .card-title {
@@ -286,14 +356,20 @@
 
     <div class="container">
         <main>
-            <h1 class="page-title">Projects</h1>
+            <div class="page-head">
+                <h1 class="page-title">Projects</h1>
+                <div class="carousel-nav" hidden>
+                    <button class="carousel-btn" type="button" data-dir="-1" aria-controls="projects-track" aria-label="Previous projects"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+                    <button class="carousel-btn" type="button" data-dir="1" aria-controls="projects-track" aria-label="Next projects"><i class="ri-arrow-right-s-line" aria-hidden="true"></i></button>
+                </div>
+            </div>
 
             <!--
                 To add a project, save a 16:10 image in photos/projects/ (1000x625 works) and copy
-                a card. The title link is the one the whole card opens. A project without an image
-                uses <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
+                a card into the carousel. The title link is the one the whole card opens. A project
+                without an image uses <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
             -->
-            <div class="gallery">
+            <div class="carousel-track" id="projects-track" role="region" aria-label="Projects" tabindex="0">
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
                     <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
@@ -477,6 +553,39 @@
         </footer>
     </div>
     <script>
+        // Carousel arrows. Each press moves by as many whole cards as fit on screen, and an
+        // arrow turns off at its end of the row.
+        (function () {
+            var track = document.getElementById('projects-track');
+            var nav = document.querySelector('.carousel-nav');
+            var prev = nav.querySelector('[data-dir="-1"]');
+            var next = nav.querySelector('[data-dir="1"]');
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function stride() {
+                var card = track.querySelector('.card');
+                var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+                var per = Math.max(1, Math.floor((track.clientWidth + gap) / (card.offsetWidth + gap)));
+                return per * (card.offsetWidth + gap);
+            }
+
+            function update() {
+                var max = track.scrollWidth - track.clientWidth;
+                nav.hidden = max <= 0;
+                prev.disabled = track.scrollLeft <= 1;
+                next.disabled = track.scrollLeft >= max - 1;
+            }
+
+            nav.addEventListener('click', function (e) {
+                var btn = e.target.closest('button');
+                if (!btn) return;
+                track.scrollBy({ left: btn.dataset.dir * stride(), behavior: reduceMotion ? 'auto' : 'smooth' });
+            });
+            track.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+
         // Refresh star and fork counts from the GitHub API. The static
         // numbers in the markup stay if a request fails or is rate limited.
         document.querySelectorAll('.repo-card[data-repo]').forEach(function (card) {
