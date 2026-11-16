@@ -4,6 +4,7 @@
 
     <nav class="sidebar-tabs" aria-label="Pages">
         <a href="/"{% if include.active == "home" %} aria-current="page"{% endif %}><i class="ri-home-5-line" aria-hidden="true"></i>Home</a>
+        <a href="/about.html"{% if include.active == "about" %} aria-current="page"{% endif %}><i class="ri-user-line" aria-hidden="true"></i>About</a>
         <a href="/research.html"{% if include.active == "research" %} aria-current="page"{% endif %}><i class="ri-flask-line" aria-hidden="true"></i>Research</a>
         <a href="/projects.html"{% if include.active == "projects" %} aria-current="page"{% endif %}><i class="ri-folder-3-line" aria-hidden="true"></i>Projects</a>
         <a href="/reading.html"{% if include.active == "reading" %} aria-current="page"{% endif %}><i class="ri-book-open-line" aria-hidden="true"></i>Reading</a>
