@@ -56,89 +56,25 @@
             margin-bottom: 50px;
         }
 
-        /* Project carousel. The title shares a row with the arrow buttons, which the script
-           shows once it runs. */
-        .page-head {
+        /* Project list. Each row has a small picture beside the text. The title link stretches
+           over the whole row, and the links underneath sit above it so they stay clickable. */
+        .project-list {
             display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .page-head .page-title {
-            margin-bottom: 0;
-        }
-
-        .carousel-nav {
-            display: flex;
-            gap: 8px;
-            padding-bottom: 6px;
-        }
-
-        .carousel-nav[hidden] {
-            display: none;
-        }
-
-        .carousel-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            background: #fff;
-            color: #555;
-            font-size: 20px;
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s, opacity 0.2s;
-        }
-
-        .carousel-btn:hover:not(:disabled) {
-            border-color: var(--link-color);
-            color: var(--link-color);
-        }
-
-        .carousel-btn:disabled {
-            opacity: 0.35;
-            cursor: default;
-        }
-
-        .carousel-btn:focus-visible,
-        .carousel-track:focus-visible {
-            outline: 2px solid var(--link-color);
-            outline-offset: 4px;
-        }
-
-        /* One row of cards that scrolls sideways and snaps to each card. A slice of the next
-           card shows at the right edge so it reads as a row that keeps going. */
-        .carousel-track {
-            display: flex;
-            gap: 24px;
+            flex-direction: column;
+            gap: 30px;
             margin-bottom: 70px;
-            padding: 2px 0 8px;
-            overflow-x: auto;
-            overscroll-behavior-x: contain;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
         }
 
-        .carousel-track::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Each card's title link stretches over the whole card, and the links underneath sit
-           above it so they stay clickable. */
         .card {
             position: relative;
-            flex: 0 0 300px;
-            scroll-snap-align: start;
+            display: grid;
+            grid-template-columns: 200px minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
         }
 
         .card-thumb {
             aspect-ratio: 16 / 10;
-            margin-bottom: 14px;
             overflow: hidden;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -161,7 +97,7 @@
             justify-content: center;
             background: #eef4fb;
             color: #7a9cc6;
-            font-size: 46px;
+            font-size: 34px;
         }
 
         .card:has(.card-title a):hover .card-thumb {
@@ -326,13 +262,22 @@
                 font-size: 28px;
             }
 
-            .carousel-track {
-                gap: 16px;
+            .project-list {
+                gap: 26px;
                 margin-bottom: 56px;
             }
 
             .card {
-                flex-basis: 82%;
+                grid-template-columns: 112px minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .card-thumb.placeholder {
+                font-size: 24px;
+            }
+
+            .card-desc {
+                font-size: 14px;
             }
 
             .card-title {
@@ -356,121 +301,135 @@
 
     <div class="container">
         <main>
-            <div class="page-head">
-                <h1 class="page-title">Projects</h1>
-                <div class="carousel-nav" hidden>
-                    <button class="carousel-btn" type="button" data-dir="-1" aria-controls="projects-track" aria-label="Previous projects"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
-                    <button class="carousel-btn" type="button" data-dir="1" aria-controls="projects-track" aria-label="Next projects"><i class="ri-arrow-right-s-line" aria-hidden="true"></i></button>
-                </div>
-            </div>
+            <h1 class="page-title">Projects</h1>
 
             <!--
                 To add a project, save a 16:10 image in photos/projects/ (1000x625 works) and copy
-                a card into the carousel. The title link is the one the whole card opens. A project
+                a card into the list. The title link is the one the whole card opens. A project
                 without an image uses <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
             -->
-            <div class="carousel-track" id="projects-track" role="region" aria-label="Projects" tabindex="0">
+            <div class="project-list">
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
-                    <p class="card-venue">2026</p>
-                    <p class="card-desc">A guide to the companies that rent GPUs and other AI accelerators, with a map of who supplies whom, a timeline, current H100 prices and profiles of 97 providers.</p>
-                    <p class="card-links">
-                        <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
-                        <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
+                        <p class="card-venue">2026</p>
+                        <p class="card-desc">A guide to the companies that rent GPUs and other AI accelerators, with a map of who supplies whom, a timeline, current H100 prices and profiles of 97 providers.</p>
+                        <p class="card-links">
+                            <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
+                            <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/datacenter-map.jpg" width="1000" height="625" alt="A US map shading each state by its 2026 stance on datacenter development" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
-                    <p class="card-venue">2026</p>
-                    <p class="card-desc">A map of how each state treats datacenter development in 2026, with local moratoriums, public pushback and a siting model that ranks states for new projects.</p>
-                    <p class="card-links">
-                        <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
-                        <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
+                        <p class="card-venue">2026</p>
+                        <p class="card-desc">A map of how each state treats datacenter development in 2026, with local moratoriums, public pushback and a siting model that ranks states for new projects.</p>
+                        <p class="card-links">
+                            <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
+                            <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/datacenter-listings.jpg" width="1000" height="625" alt="A map of AI datacenter campuses beside listing cards with satellite photos and estimated costs" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
-                    <p class="card-venue">2026</p>
-                    <p class="card-desc">A listings site for AI data centers, laid out like a real estate search, with 94 frontier campuses and 30 signed AI leases priced as rent per kW a month.</p>
-                    <p class="card-links">
-                        <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
+                        <p class="card-venue">2026</p>
+                        <p class="card-desc">A listings site for AI data centers, laid out like a real estate search, with 94 frontier campuses and 30 signed AI leases priced as rent per kW a month.</p>
+                        <p class="card-links">
+                            <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/ai-demand-supply.jpg" width="1000" height="625" alt="AI revenue forecasts with headline figures and a revenue chart through 2030" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
-                    <p class="card-venue">2026</p>
-                    <p class="card-desc">An interactive model that asks whether AI revenue can pay for the AI buildout, starting from OpenAI and Anthropic revenue forecasts through 2030.</p>
-                    <p class="card-links">
-                        <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
+                        <p class="card-venue">2026</p>
+                        <p class="card-desc">An interactive model that asks whether AI revenue can pay for the AI buildout, starting from OpenAI and Anthropic revenue forecasts through 2030.</p>
+                        <p class="card-links">
+                            <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/chip-supply-chain.jpg" width="1000" height="625" alt="A 3D model of the NVIDIA B200 package with its two dies and eight memory stacks" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
-                    <p class="card-venue">2026</p>
-                    <p class="card-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on.</p>
-                    <p class="card-links">
-                        <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
-                        <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
+                        <p class="card-venue">2026</p>
+                        <p class="card-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on.</p>
+                        <p class="card-links">
+                            <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
+                            <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/treetrash.jpg" width="1000" height="625" alt="A laptop showing an ecological footprint report beside a camera, a breadboard and a screen reading Correct!" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
-                    <p class="card-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
-                    <p class="card-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
-                    <p class="card-links">
-                        <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
-                        <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
+                        <p class="card-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
+                        <p class="card-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
+                        <p class="card-links">
+                            <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
+                            <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb placeholder"><i class="ri-sailboat-line" aria-hidden="true"></i></div>
-                    <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
-                    <p class="card-venue">Stanford Student Robotics, 2024</p>
-                    <p class="card-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
+                    <div class="card-body">
+                        <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
+                        <p class="card-venue">Stanford Student Robotics, 2024</p>
+                        <p class="card-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/rational-learning.jpg" width="1000" height="625" alt="Two simulation panels plotting group confidence as individuals are added" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
-                    <p class="card-venue">CS 109, Stanford, 2024</p>
-                    <p class="card-desc">An interactive simulation of how people update their beliefs from private information and the choices of others.</p>
-                    <p class="card-links">
-                        <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
+                        <p class="card-venue">CS 109, Stanford, 2024</p>
+                        <p class="card-desc">An interactive simulation of how people update their beliefs from private information and the choices of others.</p>
+                        <p class="card-links">
+                            <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb placeholder"><i class="ri-video-on-ai-line" aria-hidden="true"></i></div>
-                    <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
-                    <p class="card-venue">National Security Hackathon, 2023</p>
-                    <p class="card-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
-                    <p class="card-links">
-                        <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
+                        <p class="card-venue">National Security Hackathon, 2023</p>
+                        <p class="card-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
+                        <p class="card-links">
+                            <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
 
                 <article class="card">
                     <div class="card-thumb"><img src="photos/projects/plastivis.jpg" width="1000" height="625" alt="Four 3D renders of a simulated brain colored by electrical activity" loading="lazy"></div>
-                    <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
-                    <p class="card-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
-                    <p class="card-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity.</p>
-                    <p class="card-links">
-                        <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
-                        <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
-                        <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
-                    </p>
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
+                        <p class="card-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
+                        <p class="card-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity.</p>
+                        <p class="card-links">
+                            <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
+                            <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
+                            <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
+                        </p>
+                    </div>
                 </article>
             </div>
 
@@ -553,39 +512,6 @@
         </footer>
     </div>
     <script>
-        // Carousel arrows. Each press moves by as many whole cards as fit on screen, and an
-        // arrow turns off at its end of the row.
-        (function () {
-            var track = document.getElementById('projects-track');
-            var nav = document.querySelector('.carousel-nav');
-            var prev = nav.querySelector('[data-dir="-1"]');
-            var next = nav.querySelector('[data-dir="1"]');
-            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            function stride() {
-                var card = track.querySelector('.card');
-                var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-                var per = Math.max(1, Math.floor((track.clientWidth + gap) / (card.offsetWidth + gap)));
-                return per * (card.offsetWidth + gap);
-            }
-
-            function update() {
-                var max = track.scrollWidth - track.clientWidth;
-                nav.hidden = max <= 0;
-                prev.disabled = track.scrollLeft <= 1;
-                next.disabled = track.scrollLeft >= max - 1;
-            }
-
-            nav.addEventListener('click', function (e) {
-                var btn = e.target.closest('button');
-                if (!btn) return;
-                track.scrollBy({ left: btn.dataset.dir * stride(), behavior: reduceMotion ? 'auto' : 'smooth' });
-            });
-            track.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update);
-            update();
-        })();
-
         // Refresh star and fork counts from the GitHub API. The static
         // numbers in the markup stay if a request fails or is rate limited.
         document.querySelectorAll('.repo-card[data-repo]').forEach(function (card) {
