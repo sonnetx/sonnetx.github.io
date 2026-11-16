@@ -6,4 +6,6 @@ Books live in `_data/reading.yml`, split into `current`, `to_read`, `finished` a
 
 There is no Writing page for now, and the old `writing.html` and `blog.html` URLs redirect to the homepage. The old Compute page is gone too, and `compute/` redirects to Projects. Community (`community.html`) has no tab, and About links to it.
 
+Projects (`projects.html`) is a gallery of cards, each with a 16:10 image from `photos/projects/` (1000x625 JPEGs), followed by Open Source repo cards. A comment at the top of the gallery shows how to add a card.
+
 Every page shares the sidebar in `_includes/sidebar.html`, styled by `sidebar.css`. Each page pulls it in with `{% include sidebar.html active="research" %}`, where `active` names the highlighted tab. The homepage bio sits in a `capture` block at the top of `index.html` and only shows on the homepage. Pages need the empty `---` front matter at the top so GitHub Pages runs the include.

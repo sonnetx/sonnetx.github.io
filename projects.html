@@ -39,24 +39,7 @@
         .page-title {
             font-size: 36px;
             font-weight: normal;
-            margin-bottom: 20px;
-        }
-
-        .profile-link {
-            font-size: 15px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             margin-bottom: 40px;
-        }
-
-        .profile-link a {
-            color: var(--link-color);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .profile-link a:hover {
-            border-bottom-color: var(--link-color);
         }
 
         /* Section headings */
@@ -73,54 +56,111 @@
             margin-bottom: 50px;
         }
 
-        /* Project entries */
-        .project-entry {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
+        /* Project gallery. Each card's title link stretches over the whole card, and the
+           links underneath sit above it so they stay clickable. */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 44px 28px;
+            margin-bottom: 70px;
         }
 
-        .project-entry:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .card {
+            position: relative;
         }
 
-        .project-title {
+        .card-thumb {
+            aspect-ratio: 16 / 10;
+            margin-bottom: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #f6f6f6;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .card-thumb img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        /* Projects without a picture get a tinted tile with an icon. */
+        .card-thumb.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef4fb;
+            color: #7a9cc6;
+            font-size: 46px;
+        }
+
+        .card:has(.card-title a):hover .card-thumb {
+            border-color: #b9cfe8;
+            box-shadow: 0 6px 18px rgba(0, 102, 204, 0.1);
+        }
+
+        .card:has(.card-title a):hover .card-thumb img {
+            transform: scale(1.03);
+        }
+
+        .card-title {
             font-size: 19px;
             font-weight: normal;
-            line-height: 1.4;
-            margin-bottom: 4px;
-            color: var(--text-color);
+            line-height: 1.35;
+            margin-bottom: 2px;
         }
 
-        .project-venue {
-            font-size: 14px;
+        .card-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card-title a::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+        }
+
+        .card:hover .card-title a {
+            color: var(--link-color);
+        }
+
+        .card-venue {
+            margin-bottom: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
             color: #999;
-            margin-bottom: 8px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        .project-desc {
-            font-size: 16px;
-            line-height: 1.7;
+        .card-desc {
+            margin-bottom: 8px;
+            font-size: 15px;
+            line-height: 1.6;
             color: #555;
-            margin-bottom: 8px;
         }
 
-        .project-links {
-            font-size: 14px;
+        .card-links {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 16px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
         }
 
-        .project-links a {
+        .card-links a {
             color: var(--link-color);
             text-decoration: none;
-            margin-right: 15px;
             border-bottom: 1px solid transparent;
             transition: border-color 0.2s;
         }
 
-        .project-links a:hover {
+        .card-links a:hover {
             border-bottom-color: var(--link-color);
         }
 
@@ -199,82 +239,6 @@
             fill: currentColor;
         }
 
-        /* Contribution calendar */
-        .activity-summary {
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-
-        .activity-summary a {
-            color: var(--link-color);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .activity-summary a:hover {
-            border-bottom-color: var(--link-color);
-        }
-
-        .contrib-scroll {
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        .contrib-grid {
-            display: grid;
-            grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
-            grid-template-rows: auto repeat(7, auto);
-            gap: 2px;
-            min-width: calc(var(--weeks, 53) * 11px);
-        }
-
-        .contrib-month {
-            grid-row: 1;
-            font-size: 11px;
-            line-height: 1;
-            padding-bottom: 4px;
-            color: #999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            white-space: nowrap;
-        }
-
-        .contrib-cell {
-            aspect-ratio: 1;
-            border-radius: 2px;
-            outline: 1px solid rgba(27, 31, 35, 0.06);
-            outline-offset: -1px;
-        }
-
-        .contrib-cell:hover {
-            outline-color: rgba(27, 31, 35, 0.5);
-        }
-
-        .contrib-legend {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 3px;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        .contrib-legend .contrib-cell {
-            width: 10px;
-        }
-
-        .contrib-legend .legend-label {
-            margin: 0 4px;
-        }
-
-        .l0 { background: #ebedf0; }
-        .l1 { background: #9be9a8; }
-        .l2 { background: #40c463; }
-        .l3 { background: #30a14e; }
-        .l4 { background: #216e39; }
-
         footer {
             margin-top: 80px;
             padding-top: 40px;
@@ -295,12 +259,24 @@
                 font-size: 28px;
             }
 
-            .project-title {
-                font-size: 17px;
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 36px;
+                margin-bottom: 56px;
+            }
+
+            .card-title {
+                font-size: 18px;
             }
 
             .repo-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card-thumb img {
+                transition: none;
             }
         }
     </style>
@@ -312,106 +288,115 @@
         <main>
             <h1 class="page-title">Projects</h1>
 
-            <p class="profile-link">
-                <a href="https://github.com/sonnetx" target="_blank">GitHub profile &rarr;</a>
-            </p>
-
-            <section class="project-section">
-                <h2 class="section-title">Projects</h2>
-
-                <article class="project-entry">
-                    <h3 class="project-title">The Neocloud Guide</h3>
-                    <p class="project-venue">2026</p>
-                    <p class="project-desc">An interactive guide to the companies that rent GPUs and other AI accelerators. It maps who supplies compute to whom, traces the industry on a timeline from 2017 to today, tracks current H100 prices, and profiles 97 providers with sources.</p>
-                    <p class="project-links">
+            <!--
+                To add a project, save a 16:10 image in photos/projects/ (1000x625 works) and copy
+                a card. The title link is the one the whole card opens. A project without an image
+                uses <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
+            -->
+            <div class="gallery">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
+                    <p class="card-venue">2026</p>
+                    <p class="card-desc">A guide to the companies that rent GPUs and other AI accelerators, with a map of who supplies whom, a timeline, current H100 prices and profiles of 97 providers.</p>
+                    <p class="card-links">
                         <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
                         <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Datacenter Map</h3>
-                    <p class="project-venue">2026</p>
-                    <p class="project-desc">An interactive map that compares the 50 states as sites for hyperscale and AI training datacenters. Pick a project size and a set of priorities, and it ranks states on power cost, solar resource, grid headroom, policy, permitting, water, hazards, cooling climate and connectivity.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/datacenter-map.jpg" width="1000" height="625" alt="A US map shading each state by its 2026 stance on datacenter development" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
+                    <p class="card-venue">2026</p>
+                    <p class="card-desc">A map of how each state treats datacenter development in 2026, with local moratoriums, public pushback and a siting model that ranks states for new projects.</p>
+                    <p class="card-links">
                         <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
                         <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Datacenter Listings</h3>
-                    <p class="project-venue">2026</p>
-                    <p class="project-desc">A listings site for AI data centers, laid out like a real estate search. It maps 94 frontier AI campuses with an estimated cost, power, chips and a satellite photo for each, and 30 signed AI leases priced as rent per kW a month. Each listing has a monthly cost to own calculator, a construction history and the policy of its state.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/datacenter-listings.jpg" width="1000" height="625" alt="A map of AI datacenter campuses beside listing cards with satellite photos and estimated costs" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
+                    <p class="card-venue">2026</p>
+                    <p class="card-desc">A listings site for AI data centers, laid out like a real estate search, with 94 frontier campuses and 30 signed AI leases priced as rent per kW a month.</p>
+                    <p class="card-links">
                         <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">AI Demand and Supply</h3>
-                    <p class="project-venue">2026</p>
-                    <p class="project-desc">An interactive model that asks whether AI revenue can pay for the AI buildout. It forecasts OpenAI and Anthropic revenue through 2030 from reported run-rates, with an 80% range drawn from 2,000 simulated paths. It then compares that revenue with the yearly cost of the AI hardware in service, the labs' compute contracts and the returns their investors need. Every figure cites a source.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/ai-demand-supply.jpg" width="1000" height="625" alt="AI revenue forecasts with headline figures and a revenue chart through 2030" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
+                    <p class="card-venue">2026</p>
+                    <p class="card-desc">An interactive model that asks whether AI revenue can pay for the AI buildout, starting from OpenAI and Anthropic revenue forecasts through 2030.</p>
+                    <p class="card-links">
                         <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Inside an AI Chip</h3>
-                    <p class="project-venue">2026</p>
-                    <p class="project-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on. An outage model estimates how supply disruptions affect the package.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/chip-supply-chain.jpg" width="1000" height="625" alt="A 3D model of the NVIDIA B200 package with its two dies and eight memory stacks" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
+                    <p class="card-venue">2026</p>
+                    <p class="card-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on.</p>
+                    <p class="card-links">
                         <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
                         <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">TreeTrash</h3>
-                    <p class="project-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
-                    <p class="project-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/treetrash.jpg" width="1000" height="625" alt="A laptop showing an ecological footprint report beside a camera, a breadboard and a screen reading Correct!" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
+                    <p class="card-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
+                    <p class="card-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
+                    <p class="card-links">
                         <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
                         <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Pacific Nurse Shark Conservation</h3>
-                    <p class="project-venue">Stanford Student Robotics, 2024</p>
-                    <p class="project-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
+                <article class="card">
+                    <div class="card-thumb placeholder"><i class="ri-sailboat-line" aria-hidden="true"></i></div>
+                    <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
+                    <p class="card-venue">Stanford Student Robotics, 2024</p>
+                    <p class="card-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Rational Social Learning</h3>
-                    <p class="project-venue">CS 109, Stanford, 2024</p>
-                    <p class="project-desc">An interactive simulation of how people update their beliefs from private information and the choices of others. It compares a model where each person sees every earlier choice with one where they see only a random sample.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/rational-learning.jpg" width="1000" height="625" alt="Two simulation panels plotting group confidence as individuals are added" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
+                    <p class="card-venue">CS 109, Stanford, 2024</p>
+                    <p class="card-desc">An interactive simulation of how people update their beliefs from private information and the choices of others.</p>
+                    <p class="card-links">
                         <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">Scarecrow</h3>
-                    <p class="project-venue">National Security Hackathon, 2023</p>
-                    <p class="project-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb placeholder"><i class="ri-video-on-ai-line" aria-hidden="true"></i></div>
+                    <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
+                    <p class="card-venue">National Security Hackathon, 2023</p>
+                    <p class="card-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
+                    <p class="card-links">
                         <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
                     </p>
                 </article>
 
-                <article class="project-entry">
-                    <h3 class="project-title">PlastiVis</h3>
-                    <p class="project-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
-                    <p class="project-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity. Built as a Clark Summer Research Scholars project.</p>
-                    <p class="project-links">
+                <article class="card">
+                    <div class="card-thumb"><img src="photos/projects/plastivis.jpg" width="1000" height="625" alt="Four 3D renders of a simulated brain colored by electrical activity" loading="lazy"></div>
+                    <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
+                    <p class="card-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
+                    <p class="card-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity.</p>
+                    <p class="card-links">
                         <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
                         <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
                         <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
                     </p>
                 </article>
-            </section>
+            </div>
 
             <section class="project-section">
                 <h2 class="section-title">Open Source</h2>
@@ -485,23 +470,6 @@
                     </a>
                 </div>
             </section>
-
-            <section class="project-section" id="github-activity" hidden>
-                <h2 class="section-title">GitHub Activity</h2>
-                <p class="activity-summary"><a href="https://github.com/sonnetx" target="_blank"><span id="contrib-total"></span> contributions in the last year</a></p>
-                <div class="contrib-scroll" id="contrib-scroll">
-                    <div class="contrib-grid" id="contrib-grid" role="img"></div>
-                </div>
-                <div class="contrib-legend" aria-hidden="true">
-                    <span class="legend-label">Less</span>
-                    <span class="contrib-cell l0"></span>
-                    <span class="contrib-cell l1"></span>
-                    <span class="contrib-cell l2"></span>
-                    <span class="contrib-cell l3"></span>
-                    <span class="contrib-cell l4"></span>
-                    <span class="legend-label">More</span>
-                </div>
-            </section>
         </main>
 
         <footer>
@@ -524,70 +492,6 @@
                 })
                 .catch(function () {});
         });
-
-        // Draw the contribution calendar. The section stays hidden if the
-        // contributions API is unreachable.
-        (function () {
-            var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            var DAY = 24 * 60 * 60 * 1000;
-
-            function parseDate(s) {
-                var p = s.split('-');
-                return new Date(+p[0], +p[1] - 1, +p[2]);
-            }
-
-            fetch('https://github-contributions-api.jogruber.de/v4/sonnetx?y=last')
-                .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-                .then(function (data) {
-                    var days = data.contributions;
-                    if (!days || !days.length) return;
-
-                    var grid = document.getElementById('contrib-grid');
-                    var first = parseDate(days[0].date);
-                    var offset = first.getDay();
-                    var weeks = Math.ceil((days.length + offset) / 7);
-                    grid.style.setProperty('--weeks', weeks);
-
-                    // Label each month at the first week whose Sunday falls in it,
-                    // skipping the partial first week, as GitHub does.
-                    var prevMonth = null;
-                    for (var w = 0; w < weeks; w++) {
-                        var sunday = new Date(first.getTime() + (w * 7 - offset) * DAY + DAY / 2);
-                        var m = sunday.getMonth();
-                        if (w > 0 && m !== prevMonth) {
-                            var label = document.createElement('span');
-                            label.className = 'contrib-month';
-                            label.style.gridColumn = w + 1;
-                            label.textContent = MONTHS[m];
-                            grid.appendChild(label);
-                        }
-                        prevMonth = m;
-                    }
-
-                    days.forEach(function (d, i) {
-                        var idx = i + offset;
-                        var date = parseDate(d.date);
-                        var cell = document.createElement('span');
-                        cell.className = 'contrib-cell l' + d.level;
-                        cell.style.gridColumn = Math.floor(idx / 7) + 1;
-                        cell.style.gridRow = (idx % 7) + 2;
-                        cell.title = (d.count === 0 ? 'No' : d.count) + ' contribution' + (d.count === 1 ? '' : 's') +
-                            ' on ' + MONTHS[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
-                        grid.appendChild(cell);
-                    });
-
-                    var total = (data.total && data.total.lastYear) ||
-                        days.reduce(function (sum, d) { return sum + d.count; }, 0);
-                    document.getElementById('contrib-total').textContent = total.toLocaleString('en-US');
-                    grid.setAttribute('aria-label', 'GitHub contribution calendar, ' +
-                        total.toLocaleString('en-US') + ' contributions in the last year');
-
-                    document.getElementById('github-activity').hidden = false;
-                    var scroller = document.getElementById('contrib-scroll');
-                    scroller.scrollLeft = scroller.scrollWidth;
-                })
-                .catch(function () {});
-        })();
     </script>
     <script data-goatcounter="https://sonnetx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
