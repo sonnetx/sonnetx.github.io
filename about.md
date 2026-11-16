@@ -14,4 +14,6 @@ Some fun tangents during my time here have been:
 - researching US-China tech competition at the [Hoover Institution](https://www.hoover.org/) by analyzing EV patents
 - working on [zk proofs](https://github.com/NethermindEth/condor-rs), learning about quantum cryptography, and leading [Stanford Blockchain](https://blockchain.stanford.edu/)
 
+Around campus, I've also been part of Grad Crew, Alumni Reunion, New Student Orientation, Civic Disagreement, and Structured Liberal Education.
+
 I grew up in Michigan. In my free time, you can find me {% include reading.html text="reading" %} (I particularly love short stories and memoirs), or eating {% include note.html text="brunch" note="I haven't found any good places in the Bay, and I would love recommendations." %}. I also love building community and [hosting events](community.html). I'm always open to connecting — feel free to [reach out](contact.html).
