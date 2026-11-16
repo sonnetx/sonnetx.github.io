@@ -120,7 +120,7 @@
                     {%- for book in books %}
                     <li class="book">
                         <cite class="book-title">{{ book.title }}</cite>
-                        <span class="book-author">{{ book.author }}{% if book.added %} &middot; <time datetime="{{ book.added | date: '%Y-%m-%d' }}">{{ book.added | date: "%b %-d, %Y" }}</time>{% endif %}</span>
+                        <span class="book-author">{{ book.author }}{% if book.added %} &middot; <time datetime="{{ book.added | date: '%Y-%m' }}">{{ book.added | date: "%b %Y" }}</time>{% endif %}</span>
                     </li>
                     {%- endfor %}
                 </ul>

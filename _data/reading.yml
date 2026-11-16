@@ -2,7 +2,7 @@
 # Move a book from current to the top of finished when you finish it, or to shelved if you
 # abandon it. Newest first in each list.
 # added is the date (YYYY-MM-DD) the book went into its list, so set it to today when you
-# add or move a book. The Reading page shows it next to the author.
+# add or move a book. The Reading page shows its month and year next to the author.
 # While current is empty, the About popup shows the three most recent finished books instead.
 # to_read and shelved only appear on the Reading page.
 
