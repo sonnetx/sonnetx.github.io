@@ -6,6 +6,6 @@ Books live in `_data/reading.yml`, split into `current`, `to_read`, `finished` a
 
 There is no Writing page for now, and the old `writing.html` and `blog.html` URLs redirect to the homepage. The old Compute page is gone too, and `compute/` redirects to Projects. Community (`community.html`) has no tab, and About links to it.
 
-Projects (`projects.html`) is a list with one row per project, each with a small 16:10 image from `photos/projects/` (1000x625 JPEGs), followed by Open Source repo cards. A comment above the list shows how to add a project.
+Projects (`projects.html`) is a list with one row per project, each with a small 16:10 image from `photos/projects/` (1000x625 JPEGs), followed by Open Source repo cards. A comment above the list shows how to add a project. The `preference-first/` folder holds a copy of the Preference-First Medical AI demo, taken unchanged from `demo/index.html` in that project's repo, and has no front matter so GitHub Pages serves it as is.
 
 Every page shares the sidebar in `_includes/sidebar.html`, styled by `sidebar.css`. Each page pulls it in with `{% include sidebar.html active="research" %}`, where `active` names the highlighted tab. The homepage bio sits in a `capture` block at the top of `index.html` and only shows on the homepage. Pages need the empty `---` front matter at the top so GitHub Pages runs the include.

@@ -1,0 +1,1303 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preference First</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --ground: #F2F4F1; --surface: #FBFCFA; --ink: #1E2422; --muted: #5F6A66; --rule: #D5DBD6; --rule-soft: #E6EAE6;
+    --accent: #1F5C4A; --accent-ink: #FFFFFF; --accent-soft: #E1EEE8; --warn: #9A5B12; --warn-soft: #F6ECDD;
+    --opt-0: #1F78A8; --opt-1: #C2621A; --opt-2: #7A56B8; --opt-3: #3E8E5A;
+    --shadow: 0 1px 2px rgba(20, 30, 26, 0.05), 0 10px 28px rgba(20, 30, 26, 0.06);
+    --display: "Newsreader", Georgia, "Times New Roman", serif;
+    --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171A19; --surface: #1F2422; --ink: #E7EAE6; --muted: #9AA59F; --rule: #33393A; --rule-soft: #2A302E;
+      --accent: #7CC4AB; --accent-ink: #0F1A16; --accent-soft: #1F3A31; --warn: #E0A458; --warn-soft: #3A2E1E;
+      --opt-0: #3A8FC0; --opt-1: #CC7A2A; --opt-2: #9070D0; --opt-3: #5FB57E;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171A19; --surface: #1F2422; --ink: #E7EAE6; --muted: #9AA59F; --rule: #33393A; --rule-soft: #2A302E;
+    --accent: #7CC4AB; --accent-ink: #0F1A16; --accent-soft: #1F3A31; --warn: #E0A458; --warn-soft: #3A2E1E;
+    --opt-0: #3A8FC0; --opt-1: #CC7A2A; --opt-2: #9070D0; --opt-3: #5FB57E;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 24px 64px; display: flex; flex-direction: column; gap: 22px; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .brand { font-family: var(--display); font-size: 22px; font-weight: 600; }
+  .brand small { font-family: var(--body); font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .top .meta { font-size: 13px; color: var(--muted); }
+  .studybar { font-size: 13px; color: var(--muted); padding: 8px 14px; border: 1px dashed var(--rule); border-radius: 8px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .studybar b { color: var(--ink); }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: clamp(20px, 3.4vw, 36px); box-shadow: var(--shadow); }
+  .intro h1 { font-size: clamp(28px, 3.6vw, 40px); }
+  .intro .ctx { margin-top: 18px; max-width: 66ch; }
+  .intro .pop { margin-top: 10px; font-size: 13px; color: var(--muted); max-width: 70ch; }
+  .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+  .opt { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; border-top: 4px solid var(--oc); }
+  .opt b { font-size: 16px; }
+  .opt p { font-size: 14px; color: var(--muted); }
+  .opt details { font-size: 13px; color: var(--muted); }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .step { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--rule); background: var(--surface); text-align: left; cursor: pointer; }
+  .step .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--rule-soft); color: var(--muted); flex: none; }
+  .step b { display: block; font-size: 14px; }
+  .step span { font-size: 12px; color: var(--muted); }
+  .step[aria-current="step"] { border-color: var(--accent); background: var(--accent-soft); }
+  .step[aria-current="step"] .n, .step.done .n { background: var(--accent); color: var(--accent-ink); }
+  .step:disabled { cursor: not-allowed; opacity: 0.6; }
+  @media (max-width: 640px) {
+    .wrap { padding: 16px 16px 40px; gap: 16px; }
+    .step { padding: 10px 6px; flex-direction: column; gap: 6px; text-align: center; }
+    .step b { font-size: 12px; }
+    .step div span { display: none; }
+  }
+
+  .stage h2 { font-size: 26px; }
+  .stage .lede { color: var(--muted); margin-top: 6px; max-width: 66ch; }
+  .tabs { display: inline-flex; gap: 4px; margin-top: 18px; padding: 4px; border: 1px solid var(--rule); border-radius: 999px; background: var(--ground); }
+  .tabs button { padding: 7px 16px; border: none; background: none; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--muted); }
+  .tabs button[aria-selected="true"] { color: var(--ink); background: var(--surface); box-shadow: var(--shadow); }
+
+  .qs { display: flex; flex-direction: column; gap: 26px; margin-top: 22px; }
+  .q { display: flex; flex-direction: column; gap: 8px; }
+  .q label, .q .lbl { font-weight: 600; }
+  .q textarea { width: 100%; min-height: 84px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); resize: vertical; }
+  .q .note { font-size: 13px; color: var(--muted); max-width: 66ch; }
+  .radios { display: flex; flex-direction: column; gap: 6px; }
+  .radios label { display: grid; grid-template-columns: 18px 1fr; gap: 10px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; font-weight: 400; }
+  .radios label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .radios input { margin-top: 4px; accent-color: var(--accent); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; align-items: center; }
+  .btn { padding: 11px 18px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); cursor: pointer; font-weight: 600; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .hint { font-size: 13px; color: var(--muted); }
+  .disclosure { margin-top: 18px; border-top: 1px solid var(--rule-soft); padding-top: 14px; }
+  summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  details > p, details > .info { margin-top: 12px; }
+  fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+  legend { padding: 0; font-weight: 600; }
+  .choices { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+  .choices label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--rule); border-radius: 8px; padding: 12px 10px; cursor: pointer; font-size: 14px; }
+  .choices label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+  .choices input { accent-color: var(--accent); margin: 0; flex: none; }
+  .progress { color: var(--muted); font-size: 13px; margin-top: 20px; }
+  .pbar { display: flex; gap: 4px; margin-top: 8px; }
+  .pbar i { flex: 1; height: 4px; border-radius: 2px; background: var(--rule-soft); }
+  .pbar i.done { background: var(--accent); }
+  .pbar i.now { background: var(--accent); opacity: 0.45; }
+  .error { color: var(--warn); margin-top: 14px; }
+  .review-item { padding: 12px 0; border-bottom: 1px solid var(--rule-soft); }
+  .review-item summary { display: flex; justify-content: space-between; gap: 16px; font-weight: 400; color: var(--ink); }
+  .review-item summary span { display: block; }
+  .review-item summary small { color: var(--muted); }
+  .review-item .edit { color: var(--accent); font-size: 14px; flex: none; }
+  .result-lead { margin-top: 14px; font-size: 18px; max-width: 66ch; }
+  @media (max-width: 640px) {
+    .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .choices label:last-child { grid-column: 1 / -1; }
+    .rcard { padding: 14px; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; }
+  }
+
+  .limits { display: flex; flex-direction: column; gap: 10px; }
+  .limits label { display: flex; gap: 10px; align-items: center; font-size: 15px; }
+  .limits input[type="number"] { width: 90px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--rule); background: var(--surface); }
+
+  /* the conversation */
+  .convo { display: grid; grid-template-columns: minmax(0, 1fr) 286px; gap: 22px; margin-top: 20px; align-items: start; }
+  .threadcol { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .thread { display: flex; flex-direction: column; gap: 12px; min-height: 330px; max-height: min(56vh, 520px); overflow-y: auto; padding: 6px 8px 6px 2px; }
+  .chat { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
+  .log { display: flex; flex-direction: column; gap: 10px; max-height: 460px; overflow-y: auto; padding: 4px; }
+  .msg { max-width: 52ch; padding: 11px 15px; border-radius: 15px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; }
+  .msg.ai { background: var(--ground); border: 1px solid var(--rule-soft); align-self: flex-start; border-bottom-left-radius: 5px; }
+  .msg.me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 5px; font-weight: 600; }
+  .msg.sys { align-self: center; text-align: center; max-width: 46ch; background: none; padding: 2px 0; font-size: 13px; color: var(--muted); }
+  .msg .kick { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .enter { animation: rise 300ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .typing { display: inline-flex; gap: 5px; align-items: center; height: 12px; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.1s infinite; }
+  .typing i:nth-child(2) { animation-delay: 0.18s; }
+  .typing i:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
+
+  .qcard { display: flex; flex-direction: column; gap: 10px; }
+  .qcard .ans { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-self: flex-end; max-width: 58ch; }
+  .qcard .ans button { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--accent); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 14px; text-align: left; }
+  .qcard .ans button:hover:not(:disabled) { background: var(--accent-soft); }
+  .qcard .ans button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .qcard .ans button.skip { border-color: var(--rule); font-weight: 400; color: var(--muted); }
+  .qcard .why, .qcard details { align-self: flex-start; font-size: 13px; color: var(--muted); max-width: 52ch; }
+  .setup { border: 1px dashed var(--rule); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .demobar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; padding: 8px 14px; border-radius: 8px; background: var(--warn-soft); border-left: 3px solid var(--warn); }
+  .playrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .playrow button { padding: 7px 13px; border-radius: 999px; border: 1px solid var(--rule); background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; }
+  .playrow button:hover { border-color: var(--accent); color: var(--accent); }
+  .compose { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+  .compose textarea { min-height: 52px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); resize: vertical; }
+
+  /* what the engine currently believes */
+  .belief { position: sticky; top: 14px; border: 1px solid var(--rule); border-radius: 12px; padding: 16px; background: var(--ground); display: flex; flex-direction: column; gap: 12px; }
+  .belief h3 { font-family: var(--body); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .stack { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--rule-soft); }
+  .stack i { display: block; background: var(--oc); transition: width 450ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .legend { display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
+  .legend div { display: grid; grid-template-columns: 9px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-variant-numeric: tabular-nums; }
+  .legend i { width: 9px; height: 9px; border-radius: 50%; background: var(--oc); }
+  .wbars { display: flex; flex-direction: column; gap: 8px; }
+  .wbar .lab { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; line-height: 1.3; color: var(--muted); margin-bottom: 3px; }
+  .wbar .lab b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .wbar.asking .lab span { color: var(--ink); font-weight: 600; }
+  .wbar .trk { position: relative; height: 7px; border-radius: 4px; background: var(--rule-soft); }
+  .wbar .band { position: absolute; top: 0; bottom: 0; background: var(--accent); opacity: 0.28; border-radius: 4px; transition: left 450ms, width 450ms; }
+  .wbar .mark { position: absolute; top: -3px; width: 3px; height: 13px; border-radius: 2px; background: var(--accent); transition: left 450ms; }
+  @media (max-width: 860px) {
+    .convo { grid-template-columns: minmax(0, 1fr); }
+    .belief { position: static; order: -1; gap: 10px; }
+    .legend { flex-direction: row; flex-wrap: wrap; gap: 4px 14px; }
+    .legend div { grid-template-columns: 9px auto auto; }
+    .wbars { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+    .thread { max-height: 36vh; min-height: 230px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .enter { animation: none; }
+    .typing i { animation: none; opacity: 0.5; }
+    .stack i, .wbar .band, .wbar .mark { transition: none; }
+  }
+
+  /* confirm */
+  .heard { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+  .quotes { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .quotes blockquote { margin: 0; padding: 8px 14px; border-left: 3px solid var(--accent); font-family: var(--display); font-size: 18px; font-style: italic; }
+  .callout { margin-top: 18px; padding: 12px 16px; border-radius: 8px; background: var(--warn-soft); border-left: 3px solid var(--warn); font-size: 15px; }
+  .callout.ok { background: var(--accent-soft); border-left-color: var(--accent); }
+
+  /* compare */
+  .rank { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
+  .rcard { border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; display: grid; grid-template-columns: 34px 1fr; gap: 14px; border-left: 5px solid var(--oc); }
+  .rcard.top { background: var(--accent-soft); border-color: var(--accent); border-left-color: var(--oc); }
+  .rcard .pos { font-family: var(--display); font-size: 26px; font-weight: 500; color: var(--muted); line-height: 1; }
+  .rcard h3 { font-size: 20px; }
+  .rcard .fit { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .contrib { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 4px 18px; font-size: 13px; }
+  .contrib div { display: grid; grid-template-columns: 1fr 44px; gap: 8px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .contrib div b { color: var(--ink); text-align: right; font-weight: 600; }
+  .why { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; max-width: 66ch; }
+  .why h3 { font-size: 19px; }
+  .base { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--rule); font-size: 13px; color: var(--ink); }
+  .chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--oc); display: inline-block; }
+  .framings { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
+  .framing { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .framing b { font-size: 15px; }
+  .framing p { font-size: 13px; color: var(--muted); }
+  .assume { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .assume .row { display: grid; grid-template-columns: minmax(160px, 1fr) 2fr; gap: 10px; align-items: center; }
+  .assume .track { position: relative; height: 8px; border-radius: 4px; background: var(--rule-soft); }
+  .assume .track i { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 4px; }
+  .assume .track b { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--ink); }
+
+  .whatif { margin-top: 22px; padding: 16px 18px; border-radius: 10px; border: 1px solid var(--rule); background: var(--ground); display: flex; flex-direction: column; gap: 10px; }
+  .whatif select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); max-width: 100%; width: 100%; }
+  .whatif .live { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 14px; }
+
+  .tbl-wrap { overflow-x: auto; margin-top: 22px; }
+  table.rates { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .rates th, .rates td { padding: 9px 10px; border-bottom: 1px solid var(--rule-soft); text-align: right; vertical-align: top; }
+  .rates th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 700; }
+  .rates th:first-child, .rates td:first-child { text-align: left; }
+  .rates td:first-child { font-weight: 600; }
+  .rates td:first-child small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .rates .w { color: var(--muted); }
+  .rates blockquote.quote { margin: 8px 0 0; padding: 6px 10px; border-left: 2px solid var(--rule); font-size: 12px; font-weight: 400; color: var(--muted); white-space: normal; max-width: 48ch; }
+  .rates blockquote.quote small { display: block; margin-top: 2px; }
+  .sources { margin-top: 26px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }
+  .sources li { margin-bottom: 4px; }
+  .disclaimer { margin-top: 16px; font-size: 13px; color: var(--muted); max-width: 70ch; }
+
+  /* study */
+  .survey { margin-top: 26px; padding: 22px; border-radius: 10px; border: 1px solid var(--rule); background: var(--ground); display: flex; flex-direction: column; gap: 18px; }
+  .survey h3 { font-size: 19px; }
+  .survey .scale { display: flex; gap: 6px; flex-wrap: wrap; }
+  .survey .scale label { padding: 8px 12px; border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; gap: 6px; align-items: center; }
+  .survey .scale label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .checks { display: flex; flex-direction: column; gap: 6px; }
+  .checks label { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+  pre.record { font-size: 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px; max-height: 260px; overflow: auto; white-space: pre-wrap; }
+  @media print {
+    .top, #intro, #steps, #studybar, .actions, .survey { display: none !important; }
+    body { background: white; color: black; }
+    .wrap { max-width: none; padding: 0; }
+    .card { background: white; box-shadow: none; border: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) { .btn, .step, .tabs button { transition: background-color 120ms, border-color 120ms; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Preference First <small>prototype</small></div>
+    <div class="meta">Your values first. Nothing is compared until you have said what matters to you and confirmed it.</div>
+  </header>
+  <div class="studybar" id="studybar" hidden></div>
+
+  <section class="card intro" id="intro"></section>
+
+  <nav class="steps" aria-label="Steps" id="steps">
+    <button class="step" data-stage="values" aria-current="step"><span class="n">1</span><div><b>What matters to you</b><span>A short conversation</span></div></button>
+    <button class="step" data-stage="confirm" disabled><span class="n">2</span><div><b>Check we understood</b><span>Review and change anything</span></div></button>
+    <button class="step" data-stage="compare" disabled><span class="n">3</span><div><b>How the options compare for you</b><span>Unlocked after you confirm</span></div></button>
+  </nav>
+
+  <section class="card stage" id="stage-values">
+    <h2 tabindex="-1">What matters to you</h2>
+    <p class="lede">Before anything is compared, we need to know what you are hoping for and what you most want to avoid. There are no right answers, and each question is chosen to tell your priorities apart as quickly as possible.</p>
+    <div class="tabs" role="tablist" id="tabs" hidden>
+      <button role="tab" aria-selected="false" data-tab="chat" id="chat-tab" hidden>In your own words</button>
+      <button role="tab" aria-selected="true" data-tab="form" id="form-tab">Guided questions</button>
+    </div>
+    <div id="tab-chat" hidden></div>
+    <div id="tab-form"></div>
+  </section>
+
+  <section class="card stage" id="stage-intake" hidden></section>
+  <section class="card stage" id="stage-baseline" hidden></section>
+  <section class="card stage" id="stage-confirm" hidden></section>
+  <section class="card stage" id="stage-compare" hidden></section>
+  <section class="card stage" id="stage-followup" hidden></section>
+</div>
+
+<script>
+const DECISION = {"id":"prostate_localized","title":"Localized prostate cancer found by PSA screening","question":"Which approach fits you best: active monitoring, surgery, or radiotherapy?","context":"You have prostate cancer that has not spread beyond the prostate, found through a PSA blood test. Most such cancers grow slowly. There are three reasonable approaches, and the trial that compared them found no clear difference in the chance of dying from prostate cancer over fifteen years. What differs is how likely the cancer is to spread or progress, and the side effects you live with. That makes this a decision where what matters to you should drive the answer.","population":"Men aged 50 to 69 with PSA-detected localized prostate cancer, as enrolled in the UK ProtecT trial (1,643 men randomized 1999 to 2009).","options":[{"id":"monitoring","name":"Active monitoring","short":"Regular PSA tests, with treatment only if the cancer shows signs of progressing.","burden":"A PSA blood test every three months in the first year, then every six to twelve months. Repeat scans or biopsies if PSA rises. No immediate treatment side effects. Living with an untreated cancer, and the possibility of needing surgery or radiotherapy later."},{"id":"surgery","name":"Surgery (radical prostatectomy)","short":"An operation to remove the prostate.","burden":"A hospital stay of one to three days, a catheter for one to two weeks, and four to six weeks off normal activity. The largest early side effects are on urine control and erections, some of which improve over the first one to two years."},{"id":"radiotherapy","name":"Radiotherapy with short-course hormone therapy","short":"External beam radiation to the prostate over several weeks, with three to six months of hormone therapy.","burden":"Daily radiotherapy sessions, five days a week for about seven weeks, plus three to six months of hormone injections that cause hot flushes, tiredness, and loss of sex drive while they last. Bowel and urinary irritation during and shortly after treatment."}],"attributes":[{"id":"cancer_death","name":"Dying from prostate cancer","plain":"dying from prostate cancer within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"The differences between the three groups were not statistically significant. About 97 in 100 men in every group were alive without dying of prostate cancer at 15 years.","values":{"monitoring":3.1,"surgery":2.2,"radiotherapy":2.9},"levels":{},"evidence":[],"category":"disease"},{"id":"metastasis","name":"Cancer spreading beyond the prostate","plain":"the cancer spreading to other parts of the body within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Spread was about twice as common with monitoring, but this did not translate into more deaths within 15 years. Spread usually means hormone therapy and living with advanced cancer.","values":{"monitoring":9.4,"surgery":4.7,"radiotherapy":5.0},"levels":{},"evidence":[],"category":"disease"},{"id":"hormone_therapy","name":"Needing long-term hormone therapy","plain":"needing long-term hormone therapy to control the cancer within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Long-term hormone therapy causes hot flushes, tiredness, weight gain, loss of sex drive, and weaker bones for as long as it continues.","values":{"monitoring":12.7,"surgery":7.2,"radiotherapy":7.7},"levels":{},"evidence":[],"category":"disease"},{"id":"incontinence_6mo","name":"Urine leakage needing pads in the first six months","plain":"using one or more absorbent pads a day for urine leakage during the first six months","kind":"rate","unit":"out of 100 men at 6 months","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)","note":"The early effect of surgery on urine control. For most men it improves over the first one to two years, though not to zero.","values":{"monitoring":4,"surgery":46,"radiotherapy":5},"levels":{},"evidence":[],"category":"function"},{"id":"erectile_6mo","name":"Losing erections firm enough for sex in the first six months","plain":"not having erections firm enough for intercourse during the first six months","kind":"rate","unit":"out of 100 men at 6 months","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)","note":"Before treatment, 33 in 100 men already lacked firm erections. Radiotherapy's early number includes the months of hormone therapy, which suppresses sexual function while it lasts.","values":{"monitoring":48,"surgery":88,"radiotherapy":78},"levels":{},"evidence":[],"category":"function"},{"id":"incontinence","name":"Urine leakage needing pads, six years on","plain":"using one or more absorbent pads a day for urine leakage, six years on","kind":"rate","unit":"out of 100 men at 6 years","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)","note":"Right after surgery it is much higher: 46 in 100 men used pads at six months, falling to 17 in 100 by six years. Some men on monitoring later had surgery, which is why their number is above radiotherapy's.","values":{"monitoring":8,"surgery":17,"radiotherapy":4},"levels":{},"evidence":[],"category":"function"},{"id":"erectile","name":"Losing erections firm enough for sex, six years on","plain":"not having erections firm enough for intercourse, six years on","kind":"rate","unit":"out of 100 men at 6 years","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)","note":"Before treatment, 67 in 100 men had erections firm enough for sex, so 33 in 100 already did not. At six months the gap was widest: 88 in 100 after surgery, 78 after radiotherapy, and 48 on monitoring lacked firm erections. Ageing lowers everyone's number over time.","values":{"monitoring":70,"surgery":83,"radiotherapy":73},"levels":{},"evidence":[],"category":"function"},{"id":"radical_later","name":"Ending up having surgery or radiotherapy anyway","plain":"starting on monitoring but going on to have surgery or radiotherapy within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Most men who start with monitoring eventually have treatment, usually because PSA rises. Monitoring is a delay for most and an avoidance for some. Men who choose surgery or radiotherapy up front have already had it, so their number is zero by definition.","values":{"monitoring":61.1,"surgery":0,"radiotherapy":0},"levels":{},"evidence":[],"category":"disease"},{"id":"bowel","name":"Bowel problems","plain":"bowel problems such as blood in the stool or leakage","kind":"ordinal","unit":"how common, compared across options","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 and NEJM Evidence 2023 (ProtecT patient-reported outcomes)","note":"Blood in the stool was more common after radiotherapy from year two onward, and leakage of stool increased in the radiotherapy group in years seven to twelve. The trial reports these in figures rather than as single percentages, so this page shows them in words.","values":{},"levels":{"monitoring":"uncommon","surgery":"uncommon","radiotherapy":"more common"},"evidence":[],"category":"function"}],"tradeoff_checks":[{"id":"spread_vs_sideeffects","prompt":"Suppose surgery lowered the chance of the cancer spreading from about 9 in 100 to about 5 in 100 over fifteen years, but raised the chance of needing pads for urine leakage from about 8 in 100 to about 17 in 100. Which would you lean toward?","options":{"surgery":"Take the lower chance of spread, accept the leakage risk","monitoring":"Keep the lower leakage risk, accept the higher chance of spread"},"attributes":["metastasis","incontinence"]},{"id":"treat_now_vs_later","prompt":"About 61 in 100 men who start with monitoring end up having surgery or radiotherapy later anyway. Some see that as a reason to treat now and be done with it. Others see the years without side effects as worth having even if treatment comes later. Which is closer to you?","options":{"surgery":"Treat now and be done with it","monitoring":"Take the side-effect-free years, even if treatment comes later"},"attributes":["radical_later","erectile"]}],"default_weights_note":"Before your values are recorded, the comparison treats every outcome as mattering equally. That is not a recommendation. It is the placeholder your answers replace.","sources":["Hamdy FC, Donovan JL, Lane JA, et al. Fifteen-Year Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2023;388:1547-1558.","Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2016;375:1425-1437.","Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes 12 Years after Localized Prostate Cancer Treatment. NEJM Evidence 2023;2(4)."],"provenance":{}};
+
+/* ------------------------------------------------------------------ helpers */
+const $ = (s, el = document) => el.querySelector(s);
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v;
+    else if (k === 'html') n.innerHTML = v;
+    else if (k === 'style') n.style.cssText = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else if (v === true) n.setAttribute(k, '');
+    else if (v !== false && v != null) n.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) n.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return n;
+};
+const fmt = v => Number.isInteger(v) ? String(v) : String(Math.round(v * 10) / 10);
+const optIndex = Object.fromEntries(DECISION.options.map((o, i) => [o.id, i]));
+const optColor = oid => `var(--opt-${optIndex[oid]})`;
+const option = oid => DECISION.options.find(o => o.id === oid);
+const attribute = aid => DECISION.attributes.find(a => a.id === aid);
+const scored = DECISION.attributes.filter(a => a.kind === 'rate');
+const isEarly = a => (a.unit || '').toLowerCase().includes('month');
+const ANCHORS = [[0, 'does not matter to me'], [25, 'matters a little'], [50, 'matters'], [75, 'matters a lot'], [100, 'matters as much as anything could']];
+const anchorLabel = w => { let l = ANCHORS[0][1]; for (const [lo, lbl] of ANCHORS) if (w >= lo) l = lbl; return l; };
+const CHOICES = [[0, 'Not at all'], [25, 'A little'], [50, 'Somewhat'], [75, 'A lot'], [100, 'As much as possible']];
+const motion = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+function makeRng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const gaussian = rng => Math.sqrt(-2 * Math.log(1 - rng())) * Math.cos(2 * Math.PI * rng());
+
+/* --------------------------------------------------------------- the engine */
+/* Mirrors src/preference_first/recommend.py. burden = sum (w/100) * rate over allowed options. */
+const validWeight = w => typeof w === 'number' && Number.isFinite(w) && w >= 0 && w <= 100;
+function allowedOptions(profile) {
+  return DECISION.options.filter(o => !(profile.ruled_out || []).includes(o.id)
+    && !Object.entries(profile.max_rate || {}).some(([aid, cap]) => attribute(aid)?.kind === 'rate' && attribute(aid).values[o.id] > cap)).map(o => o.id);
+}
+function scoreOptions(weights, allowed) {
+  return DECISION.options.filter(o => !allowed || allowed.includes(o.id)).map(o => {
+    const contributions = {};
+    for (const a of scored) contributions[a.id] = (weights[a.id] || 0) / 100 * a.values[o.id];
+    return { option_id: o.id, burden: Object.values(contributions).reduce((s, v) => s + v, 0), contributions };
+  }).sort((x, y) => x.burden - y.burden || x.option_id.localeCompare(y.option_id));
+}
+const topOf = (w, allowed) => scoreOptions(w, allowed)[0].option_id;
+function sensitivity(weights, allowed) {
+  const base = topOf(weights, allowed), flips = [];
+  for (const a of scored) {
+    const w0 = weights[a.id]; let found = null;
+    for (let w = w0 + 1; w <= 100; w++) { const t = topOf({ ...weights, [a.id]: w }, allowed); if (t !== base) { found = { attribute_id: a.id, current_weight: w0, flip_weight: w, direction: 'up', new_top: t }; break; } }
+    for (let w = w0 - 1; w >= 0; w--) { const t = topOf({ ...weights, [a.id]: w }, allowed); if (t !== base) { const c = { attribute_id: a.id, current_weight: w0, flip_weight: w, direction: 'down', new_top: t }; if (!found || Math.abs(c.flip_weight - w0) < Math.abs(found.flip_weight - w0)) found = c; break; } }
+    if (found) flips.push(found);
+  }
+  return flips.sort((x, y) => Math.abs(x.flip_weight - x.current_weight) - Math.abs(y.flip_weight - y.current_weight));
+}
+function drivers(top, runner, k = 2) {
+  const diffs = Object.fromEntries(Object.keys(top.contributions).map(a => [a, runner.contributions[a] - top.contributions[a]]));
+  return Object.keys(diffs).sort((x, y) => diffs[y] - diffs[x]).slice(0, k).filter(a => diffs[a] > 0);
+}
+const FRAMINGS = [
+  { id: 'survival_first', name: 'Survival first', description: 'Disease outcomes matter most; side effects matter a little.', rule: a => a.category === 'disease' ? 100 : 15 },
+  { id: 'quality_of_life_first', name: 'Quality of life first', description: 'Living well matters most; disease outcomes matter a little.', rule: a => a.category !== 'disease' ? 100 : 15 },
+  { id: 'minimal_intervention', name: 'Minimal intervention', description: 'Avoid treatment and its early effects unless the disease outcome gap is large.', rule: a => a.category !== 'disease' && isEarly(a) ? 100 : (a.category !== 'disease' ? 60 : 25) },
+];
+function framings(allowed) {
+  return FRAMINGS.map(f => { const w = Object.fromEntries(scored.map(a => [a.id, f.rule(a)])); return { id: f.id, name: f.name, description: f.description, weights: w, ranking: scoreOptions(w, allowed).map(s => s.option_id) }; });
+}
+function assumptionsFor(optionId, allowed, grid = 41) {
+  const base = Object.fromEntries(scored.map(a => [a.id, 50]));
+  const rows = scored.map(a => {
+    const first = [];
+    for (let g = 0; g < grid; g++) { const w = 100 * g / (grid - 1); if (topOf({ ...base, [a.id]: w }, allowed) === optionId) first.push(w); }
+    return { attribute_id: a.id, holds_from: first.length ? Math.round(Math.min(...first) * 10) / 10 : null, holds_to: first.length ? Math.round(Math.max(...first) * 10) / 10 : null, holds_at_equal: topOf(base, allowed) === optionId };
+  });
+  const rng = makeRng(0); let hits = 0; const N = 4000;
+  for (let n = 0; n < N; n++) { const w = {}; for (const a of scored) w[a.id] = 100 * rng(); if (topOf(w, allowed) === optionId) hits++; }
+  return [{ share_of_value_space: Math.round(1000 * hits / N) / 1000 }, ...rows];
+}
+function weightError(weights) {
+  if (scored.some(a => !validWeight(weights?.[a.id]))) return 'Choose an answer for each outcome before comparing.';
+  if (Object.keys(weights).some(aid => !scored.some(a => a.id === aid))) return 'These answers do not match this decision. Please start over.';
+  if (scored.every(a => weights[a.id] === 0)) return 'You said none of these outcomes matters to you, so there is no basis for ranking the options. You can change an answer or discuss other priorities with your clinician.';
+  return '';
+}
+function recommend(profile) {
+  const allowed = allowedOptions(profile);
+  const error = allowed.length >= 2 ? weightError(profile.weights) : '';
+  if (error) throw new Error(error);
+  if (!profile.confirmed) throw new Error('Confirm your priorities before comparing.');
+  if (allowed.length < 2) return { status: allowed.length ? 'single_option' : 'no_options', available_options: allowed, ranking: [], excluded: DECISION.options.map(o => o.id).filter(o => !allowed.includes(o)) };
+  const ranking = scoreOptions(profile.weights, allowed);
+  const baseline = scoreOptions(Object.fromEntries(scored.map(a => [a.id, 50])));
+  const flips = sensitivity(profile.weights, allowed);
+  const [top, runner] = ranking;
+  const close = runner.burden === top.burden || (top.burden > 0 && (runner.burden - top.burden) / top.burden < 0.10);
+  return { status: 'ranked', available_options: allowed, ranking, baseline_ranking: baseline, flips, close_call: close, changed_from_baseline: baseline[0].option_id !== top.option_id, drivers: drivers(top, runner),
+    fragile: flips.some(f => Math.abs(f.flip_weight - f.current_weight) <= 10), excluded: DECISION.options.map(o => o.id).filter(o => !allowed.includes(o)),
+    framings: framings(allowed), assumptions: assumptionsFor(top.option_id, allowed) };
+}
+
+/* ------------------------------------------------- adaptive elicitation */
+/* Mirrors src/preference_first/adaptive.py: particles over weights, questions chosen to
+   resolve which option is best, stop when confident or out of budget. */
+class Elicitor {
+  constructor({ n = 3000, seed = 7, tau = 3, ratingSd = 18, target = 0.9, budget = 10, allowed = null } = {}) {
+    this.attrs = scored.map(a => a.id); this.k = this.attrs.length;
+    this.options = (allowed || DECISION.options.map(o => o.id)); this.m = this.options.length;
+    this.rates = this.options.map(o => this.attrs.map(a => attribute(a).values[o]));
+    this.n = n; this.tau = tau; this.ratingSd = ratingSd; this.target = target; this.budget = budget;
+    this.rng = makeRng(seed);
+    this.P = new Float64Array(n * this.k); for (let i = 0; i < this.P.length; i++) this.P[i] = 100 * this.rng();
+    this.logw = new Float64Array(n);
+    this.asked = [];
+    this.bank = this.buildBank();
+  }
+  buildBank() {
+    const qs = [], names = Object.fromEntries(scored.map(a => [a.id, a])), oname = o => option(o).name;
+    for (let i = 0; i < this.k; i++) for (let j = i + 1; j < this.k; j++) {
+      const a = this.attrs[i], b = this.attrs[j];
+      for (let x = 0; x < this.m; x++) for (let y = x + 1; y < this.m; y++) {
+        const ax = this.rates[x][i], ay = this.rates[y][i], bx = this.rates[x][j], by = this.rates[y][j];
+        if ((ax - ay) * (bx - by) >= 0 || Math.abs(ax - ay) < 1 || Math.abs(bx - by) < 1) continue;
+        qs.push({ id: `pair:${a}:${b}:${this.options[x]}:${this.options[y]}`, kind: 'option_pair', attributes: [a, b],
+          text: `Which set of numbers would you rather have? ${oname(this.options[x])}: about ${fmt(ax)} in 100 for ${names[a].plain} and ${fmt(bx)} in 100 for ${names[b].plain}. ${oname(this.options[y])}: about ${fmt(ay)} in 100 and ${fmt(by)} in 100.`,
+          answers: [{ id: 'x', label: oname(this.options[x]) }, { id: 'y', label: oname(this.options[y]) }], params: { i, j, ax, ay, bx, by } });
+      }
+    }
+    for (let i = 0; i < this.k; i++) for (let j = 0; j < this.k; j++) {
+      if (i === j) continue;
+      const a = this.attrs[i], b = this.attrs[j];
+      const col = idx => this.rates.map(r => r[idx]);
+      const gapA = Math.max(...col(i)) - Math.min(...col(i)), gapB = Math.max(...col(j)) - Math.min(...col(j));
+      if (gapA < 1 || gapB < 1) continue;
+      for (const [fa, fb] of [[1, 1], [1, 0.5], [0.5, 1]]) {
+        const da = Math.round(gapA * fa * 10) / 10, db = Math.round(gapB * fb * 10) / 10;
+        qs.push({ id: `trade:${a}:${b}:${da}:${db}`, kind: 'tradeoff', attributes: [a, b],
+          text: `Suppose one option lowered your chance of ${names[a].plain} by about ${fmt(da)} in 100, but raised your chance of ${names[b].plain} by about ${fmt(db)} in 100. Would you take it?`,
+          answers: [{ id: 'yes', label: 'Yes, I would take it' }, { id: 'no', label: 'No, I would not' }], params: { i, j, da, db } });
+      }
+    }
+    this.attrs.forEach((a, i) => qs.push({ id: `rate:${a}`, kind: 'rating', attributes: [a], text: `How much would it matter to you to avoid ${names[a].plain}?`,
+      answers: CHOICES.map(([v, l]) => ({ id: String(v), label: l })), params: { i } }));
+    return qs;
+  }
+  probs() { let mx = -Infinity; for (const v of this.logw) if (v > mx) mx = v; const p = new Float64Array(this.n); let s = 0; for (let i = 0; i < this.n; i++) { p[i] = Math.exp(this.logw[i] - mx); s += p[i]; } for (let i = 0; i < this.n; i++) p[i] /= s; return p; }
+  likelihood(q, ans) {
+    const out = new Float64Array(this.n), p = q.params;
+    for (let n = 0; n < this.n; n++) {
+      const w = i => this.P[n * this.k + i];
+      if (q.kind === 'tradeoff') { const g = (w(p.i) * p.da - w(p.j) * p.db) / 100; const py = 1 / (1 + Math.exp(-g / this.tau)); out[n] = ans === 'yes' ? py : 1 - py; }
+      else if (q.kind === 'option_pair') { const bx = (w(p.i) * p.ax + w(p.j) * p.bx) / 100, by = (w(p.i) * p.ay + w(p.j) * p.by) / 100; const px = 1 / (1 + Math.exp(-(by - bx) / this.tau)); out[n] = ans === 'x' ? px : 1 - px; }
+      else { const z = (w(p.i) - Number(ans)) / this.ratingSd; out[n] = Math.exp(-0.5 * z * z) + 1e-9; }
+    }
+    return out;
+  }
+  topDistribution(probs) {
+    probs = probs || this.probs(); const out = new Array(this.m).fill(0);
+    for (let n = 0; n < this.n; n++) { let best = 0, bb = Infinity; for (let o = 0; o < this.m; o++) { let b = 0; for (let i = 0; i < this.k; i++) b += this.P[n * this.k + i] * this.rates[o][i]; if (b < bb) { bb = b; best = o; } } out[best] += probs[n]; }
+    return out;
+  }
+  static entropy(p) { let h = 0; for (const v of p) if (v > 1e-12) h -= v * Math.log(v); return h; }
+  expectedEntropy(q) {
+    const probs = this.probs(); let total = 0;
+    for (const a of q.answers) { const like = this.likelihood(q, a.id); let pa = 0; for (let n = 0; n < this.n; n++) pa += like[n] * probs[n]; if (pa < 1e-9) continue; const post = new Float64Array(this.n); for (let n = 0; n < this.n; n++) post[n] = like[n] * probs[n] / pa; total += pa * Elicitor.entropy(this.topDistribution(post)); }
+    return total;
+  }
+  nextQuestion() {
+    const asked = new Set(this.asked.map(a => a.question_id)); const h0 = Elicitor.entropy(this.topDistribution()); let best = null, bh = h0;
+    for (const q of this.bank) { if (asked.has(q.id)) continue; const h = this.expectedEntropy(q); if (h < bh - 1e-6) { best = q; bh = h; } }
+    if (best) best.expected_gain = h0 - bh;
+    return best || this.bank.find(q => q.kind === 'rating' && !asked.has(q.id)) || null;
+  }
+  answer(q, ans) {
+    if (ans === 'unsure') { this.asked.push({ question_id: q.id, kind: q.kind, text: q.text, answer: ans, attributes: q.attributes }); return; }
+    const like = this.likelihood(q, ans); for (let n = 0; n < this.n; n++) this.logw[n] += Math.log(like[n] + 1e-12);
+    this.asked.push({ question_id: q.id, kind: q.kind, text: q.text, answer: ans, attributes: q.attributes });
+    const p = this.probs(); let ess = 0; for (const v of p) ess += v * v; if (1 / ess < 0.3 * this.n) this.resample(p);
+  }
+  resample(p) {
+    const cum = new Float64Array(this.n); let s = 0; for (let i = 0; i < this.n; i++) { s += p[i]; cum[i] = s; }
+    const NP = new Float64Array(this.P.length);
+    for (let n = 0; n < this.n; n++) { const u = this.rng() * s; let lo = 0, hi = this.n - 1; while (lo < hi) { const mid = (lo + hi) >> 1; if (cum[mid] < u) lo = mid + 1; else hi = mid; } for (let i = 0; i < this.k; i++) NP[n * this.k + i] = Math.min(100, Math.max(0, this.P[lo * this.k + i] + 4 * gaussian(this.rng))); }
+    this.P = NP; this.logw.fill(0);
+  }
+  done() { return this.asked.length >= this.budget || (this.asked.length >= 3 && Math.max(...this.topDistribution()) >= this.target); }
+  meanWeights() { const p = this.probs(), out = {}; this.attrs.forEach((a, i) => { let s = 0; for (let n = 0; n < this.n; n++) s += this.P[n * this.k + i] * p[n]; out[a] = s; }); return out; }
+  interval(level = 0.9) {
+    const p = this.probs(), out = {};
+    this.attrs.forEach((a, i) => { const idx = Array.from({ length: this.n }, (_, n) => n).sort((x, y) => this.P[x * this.k + i] - this.P[y * this.k + i]); let c = 0, lo = null, hi = null; for (const n of idx) { c += p[n]; if (lo === null && c >= (1 - level) / 2) lo = this.P[n * this.k + i]; if (c >= 1 - (1 - level) / 2) { hi = this.P[n * this.k + i]; break; } } out[a] = [Math.round(lo ?? 0), Math.round(hi ?? 100)]; });
+    return out;
+  }
+  summary() {
+    const top = this.topDistribution(), mx = Math.max(...top);
+    return { questions_asked: this.asked.length, p_best: Object.fromEntries(this.options.map((o, i) => [o, Math.round(top[i] * 1000) / 1000])), mean_weights: Object.fromEntries(Object.entries(this.meanWeights()).map(([a, v]) => [a, Math.round(v * 10) / 10])), interval_90: this.interval(), stopped_because: mx >= this.target ? 'confident' : (this.asked.length >= this.budget ? 'budget' : 'not finished') };
+  }
+}
+
+/* ------------------------------------------------------------------- state */
+const blankProfile = () => ({ weights: {}, statements: [], tradeoff_answers: {}, ruled_out: [], max_rate: {}, constraint_notes: [], context_notes: [], posterior: null, transcript: [], source: 'adaptive', simulated: null, confirmed: false });
+const state = { stage: 'values', profile: blankProfile(), openText: '', chat: [], sample: null, downloads: null, elicitor: null, answers: [],
+  trace: [], pending: null, busy: false, shown: 0, focusNext: false, demo: null,
+  study: null /* {arm, pid} */, record: { events: [] } };
+const sessionParams = new URLSearchParams(location.search);
+if ((location.hash === '#study' || sessionParams.has('arm')) && !sessionParams.get('pid')) {
+  sessionParams.set('pid', Math.random().toString(36).slice(2, 10).toUpperCase());
+  history.replaceState(null, '', location.pathname + '?' + sessionParams + location.hash);
+}
+const SKEY = 'preference-first-draft-v4-' + DECISION.id + '-' + (sessionParams.get('pid') || ('personal-' + (sessionParams.get('arm') || 'demo')));
+const limited = () => allowedOptions(state.profile).length < 2;
+const canReview = () => complete() || limited() || state.answers.length >= 3;
+const comparisonError = () => limited() ? '' : weightError(state.profile.weights);
+const complete = () => scored.every(a => validWeight(state.profile.weights[a.id]));
+function log(event, data = {}) { state.record.events.push({ t: new Date().toISOString(), event, ...data }); saveDraft(); }
+function saveDraft() {
+  if (state.profile.source === 'example') return;
+  try { localStorage.setItem(SKEY, JSON.stringify({ profile: state.profile, openText: state.openText, answers: state.answers, study: state.study, record: state.record })); } catch (e) {}
+}
+function loadDraft() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SKEY));
+    if (!d?.profile || d.profile.source === 'example') return;
+    const p = blankProfile();
+    for (const a of scored) { const w = d.profile.weights?.[a.id]; if (validWeight(w)) p.weights[a.id] = w; }
+    for (const k of ['statements', 'constraint_notes', 'context_notes']) p[k] = Array.isArray(d.profile[k]) ? d.profile[k].filter(s => typeof s === 'string') : [];
+    p.ruled_out = (d.profile.ruled_out || []).filter(o => option(o));
+    for (const [aid, cap] of Object.entries(d.profile.max_rate || {})) if (attribute(aid)?.kind === 'rate' && validWeight(cap)) p.max_rate[aid] = cap;
+    p.posterior = null; // Saved inference may predate edits; omit uncertainty until elicited again.
+    p.coverage = d.profile.coverage || null; p.transcript = d.profile.transcript || [];
+    p.simulated = typeof d.profile.simulated === 'string' ? d.profile.simulated : null;
+    p.source = ['interview', 'adaptive', 'structured'].includes(d.profile.source) ? d.profile.source : 'adaptive';
+    state.profile = p; state.openText = typeof d.openText === 'string' ? d.openText : ''; state.answers = Array.isArray(d.answers) ? d.answers : [];
+    state.study = d.study || null; state.record = d.record || { events: [] };
+  } catch (e) {}
+}
+function invalidateProfile() {
+  state.profile.confirmed = false;
+  state.profile.posterior = null;
+  if (state.profile.coverage) state.profile.coverage.reviewed = false;
+  document.querySelectorAll('input[name="coverage"]').forEach(n => { n.checked = false; });
+  $('#posterior-note')?.remove();
+  document.querySelectorAll('[data-rating-label]').forEach(n => {
+    const w = state.profile.weights[n.dataset.ratingLabel];
+    n.textContent = validWeight(w) ? anchorLabel(w) : 'Not yet discussed';
+  });
+  $('#stage-compare').replaceChildren(); syncSteps(); saveDraft();
+}
+function startOver() {
+  try { localStorage.removeItem(SKEY); } catch (e) {}
+  history.replaceState(null, '', location.href.split('#')[0].split('?')[0]);
+  location.reload();
+}
+function scopeNote() {
+  const unscored = DECISION.attributes.filter(a => a.kind !== 'rate').map(a => a.name.toLowerCase());
+  return 'Your limits determine which options are included. Ratings determine their order; notes are kept for discussion.' + (unscored.length ? ' ' + unscored.join(', ').replace(/^./, c => c.toUpperCase()) + ' are shown in the evidence but do not affect the score.' : '');
+}
+function exampleNotice() {
+  if (state.profile.source === 'example') return el('div', { class: 'callout', style: 'margin:0 0 18px' }, el('b', {}, 'Worked example. '), 'These are sample answers, not yours. ', el('button', { class: 'btn', onclick: startOver }, 'Start over'));
+  if (state.profile.simulated && !state.demo) return el('div', { class: 'callout', style: 'margin:0 0 18px' }, el('b', {}, 'Simulated patient. '), `The answers below were generated by the demo for a patient whose priorities are ${state.profile.simulated.toLowerCase()}. They are not yours. `, el('button', { class: 'btn', onclick: startOver }, 'Start over'));
+  return document.createDocumentFragment();
+}
+
+/* ------------------------------------------------------------------- intro */
+function renderIntro() {
+  const s = $('#intro'); s.innerHTML = '';
+  s.append(el('h1', {}, DECISION.title));
+  const info = el('details', { class: 'disclosure', open: !!state.study }, el('summary', {}, 'About this decision and the treatments'), el('p', { class: 'ctx' }, DECISION.context), el('p', { class: 'pop' }, 'Evidence: ' + DECISION.population));
+  const grid = el('div', { class: 'options' });
+  DECISION.options.forEach(o => grid.append(el('div', { class: 'opt', style: `--oc:${optColor(o.id)}` }, el('b', {}, o.name), el('p', {}, o.short), el('details', {}, el('summary', {}, 'What it involves'), o.burden))));
+  info.append(grid); s.append(info);
+}
+
+/* ------------------------------------------------------------------- steps */
+function syncSteps() {
+  $('.step[data-stage="confirm"]').disabled = !canReview();
+  $('.step[data-stage="compare"]').disabled = !state.profile.confirmed || !!comparisonError();
+}
+function setStage(name, scroll = true) {
+  if (name === 'confirm' && !canReview()) return;
+  if (name === 'compare' && (!state.profile.confirmed || comparisonError())) return;
+  state.stage = name;
+  for (const b of document.querySelectorAll('.step')) { const st = b.dataset.stage; b.removeAttribute('aria-current'); if (st === name) b.setAttribute('aria-current', 'step'); b.classList.toggle('done', (st === 'values' && name !== 'values') || (st === 'confirm' && name === 'compare')); }
+  syncSteps();
+  for (const st of ['values', 'baseline', 'confirm', 'compare', 'followup', 'intake']) $('#stage-' + st).hidden = st !== name;
+  if (name === 'values') renderForm();
+  if (name === 'confirm') renderConfirm();
+  if (name === 'compare') renderCompare();
+  if (scroll) { $('#stage-' + name).scrollIntoView({ block: 'start', behavior: motion() }); $('#stage-' + name + ' h2')?.focus({ preventScroll: true }); }
+}
+document.querySelectorAll('.step').forEach(b => b.addEventListener('click', () => { if (!b.disabled) setStage(b.dataset.stage); }));
+
+/* ------------------------------------------------ values: the conversation */
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const playing = () => !!(state.demo && !state.demo.cancel);
+const OPENING = 'Before anything is compared, I want to understand what you are hoping for and what you most want to avoid. There are no right answers here, and I will not suggest a treatment until you have checked what I heard.';
+const KICKER = { tradeoff: 'A trade-off', option_pair: 'Two sets of numbers', rating: 'How much it matters' };
+const WHYLINE = { tradeoff: 'Your answer says how these two outcomes weigh against each other for you.',
+  option_pair: 'Whole outcomes side by side tell us more than rating them one at a time.',
+  rating: 'A direct rating. It anchors the scale for the trade-off questions.' };
+function msg(role, text, kicker) {
+  const node = el('div', { class: 'msg ' + role });
+  if (kicker) node.append(el('span', { class: 'kick' }, kicker));
+  node.append(text);
+  return node;
+}
+const answerLabel = (q, ans) => ans === 'unsure' ? 'I am not sure' : (q?.answers.find(a => a.id === ans)?.label ?? String(ans));
+/* A one-line note when an answer moved the leader or settled the question. */
+function traceNote(before, E) {
+  if (E.asked.length < 2) return null;
+  const after = E.topDistribution();
+  const was = before.indexOf(Math.max(...before)), now = after.indexOf(Math.max(...after));
+  if (was !== now) return `That answer changed which option currently fits best: now ${option(E.options[now]).name.toLowerCase()}.`;
+  if (Math.max(...after) >= E.target && Math.max(...before) < E.target) return 'That is enough to tell the options apart with some confidence.';
+  return null;
+}
+function rebuildElicitor() {
+  state.elicitor = new Elicitor({ allowed: allowedOptions(state.profile).length >= 2 ? allowedOptions(state.profile) : null });
+  state.pending = null; state.busy = false; state.trace = [];
+  const byId = Object.fromEntries(state.elicitor.bank.map(q => [q.id, q]));
+  for (const a of state.answers) if (byId[a.question_id]) {
+    const before = state.elicitor.topDistribution();
+    state.elicitor.answer(byId[a.question_id], a.answer);
+    state.trace.push(traceNote(before, state.elicitor));
+  }
+}
+function submitAnswer(q, ans) {
+  const E = state.elicitor, before = E.topDistribution();
+  E.answer(q, ans);
+  state.answers.push({ question_id: q.id, answer: ans });
+  state.trace.push(traceNote(before, E));
+  log('answer', { question_id: q.id, answer: ans, simulated: playing() });
+  state.pending = null; state.focusNext = !playing();
+  state.profile.weights = {};
+  invalidateProfile();
+  renderForm();
+}
+function limitsBlock(onChange, open = false) {
+  const wrap = el('details', { class: 'disclosure', open }, el('summary', {}, 'Is anything off the table? (optional)'),
+    el('p', { class: 'hint' }, 'Limits are different from priorities. A limit removes an option before anything is compared.'));
+  const box = el('div', { class: 'limits', style: 'margin-top:12px' });
+  for (const o of DECISION.options) {
+    const cb = el('input', { type: 'checkbox', checked: state.profile.ruled_out.includes(o.id) });
+    cb.addEventListener('change', () => { state.profile.ruled_out = cb.checked ? [...new Set([...state.profile.ruled_out, o.id])] : state.profile.ruled_out.filter(x => x !== o.id); state.elicitor = null; invalidateProfile(); onChange(); });
+    box.append(el('label', {}, cb, `I would not consider ${o.name.toLowerCase()}, whatever the numbers.`));
+  }
+  for (const a of scored) {
+    const inp = el('input', { type: 'number', min: 0, max: 100, step: 1, placeholder: 'no limit', value: state.profile.max_rate[a.id] ?? '' , 'aria-label': `Highest acceptable chance in 100 of ${a.plain}` });
+    inp.addEventListener('change', () => { const v = Number(inp.value); if (inp.value === '' || !validWeight(v)) delete state.profile.max_rate[a.id]; else state.profile.max_rate[a.id] = v; state.elicitor = null; invalidateProfile(); onChange(); });
+    box.append(el('label', {}, el('span', { style: 'flex:1' }, `Highest chance I could accept of ${a.plain}:`), inp, el('span', { class: 'hint' }, 'in 100')));
+  }
+  const warn = el('p', { class: 'error', role: 'alert', hidden: true });
+  const check = () => { const ok = allowedOptions(state.profile).length >= 2; warn.hidden = ok; warn.textContent = ok ? '' : 'You can keep these limits and continue to a summary for your clinician. Changing a limit is optional.'; };
+  box.addEventListener('change', check); check();
+  wrap.append(box, warn);
+  return wrap;
+}
+function notesBlock() {
+  const notes = el('details', {}, el('summary', {}, 'Anything you want us to know? (optional)'));
+  const ta = el('textarea', { id: 'open', placeholder: 'What are you hoping for, or hoping to avoid? Anything about your life the numbers would miss?' });
+  ta.value = state.openText;
+  ta.addEventListener('input', () => { state.openText = ta.value; state.profile.statements = ta.value.trim() ? [ta.value.trim()] : []; invalidateProfile(); });
+  notes.append(el('div', { class: 'q', style: 'margin-top:12px' }, el('label', { for: 'open' }, 'In your own words'), ta, el('p', { class: 'note' }, 'Kept for the comparison and for your clinician. Your answers below determine the ranking.')));
+  return notes;
+}
+/* The live panel: what the engine currently believes, redrawn in place so the bars move. */
+let belief = null;
+function buildBelief() {
+  const bars = {}, pcts = {}, rows = {};
+  const stack = el('div', { class: 'stack', 'aria-hidden': 'true' });
+  const legend = el('div', { class: 'legend' });
+  for (const o of DECISION.options) {
+    bars[o.id] = el('i', { style: `--oc:${optColor(o.id)};width:0%` });
+    pcts[o.id] = el('b', {}, '—');
+    stack.append(bars[o.id]);
+    legend.append(el('div', { style: `--oc:${optColor(o.id)}` }, el('i'), el('span', {}, o.name), pcts[o.id]));
+  }
+  const progress = el('p', { class: 'progress', style: 'margin-top:0' });
+  const pbar = el('div', { class: 'pbar', 'aria-hidden': 'true' });
+  const wbars = el('div', { class: 'wbars' });
+  for (const a of scored) {
+    const band = el('i', { class: 'band', style: 'left:5%;width:90%' }), mark = el('b', { class: 'mark', style: 'left:50%' }), val = el('b', {}, '—');
+    const row = el('div', { class: 'wbar' }, el('div', { class: 'lab' }, el('span', {}, a.name), val), el('div', { class: 'trk' }, band, mark));
+    rows[a.id] = { band, mark, val, row };
+    wbars.append(row);
+  }
+  const root = el('aside', { class: 'belief', id: 'belief', 'aria-label': 'What we have learned so far' },
+    el('h3', {}, 'Which option fits you'), stack, legend, el('div', {}, progress, pbar),
+    el('h3', {}, 'What we think matters to you'), wbars,
+    el('p', { class: 'hint', style: 'font-size:12px' }, 'The mark is the current reading, the band is how far it is pinned down. Estimates from your answers, not a medical finding.'));
+  belief = { root, bars, pcts, progress, pbar, rows };
+  return root;
+}
+function updateBelief(asking = []) {
+  if (!belief || !belief.root.isConnected) return;
+  const E = state.elicitor, dist = E.topDistribution(), mean = E.meanWeights(), spread = E.interval();
+  const answered = E.asked.some(a => a.answer !== 'unsure');
+  const p = Object.fromEntries(E.options.map((o, i) => [o, dist[i]]));
+  // Before the first answer there is nothing to say about this patient, so say nothing.
+  for (const o of DECISION.options) {
+    belief.bars[o.id].style.width = (!answered || p[o.id] == null ? 0 : Math.round(1000 * p[o.id]) / 10) + '%';
+    belief.pcts[o.id].textContent = p[o.id] == null ? 'ruled out' : answered ? Math.round(100 * p[o.id]) + '%' : '—';
+  }
+  for (const a of scored) {
+    const row = belief.rows[a.id], [lo, hi] = spread[a.id];
+    row.band.style.left = lo + '%'; row.band.style.width = Math.max(1, hi - lo) + '%';
+    row.mark.style.left = `calc(${mean[a.id]}% - 1.5px)`;
+    row.val.textContent = answered ? String(Math.round(mean[a.id])) : '—';
+    row.row.classList.toggle('asking', asking.includes(a.id)); // the outcomes this question is about
+  }
+  const n = E.asked.length, over = limited() || E.done();
+  belief.progress.textContent = over ? `${n} answered.` : n ? `Question ${n + 1}. ${n} answered.` : 'Question 1. Nothing answered yet.';
+  belief.pbar.replaceChildren(...Array.from({ length: E.budget }, (_, i) => el('i', { class: i < n ? 'done' : i === n && !over ? 'now' : '' })));
+}
+function questionCard(q) {
+  const card = el('div', { class: 'qcard' });
+  const bubble = msg('ai', q.text, KICKER[q.kind]); bubble.classList.add('qt', 'enter');
+  const help = el('details', {}, el('summary', {}, 'Help me understand this question'),
+    el('p', {}, 'Think about which effects you would find harder to live with. You can skip any question you cannot answer yet.'));
+  for (const aid of q.attributes) { const a = attribute(aid); help.append(el('p', {}, el('b', {}, a.name + '. '), a.note)); }
+  const ans = el('div', { class: 'ans enter', role: 'group', 'aria-label': 'Answers' });
+  for (const a of q.answers) ans.append(el('button', { type: 'button', disabled: playing(), onclick: () => submitAnswer(q, a.id) }, a.label));
+  ans.append(el('button', { type: 'button', class: 'skip', disabled: playing(), onclick: () => submitAnswer(q, 'unsure') }, 'I am not sure / skip'));
+  card.append(bubble, help, el('p', { class: 'why' }, WHYLINE[q.kind]), ans);
+  return card;
+}
+function renderForm() {
+  const f = $('#tab-form');
+  if (!$('#thread')) {
+    f.className = 'convo';
+    f.replaceChildren(el('div', { class: 'threadcol' },
+      el('div', { id: 'playhost' }),
+      el('div', { class: 'thread', id: 'thread', role: 'log', 'aria-live': 'polite', 'aria-label': 'What matters to you' }),
+      el('div', { id: 'threadfoot', style: 'display:flex;flex-direction:column;gap:12px' })), buildBelief());
+  }
+  if (!state.elicitor) rebuildElicitor();
+  const E = state.elicitor, thread = $('#thread'), foot = $('#threadfoot'), playhost = $('#playhost');
+  thread.replaceChildren(); foot.replaceChildren(); playhost.replaceChildren();
+  let seen = 0;
+  const say = node => { if (seen++ >= state.shown) node.classList.add('enter'); thread.append(node); };
+  thread.append(exampleNotice());
+  say(msg('ai', OPENING));
+  if (!E.asked.length) thread.append(el('div', { class: 'setup' }, el('p', { class: 'hint' }, 'Optional before we start.'), notesBlock(),
+    limitsBlock(() => { state.answers = []; rebuildElicitor(); renderForm(); $('#tab-form .limits')?.closest('details')?.setAttribute('open', ''); })));
+  const byId = Object.fromEntries(E.bank.map(q => [q.id, q]));
+  E.asked.forEach((a, i) => {
+    say(msg('ai', a.text, KICKER[a.kind]));
+    say(msg('me', answerLabel(byId[a.question_id], a.answer)));
+    if (state.trace[i]) say(msg('sys', state.trace[i]));
+  });
+  state.shown = seen;
+  const finished = limited() || E.done() || state.pending === 'none';
+  if (finished) {
+    thread.append(el('div', { class: 'msg ai enter' }, limited()
+      ? 'Your limits are recorded. You can keep them and see a summary without answering any more questions.'
+      : 'I think I have enough. Nothing is compared until you check what I heard and confirm it.'));
+  } else if (state.pending) {
+    thread.append(questionCard(state.pending));
+  } else {
+    thread.append(el('div', { class: 'msg ai enter' }, el('span', { class: 'typing', 'aria-label': 'Choosing the next question' }, el('i'), el('i'), el('i'))));
+    state.busy = true;
+    setTimeout(() => { if (state.elicitor !== E) return; state.pending = E.nextQuestion() || 'none'; state.busy = false; renderForm(); }, 320);
+  }
+  updateBelief(state.pending && state.pending !== 'none' ? state.pending.attributes : []);
+  if (state.demo) playhost.append(el('div', { class: 'demobar' }, el('b', {}, 'Simulated patient. '), state.demo.name + '. Generated answers, not a real person.',
+    el('button', { class: 'btn', style: 'padding:5px 11px;font-size:13px;margin-left:auto', onclick: () => { state.demo.cancel = true; } }, 'Stop')));
+  const actions = el('div', { class: 'actions', style: 'margin-top:0' });
+  if (E.asked.length && !playing()) actions.append(el('button', { class: 'btn', onclick: () => { state.answers.pop(); rebuildElicitor(); state.profile.weights = {}; invalidateProfile(); renderForm(); } }, 'Undo last answer'));
+  const locked = (E.asked.length < 3 && !canReview()) || playing();
+  actions.append(el('button', { class: 'btn' + (finished ? ' primary' : ''), disabled: locked, onclick: () => { if (!complete() && !limited()) adoptAdaptive(); setStage('confirm'); } }, 'Review what we heard'),
+    el('span', { class: 'hint' }, E.asked.length < 3 && !canReview() ? 'Available after three answers.' : 'Nothing is compared until you confirm.'));
+  foot.append(actions);
+  if (!state.study && !state.demo && !E.asked.length && state.profile.source !== 'example') {
+    const row = el('div', { class: 'playrow' }, el('span', {}, 'In a hurry? Watch a simulated patient answer:'));
+    for (const persona of personas()) row.append(el('button', { type: 'button', onclick: () => playDemo(persona) }, '▶ ' + persona.name));
+    playhost.append(row);
+  }
+  playhost.hidden = !playhost.childElementCount;
+  if (E.asked.length) thread.scrollTop = thread.scrollHeight; // keep the opening message in view at the start
+  if (state.focusNext && state.pending && state.pending !== 'none') { state.focusNext = false; $('#thread .ans button')?.focus({ preventScroll: true }); }
+}
+
+/* Simulated patients. Their answers come from the same response model the engine assumes,
+   so the demo shows real inference, not a script. */
+function personas() {
+  return FRAMINGS.map((f, index) => {
+    const rng = makeRng(101 + index);
+    // Pulled in from the corners of the framing rule: a plausible patient, not an extremist.
+    const jitter = a => Math.max(0, Math.min(100, Math.round(20 + 0.75 * f.rule(a) + 20 * (rng() - 0.5))));
+    return { id: f.id, name: f.name, weights: Object.fromEntries(scored.map(a => [a.id, jitter(a)])) };
+  });
+}
+function simulatedAnswer(E, q, weights, rng) {
+  const particles = E.P, n = E.n;
+  E.P = new Float64Array(E.attrs.map(a => weights[a])); E.n = 1;
+  const likely = q.answers.map(a => E.likelihood(q, a.id)[0]);
+  E.P = particles; E.n = n;
+  let u = rng() * likely.reduce((x, y) => x + y, 0);
+  for (let i = 0; i < likely.length; i++) { u -= likely[i]; if (u <= 0) return q.answers[i].id; }
+  return q.answers[q.answers.length - 1].id;
+}
+async function playDemo(persona) {
+  if (playing()) return;
+  state.demo = { name: persona.name, cancel: false };
+  state.answers = []; state.openText = ''; state.profile = blankProfile(); state.shown = 0;
+  state.profile.simulated = persona.name; // labelled from the first answer, even if the run is stopped
+  rebuildElicitor(); renderForm();
+  log('demo_start', { persona: persona.id });
+  const rng = makeRng(29);
+  while (!state.demo.cancel) {
+    while (state.busy && !state.demo.cancel) await sleep(60);
+    const q = state.pending;
+    if (state.demo.cancel || !q || q === 'none' || limited() || state.elicitor.done()) break;
+    await sleep(1100);
+    if (state.demo.cancel) break;
+    submitAnswer(q, simulatedAnswer(state.elicitor, q, persona.weights, rng));
+  }
+  if (state.demo.cancel) { state.demo = null; renderForm(); return; }
+  state.demo = null;
+  await sleep(800);
+  adoptAdaptive();
+  saveDraft();
+  setStage('confirm');
+}
+function adoptAdaptive() {
+  const E = state.elicitor; const mean = E.meanWeights();
+  if (!E.asked.some(a => a.answer !== 'unsure')) {
+    state.profile.weights = {}; state.profile.posterior = null;
+    state.profile.transcript = E.asked.slice(); state.profile.source = 'adaptive';
+    saveDraft(); return;
+  }
+  for (const a of scored) state.profile.weights[a.id] = Math.round(mean[a.id]);
+  state.profile.posterior = E.summary();
+  state.profile.posterior.weights_snapshot = { ...state.profile.weights };
+  state.profile.posterior.allowed_options_snapshot = allowedOptions(state.profile); state.profile.transcript = E.asked.slice(); state.profile.source = 'adaptive'; state.profile.confirmed = false;
+  saveDraft();
+}
+
+/* An example patient, plainly marked. */
+const EXAMPLE = { weights: { cancer_death: 70, metastasis: 90, hormone_therapy: 60, incontinence_6mo: 30, erectile_6mo: 20, incontinence: 80, erectile: 25, radical_later: 60 },
+  statements: ['I am most scared of it spreading. My father died of prostate cancer that had spread to his bones.', 'I still work and I would hate wearing pads at the office.'],
+  context_notes: ['I run a small business and cannot be away for weeks.'], ruled_out: [], max_rate: {}, constraint_notes: [], tradeoff_answers: {}, posterior: null, transcript: [], source: 'example', confirmed: true };
+function loadExample(scroll) { state.profile = JSON.parse(JSON.stringify(EXAMPLE)); state.openText = EXAMPLE.statements.join('\n\n'); setStage('compare', scroll); }
+
+/* -------------------------------------------------------- values: the chat */
+const INTERVIEW_RULES = () => {
+  const attrs = DECISION.attributes.map(a => `- ${a.id}: avoiding ${a.plain}. Evidence: ` + (a.kind === 'rate' ? Object.entries(a.values).map(([o, v]) => `${option(o).name} ${fmt(v)} in 100`).join(', ') : Object.entries(a.levels).map(([o, l]) => `${option(o).name} ${l}`).join(', ')) + `. ${a.note}`).join('\n');
+  const opts = DECISION.options.map(o => `- ${o.id}: ${o.name}. ${o.short} ${o.burden}`).join('\n');
+  return `You are helping a patient work out what matters to them before any treatment is recommended. You are not the one who recommends. Your only job is to understand their values.
+
+The decision: ${DECISION.title}. ${DECISION.question}
+Context: ${DECISION.context}
+Population the evidence comes from: ${DECISION.population}
+
+Options:
+${opts}
+
+Outcomes to cover, with the trial evidence (use these numbers if asked how common something is, and no others):
+${attrs}
+
+How to conduct the interview: open by asking in plain words what they are most hoping for and most hoping to avoid. Ask one question at a time, a few sentences each, at a sixth-grade reading level. Cover every outcome at least once, asking how much avoiding it would matter and why. When a priority shows, reflect it back briefly so they can correct you. Ask once, plainly, whether any option is off the table for them whatever the numbers, and whether there is any outcome whose chance they could not accept above some level. Listen for life context the numbers miss (work, caregiving, travel, past experiences with treatment) and acknowledge it. If asked how common an outcome is, answer only from the numbers above as counts out of 100. If asked which option is best or what you would do, say you will not weigh in, that the comparison comes after their values are written down, and return to the interview. Do not use dashes as punctuation or bullet points. After roughly six to ten exchanges, when every outcome is covered, tell the patient you have enough and they can press the button to write down what they said.`;
+};
+const EXTRACT_PROMPT = transcript => `Below is an interview about what matters to a patient facing this decision: ${DECISION.title}. Read it and record their values.
+
+Reply with only a JSON object of this exact shape:
+{"weights": {${scored.map(a => `"${a.id}": <integer 0 to 100>`).join(', ')}}, "statements": [<two to four short verbatim quotes from the patient about what matters most>], "ruled_out": [<option ids the patient clearly said they will not consider, from ${DECISION.options.map(o => `"${o.id}"`).join(', ')}; usually empty>], "max_rate": {<outcome id>: <highest chance in 100 the patient said they could accept, only if they stated a limit>}, "constraint_notes": [<the patient's own words for any limit>], "context_notes": [<life circumstances the patient raised that the outcomes do not capture, in their words>]}
+
+Weights mean how much avoiding each outcome matters to this patient, 0 to 100, relative to each other:
+${scored.map(a => `- ${a.id}: avoiding ${a.plain}`).join('\n')}
+
+Transcript:
+${transcript}`;
+
+function renderChat() {
+  const c = $('#tab-chat'); c.innerHTML = '';
+  const log_ = el('div', { class: 'log', 'aria-live': 'polite' });
+  const draw = () => { log_.innerHTML = ''; if (!state.chat.length) log_.append(el('div', { class: 'msg sys' }, 'Press Start and the interviewer will ask what matters to you. It will not recommend anything.')); for (const m of state.chat) log_.append(el('div', { class: 'msg ' + (m.role === 'assistant' ? 'ai' : 'me') }, m.content)); log_.scrollTop = log_.scrollHeight; };
+  draw();
+  const box = el('textarea', { placeholder: 'Type your reply', 'aria-label': 'Your reply' });
+  const send = el('button', { class: 'btn primary' }, state.chat.length ? 'Send' : 'Start');
+  const done = el('button', { class: 'btn', disabled: state.chat.length < 4 }, 'I have said what matters. Write it down');
+  const status = el('span', { class: 'hint' });
+  let ctl = null;
+  async function ask(userText) {
+    if (userText) { state.chat.push({ role: 'user', content: userText }); invalidateProfile(); }
+    const bubble = { role: 'assistant', content: 'Thinking...' }; state.chat.push(bubble); draw();
+    send.disabled = true; done.disabled = true; ctl = new AbortController();
+    const turns = [{ role: 'user', content: INTERVIEW_RULES() }, ...state.chat.slice(0, -1).map(m => ({ role: m.role, content: m.content }))];
+    if (turns[turns.length - 1].role !== 'user') turns.push({ role: 'user', content: 'Please begin.' });
+    try { const { text } = await state.sample(turns, { cache: false, signal: ctl.signal, onText: ({ text }) => { bubble.content = text; draw(); } }); bubble.content = text; }
+    catch (e) { bubble.content = e.text || ''; status.textContent = e.code === 'cancelled' ? '' : e.code === 'not_granted' ? 'Claude is not available in this view. Use the questions instead.' : `Could not get a reply (${e.code}). Try again.`; if (!bubble.content) state.chat.pop(); }
+    draw(); send.disabled = false; send.textContent = 'Send'; done.disabled = state.chat.length < 4;
+  }
+  send.addEventListener('click', () => { const t = box.value.trim(); if (!state.chat.length) { ask(null); return; } if (!t) return; box.value = ''; ask(t); });
+  box.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send.click(); } });
+  done.addEventListener('click', async () => {
+    done.disabled = true; status.textContent = 'Writing down what you said...';
+    const transcript = state.chat.map(m => (m.role === 'assistant' ? 'Interviewer: ' : 'Patient: ') + m.content).join('\n\n');
+    try {
+      const data = await state.sample.json(EXTRACT_PROMPT(transcript), { cache: false });
+      const error = weightError(data.weights); if (error) throw new Error(error);
+      const p = blankProfile();
+      p.weights = Object.fromEntries(scored.map(a => [a.id, Math.round(Number(data.weights[a.id]))]));
+      p.statements = Array.isArray(data.statements) ? data.statements.map(String).slice(0, 4) : [];
+      p.ruled_out = (Array.isArray(data.ruled_out) ? data.ruled_out : []).filter(o => option(o));
+      for (const [aid, cap] of Object.entries(data.max_rate || {})) if (attribute(aid)?.kind === 'rate' && validWeight(Number(cap))) p.max_rate[aid] = Number(cap);
+      p.constraint_notes = Array.isArray(data.constraint_notes) ? data.constraint_notes.map(String) : [];
+      p.context_notes = Array.isArray(data.context_notes) ? data.context_notes.map(String) : [];
+      p.source = 'interview'; p.transcript = state.chat.slice();
+      state.profile = p; state.openText = p.statements.join('\n\n');
+      log('interview_recorded', { turns: state.chat.length });
+      invalidateProfile(); status.textContent = ''; setStage('confirm');
+    } catch (e) { status.textContent = `Could not record the values. ${e.message || 'Please try again.'} You can continue talking or use the questions; your conversation is kept.`; done.disabled = false; }
+  });
+  c.append(el('div', { class: 'chat' }, log_, el('div', { class: 'compose' }, box, send), el('div', { class: 'actions' }, done, el('button', { class: 'btn', onclick: () => ctl && ctl.abort() }, 'Stop'), status)));
+}
+function selectTab(name) {
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', String(x.dataset.tab === name)));
+  $('#tab-form').hidden = name !== 'form'; $('#tab-chat').hidden = name !== 'chat';
+}
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => selectTab(b.dataset.tab)));
+
+/* ----------------------------------------------------------------- confirm */
+function ratingChoices(a, context, onChange) {
+  const choices = el('div', { class: 'choices' });
+  const w = state.profile.weights[a.id];
+  const current = el('p', { class: 'hint', hidden: !validWeight(w) || CHOICES.some(([v]) => v === w) }, validWeight(w) ? `Recorded rating: ${fmt(w)} out of 100. Choose an answer to replace it.` : '');
+  for (const [value, label] of CHOICES) {
+    const input = el('input', { type: 'radio', name: `${context}-${a.id}`, value, checked: state.profile.weights[a.id] === value });
+    input.addEventListener('change', () => { state.profile.weights[a.id] = value; current.hidden = true; invalidateProfile(); onChange(); });
+    choices.append(el('label', {}, input, label));
+  }
+  return el('div', {}, choices, current);
+}
+function renderConfirm() {
+  const s = $('#stage-confirm'); s.innerHTML = '';
+  const p = state.profile;
+  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'Check we understood'), el('p', { class: 'lede' }, 'These are your priorities for avoiding each outcome. Open any line to change it. Nothing is compared until you confirm.'));
+  if (p.source === 'interview') s.append(el('p', { class: 'hint', style: 'margin-top:12px' }, 'These ratings were inferred from your conversation. Please check each one before confirming.'));
+  if (p.source === 'adaptive' && p.posterior) s.append(el('p', { id: 'posterior-note', class: 'hint', style: 'margin-top:12px' }, `Inferred from ${p.posterior.questions_asked} answers. The range shows how far each rating is pinned down; where it is wide, we are still unsure. Check whether anything important was missed.`));
+  const heard = el('div', { class: 'heard' });
+  const error = el('p', { class: 'error', role: 'alert' });
+  const confirm = el('button', { id: 'confirm-priorities', class: 'btn primary', onclick: () => { if (comparisonError() || !p.coverage?.reviewed) { refresh(); return; } p.confirmed = true; log('confirmed', { source: p.source }); saveDraft(); setStage('compare'); } }, 'Yes, compare the options');
+  function refresh() { error.textContent = comparisonError(); confirm.disabled = !!error.textContent || !p.coverage?.reviewed; confirm.textContent = limited() ? 'Yes, show my summary' : 'Yes, compare the options'; }
+  for (const a of [...scored].sort((a, b) => p.weights[b.id] - p.weights[a.id])) {
+    const label = el('small', { 'data-rating-label': a.id }, (validWeight(p.weights[a.id]) ? anchorLabel(p.weights[a.id]) : 'Not yet discussed') + (p.posterior?.interval_90?.[a.id] ? ` (range ${p.posterior.interval_90[a.id][0]} to ${p.posterior.interval_90[a.id][1]})` : ''));
+    const row = el('details', { class: 'review-item' }, el('summary', {}, el('span', {}, a.name, el('span', {}, label)), el('span', { class: 'edit' }, 'Edit')));
+    row.append(el('fieldset', { style: 'margin-top:14px' }, el('legend', {}, 'How much does avoiding this matter?'), ratingChoices(a, 'review', () => { label.textContent = anchorLabel(p.weights[a.id]); refresh(); })));
+    heard.append(row);
+  }
+  s.append(heard);
+  const limits = [...p.ruled_out.map(o => `Will not consider ${option(o).name.toLowerCase()}.`), ...Object.entries(p.max_rate).map(([a, cap]) => `Could not accept more than ${fmt(cap)} in 100 for ${attribute(a).plain}.`)];
+  const lim = el('details', { class: 'disclosure', open: limits.length > 0 }, el('summary', {}, limits.length ? `Your limits (${limits.length})` : 'Limits (none recorded)'));
+  if (limits.length) lim.append(el('ul', {}, ...limits.map(t => el('li', {}, t))));
+  if (p.constraint_notes.length) lim.append(el('div', { class: 'quotes' }, ...p.constraint_notes.map(q => el('blockquote', {}, q))));
+  lim.append(limitsBlock(refresh, true));
+  s.append(lim);
+  if (p.statements.length) s.append(el('div', { class: 'quotes' }, ...p.statements.map(q => el('blockquote', {}, q))));
+  if (p.context_notes.length) s.append(el('div', { class: 'callout ok' }, el('b', {}, 'Things the numbers do not capture. '), p.context_notes.join(' '), ' These are kept for you and your clinician.'));
+  s.append(el('p', { class: 'hint', style: 'margin-top:16px' }, scopeNote()));
+  const coverage = el('fieldset', { class: 'q', style: 'margin-top:20px' }, el('legend', {}, 'Is there something important we have not discussed?'));
+  const missing = el('textarea', { 'aria-label': 'Priorities or questions still missing', placeholder: 'A priority, a question, or something to discuss with your clinician', hidden: !p.coverage?.note });
+  missing.value = p.coverage?.note || '';
+  const choices = el('div', { class: 'radios' });
+  for (const [value, label] of [['ready', 'This captures enough to continue'], ['missing', 'Something is missing or I am still unsure']]) {
+    const input = el('input', { type: 'radio', name: 'coverage', value, checked: p.coverage?.reviewed && p.coverage?.answer === value });
+    input.addEventListener('change', () => { p.coverage = { answer: value, note: missing.value, reviewed: true }; p.confirmed = false; missing.hidden = value !== 'missing'; syncSteps(); saveDraft(); refresh(); });
+    choices.append(el('label', {}, input, label));
+  }
+  missing.addEventListener('input', () => { if (p.coverage) p.coverage.note = missing.value; p.confirmed = false; syncSteps(); saveDraft(); });
+  coverage.append(choices, missing, el('p', { class: 'hint' }, 'You can continue with uncertainty. Unanswered questions will be kept in your discussion summary.'));
+  s.append(coverage);
+  s.append(error, el('div', { class: 'actions' }, confirm, el('button', { class: 'btn', onclick: () => setStage('values') }, 'Back')));
+  refresh();
+}
+
+/* ----------------------------------------------------------------- compare */
+function chip(oid) { return el('span', { class: 'chip', style: `--oc:${optColor(oid)}` }, el('i'), option(oid).name); }
+function renderCompare() {
+  const s = $('#stage-compare'); s.innerHTML = '';
+  const p = state.profile;
+  let rec; try { rec = recommend(p); } catch (e) { s.append(el('p', { role: 'alert' }, e.message)); return; }
+  if (rec.status !== 'ranked') { renderLimitsSummary(s, rec); return; }
+  const [top, runner] = rec.ranking;
+  const topName = option(top.option_id).name, runnerName = option(runner.option_id).name;
+  const tied = top.burden === runner.burden;
+  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'How the options compare for you'));
+  if (rec.excluded.length) s.append(el('p', { class: 'hint', style: 'margin-top:8px' }, `You ruled out ${rec.excluded.map(o => option(o).name.toLowerCase()).join(' and ')}, so the comparison is between the options you would consider.`));
+  s.append(el('p', { class: 'result-lead' }, tied ? 'There is no single leader on the outcomes you rated. The leading options have the same score.' : `${topName} ranks first on the outcomes you rated.`));
+  const pb = p.posterior?.p_best?.[top.option_id];
+  if (!tied && pb != null) s.append(el('p', { class: 'hint', style: 'margin-top:8px' }, `Your answers do not pin your values down exactly. Across the values consistent with them, ${topName.toLowerCase()} comes first about ${Math.round(100 * pb)} times in 100 under this preference model. This is not the chance that the treatment is medically right.`));
+  if (!tied && rec.close_call) s.append(el('p', { class: 'callout' }, `It is a close call with ${runnerName.toLowerCase()}. Small differences in these scores should not decide your treatment.`));
+  else if (!tied && rec.fragile) s.append(el('p', { class: 'callout' }, 'A small change in one rating could change which option leads. Treat this as a lean, not a verdict.'));
+
+  const why = el('div', { class: 'why' }, el('h3', {}, 'The main trade-off'));
+  const advantage = rec.drivers[0];
+  const disadvantage = scored.filter(a => top.contributions[a.id] > runner.contributions[a.id]).sort((a, b) => (top.contributions[b.id] - runner.contributions[b.id]) - (top.contributions[a.id] - runner.contributions[a.id]))[0];
+  const describe = (a, lead) => el('div', {}, el('p', {}, el('b', {}, lead + ' '), `${a.plain.replace(/^./, c => c.toUpperCase())}: ${fmt(a.values[top.option_id])} in 100 with ${topName.toLowerCase()}, compared with ${fmt(a.values[runner.option_id])} in 100 with ${runnerName.toLowerCase()}.`), a.note ? el('details', { class: 'hint', style: 'margin-top:8px' }, el('summary', {}, 'About this outcome'), el('p', {}, a.note)) : null);
+  if (advantage) why.append(describe(attribute(advantage), 'What favors the first option:'));
+  if (disadvantage) why.append(describe(disadvantage, 'What you give up:'));
+  if (!advantage && !disadvantage) why.append(el('p', {}, 'Your ratings do not separate these options on individual outcomes.'));
+  if (p.context_notes.length) why.append(el('p', { class: 'callout ok' }, el('b', {}, 'You also said: '), p.context_notes.join(' '), ' The numbers do not capture this. Raise it with your clinician; it can matter more than any rate here.'));
+  s.append(why);
+
+  const rank = el('div', { class: 'rank', 'aria-label': 'Treatment options in score order' });
+  rec.ranking.forEach((r, i) => {
+    const o = option(r.option_id); const shared = rec.ranking.filter(x => x.burden === r.burden).length > 1;
+    rank.append(el('div', { class: 'rcard' + (r.burden === top.burden ? ' top' : ''), style: `--oc:${optColor(o.id)}` }, el('div', { class: 'pos' }, rec.ranking.findIndex(x => x.burden === r.burden) + 1),
+      el('div', {}, el('h3', {}, o.name), el('p', { class: 'fit' }, shared ? 'Joint position on the rated outcomes' : i === 0 ? 'First on the rated outcomes' : 'Another option to discuss'), el('p', {}, o.short))));
+  });
+  s.append(rank, el('p', { class: 'disclaimer' }, scopeNote()));
+
+  // Other framings of the same evidence.
+  const fr = el('details', { class: 'disclosure' }, el('summary', {}, 'See how different priorities change the comparison'), el('p', { class: 'hint' }, 'These are illustrative weighting assumptions. They show different rankings; they do not establish medical suitability for you.'));
+  const grid = el('div', { class: 'framings' });
+  for (const f of rec.framings) grid.append(el('div', { class: 'framing' }, el('b', {}, f.name), el('p', {}, f.description), el('div', { class: 'base' }, ...f.ranking.map(chip))));
+  fr.append(grid); s.append(fr);
+
+  // What the result assumes.
+  const share = rec.assumptions[0].share_of_value_space;
+  const asm = el('details', { class: 'disclosure' }, el('summary', {}, `What this result assumes about your values`),
+    el('p', {}, `${topName} comes first under about ${Math.round(100 * share)} in 100 of all possible weightings of these outcomes. Starting from equal weights and changing one rating at a time, it stays first only within the ranges shown. Your ratings are the marks.`));
+  const rows = el('div', { class: 'assume' });
+  for (const r of rec.assumptions.slice(1)) {
+    const a = attribute(r.attribute_id); const track = el('div', { class: 'track' });
+    if (r.holds_from != null) track.append(el('i', { style: `left:${r.holds_from}%;width:${Math.max(1, r.holds_to - r.holds_from)}%` }));
+    track.append(el('b', { style: `left:${p.weights[a.id]}%`, title: `your rating ${p.weights[a.id]}` }));
+    rows.append(el('div', { class: 'row' }, el('span', {}, a.name, el('small', { class: 'hint' }, r.holds_from == null ? ' (never first when this alone changes)' : ` (first from ${fmt(r.holds_from)} to ${fmt(r.holds_to)})`)), track));
+  }
+  asm.append(rows); s.append(asm);
+
+  const calculations = el('details', { class: 'disclosure' }, el('summary', {}, 'How the scores work'),
+    el('p', {}, 'For each outcome, we multiply its trial rate per 100 people by your rating divided by 100, then add those contributions. Lower scores rank first. Scores are not probabilities.'));
+  for (const r of rec.ranking) calculations.append(el('h3', { style: 'margin-top:18px' }, `${option(r.option_id).name}: ${fmt(r.burden)}`), el('div', { class: 'contrib' }, ...Object.entries(r.contributions).map(([aid, v]) => el('div', {}, el('span', {}, attribute(aid).name), el('b', {}, fmt(v))))));
+  calculations.append(el('p', {}, 'If every outcome had equal weight, the order would be:'), el('div', { class: 'base' }, ...rec.baseline_ranking.map(r => chip(r.option_id))), el('p', { class: 'hint' }, 'Equal weighting is another assumption, not a neutral recommendation.'));
+  s.append(calculations);
+
+  const explore = el('details', { class: 'disclosure' }, el('summary', {}, 'Explore a different priority'));
+  if (rec.flips.length) { const f = rec.flips[0]; explore.append(el('p', {}, `The nearest change found by varying one rating at a time is for ${attribute(f.attribute_id).name.toLowerCase()}: from ${fmt(f.current_weight)} to ${fmt(f.flip_weight)} on the 0 to 100 scale. At that value, ${option(f.new_top).name.toLowerCase()} ranks first or shares first place.`)); }
+  else explore.append(el('p', {}, 'Moving one rating at a time did not change the leading option. Changing several together may do so.'));
+  const wi = el('div', { class: 'whatif' });
+  const sel = el('select', { id: 'trial-outcome' }); scored.forEach(a => sel.append(el('option', { value: a.id }, a.name)));
+  if (rec.flips.length) sel.value = rec.flips[0].attribute_id;
+  const rng = el('input', { type: 'range', min: 0, max: 100, step: 'any', value: p.weights[sel.value], 'aria-label': 'Trial weight' });
+  const current = el('p', { class: 'hint' }); const live = el('div', { class: 'live', 'aria-live': 'polite' });
+  const upd = () => { const w = { ...p.weights, [sel.value]: Number(rng.value) }; current.textContent = `Your recorded rating: ${fmt(p.weights[sel.value])}. Trial rating: ${fmt(Number(rng.value))}.`; if (weightError(w)) { live.replaceChildren(el('p', {}, 'All trial ratings are zero, so there is no ranking.')); return; } const sc = scoreOptions(w, allowedOptions(p)); const leaders = sc.filter(r => r.burden === sc[0].burden); live.replaceChildren(el('span', {}, leaders.length > 1 ? 'Shared lead:' : 'First on these trial ratings:'), ...leaders.map(r => chip(r.option_id))); };
+  sel.addEventListener('change', () => { rng.value = p.weights[sel.value]; upd(); }); rng.addEventListener('input', upd); upd();
+  wi.append(el('label', { for: 'trial-outcome' }, 'Outcome to explore'), sel, current, rng, live, el('p', { class: 'hint' }, 'Exploring here does not change your recorded priorities.'));
+  explore.append(wi); s.append(explore);
+
+  const evidence = el('details', { class: 'disclosure' }, el('summary', {}, 'Trial evidence and sources'), el('p', {}, DECISION.population));
+  const tbl = el('table', { class: 'rates' });
+  tbl.append(el('caption', {}, 'Outcomes in the trial, with your recorded weights'), el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Outcome'), el('th', { scope: 'col' }, 'Your weight'), ...DECISION.options.map(o => el('th', { scope: 'col' }, o.name)))));
+  const tb = el('tbody');
+  for (const a of DECISION.attributes) {
+    const quotes = (a.evidence || []).filter(e => e.status === 'verified' && e.quote).map(e => el('blockquote', { class: 'quote' }, `“${e.quote}”`, el('small', {}, ` ${option(e.option_id)?.name || e.option_id}, ${e.source_id}`)));
+    tb.append(el('tr', {}, el('td', {}, a.name, el('small', {}, a.unit + '. ' + a.source), el('details', {}, el('summary', {}, quotes.length ? 'About these numbers, with the source text' : 'About these numbers'), el('p', {}, a.note), ...quotes)),
+      el('td', { class: 'w' }, a.kind === 'rate' ? fmt(p.weights[a.id]) : 'not scored'), ...DECISION.options.map(o => el('td', {}, a.kind === 'rate' ? fmt(a.values[o.id]) + ' in 100' : a.levels[o.id]))));
+  }
+  tbl.append(tb); evidence.append(el('div', { class: 'tbl-wrap', tabindex: '0', role: 'region', 'aria-label': 'Scrollable trial evidence' }, tbl), el('ol', { class: 'sources' }, ...DECISION.sources.map(x => el('li', {}, x))));
+  s.append(evidence);
+
+  s.append(el('p', { class: 'disclaimer' }, 'Research prototype, not medical advice. These trial averages do not predict your individual outcome. Discuss the options and any priorities missing here with your clinician.'));
+  if (p.coverage?.answer === 'missing') s.append(el('p', { class: 'callout' }, 'Still to discuss: ' + (p.coverage.note || 'You said something is missing or uncertain.')));
+  if (state.study) s.append(renderSurvey({ ai_top: top.option_id, arm: 'preference' }));
+  s.append(el('div', { class: 'actions' }, el('button', { class: 'btn primary', onclick: () => setStage('confirm') }, 'Adjust my priorities'), el('button', { class: 'btn', onclick: startOver }, 'Start over')));
+  log('compare_viewed', { top: top.option_id, p_best: pb ?? null });
+}
+
+function renderLimitsSummary(s, rec) {
+  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'Your limits and next steps'),
+    el('p', { class: 'result-lead' }, rec.available_options.length
+      ? `Only ${option(rec.available_options[0]).name.toLowerCase()} meets your stated limits. This is not a ranking or a treatment recommendation.`
+      : 'None of these options meets your stated limits.'));
+  if (rec.available_options.length) {
+    const o = option(rec.available_options[0]);
+    s.append(el('div', { class: 'why' }, el('h3', {}, o.name), el('p', {}, o.short), el('p', {}, o.burden)));
+  }
+  const reasons = el('ul');
+  for (const oid of state.profile.ruled_out) reasons.append(el('li', {}, 'You would not consider ' + option(oid).name.toLowerCase() + '.'));
+  for (const [aid, cap] of Object.entries(state.profile.max_rate)) reasons.append(el('li', {}, `Your highest acceptable chance for ${attribute(aid).plain} is ${cap} in 100.`));
+  s.append(reasons, el('p', {}, 'You can keep these limits and take this summary to your clinician to discuss other possibilities. Changing a limit is optional.'));
+  for (const text of [...state.profile.statements, ...state.profile.context_notes, state.profile.coverage?.note].filter(Boolean)) s.append(el('p', { class: 'callout' }, text));
+  s.append(el('div', { class: 'actions' }, el('button', { class: 'btn primary', onclick: () => window.print() }, 'Print discussion summary'),
+    el('button', { class: 'btn', onclick: () => setStage('confirm') }, 'Review my priorities'), el('button', { class: 'btn', onclick: startOver }, 'Start over')));
+  if (state.study) s.append(renderSurvey({ ai_top: null, arm: 'preference' }));
+  log('limits_summary_viewed', { status: rec.status, available_options: rec.available_options });
+}
+
+/* ------------------------------------------------------------------- study */
+/* Randomized arms: "baseline" (a standard medical AI recommends from the vignette with no
+   values) or "preference" (this flow). Autonomy instruments after the decision. Records stay
+   on the device and can be saved as a file; no data leaves the page on its own. */
+const STUDY_PROTOCOL = 'autonomy-pilot-v2';
+function initStudy() {
+  const params = new URLSearchParams(location.search);
+  const wanted = ['#study', '#followup'].includes(location.hash) || params.has('arm') || params.has('pid');
+  if (!wanted && !state.study) return;
+  if (!state.study) {
+    const pid = params.get('pid') || Math.random().toString(36).slice(2, 10).toUpperCase();
+    let arm = params.get('arm');
+    if (!['baseline', 'preference'].includes(arm)) { let h = 0; for (const c of pid) h = (h * 31 + c.charCodeAt(0)) >>> 0; arm = h % 2 ? 'baseline' : 'preference'; }
+    state.study = { pid, arm, protocol: STUDY_PROTOCOL, started: new Date().toISOString() };
+    log('study_start', { arm, pid, protocol: STUDY_PROTOCOL });
+  }
+  const bar = $('#studybar'); bar.hidden = false; bar.replaceChildren();
+  bar.append(el('span', {}, 'Study mode. Participant ', el('b', {}, state.study.pid), ', arm ', el('b', {}, state.study.arm === 'baseline' ? 'standard AI' : 'preference first'), '.'),
+    el('span', {}, 'Keep your participant code and use the same browser for follow-up.'),
+    el('button', { class: 'btn', style: 'padding:6px 10px;font-size:13px', onclick: exportRecord }, 'Save my session record'));
+  renderIntro();
+  if (location.hash === '#followup') return;
+  if (!state.study.assessment) renderResearchIntake(); else showStudyArm();
+}
+function showStudyArm() {
+  $('#steps').hidden = state.study.arm === 'baseline';
+  if (state.study.arm === 'baseline') { setStage('baseline', false); renderBaseline(); }
+  else setStage('values', false);
+}
+async function exportRecord() {
+  const rec = { protocol: STUDY_PROTOCOL, decision: DECISION.id, evidence_snapshot: DECISION, study: state.study, profile: state.profile, answers: state.answers, chat: state.chat, record: state.record, exported: new Date().toISOString() };
+  const text = JSON.stringify(rec, null, 1);
+  if (state.downloads) { try { await state.downloads.save({ filename: `preference-first-${state.study?.pid || 'session'}.json`, data: text }); return; } catch (e) { if (e.code === 'declined') return; } }
+  const blob = new Blob([text], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = el('a', { href: url, download: `preference-first-${state.study?.pid || 'session'}.json` });
+  document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function studyRatings(prefix, weights, onChange) {
+  const qs = el('div', { class: 'qs' });
+  for (const a of scored) {
+    const choices = el('div', { class: 'choices' });
+    for (const [v, label] of [...CHOICES, [null, 'Not sure']]) {
+      const input = el('input', { type: 'radio', name: prefix + '-' + a.id, value: v === null ? 'unsure' : v, checked: Object.hasOwn(weights, a.id) && weights[a.id] === v });
+      input.addEventListener('change', () => { weights[a.id] = v; onChange(); });
+      choices.append(el('label', {}, input, label));
+    }
+    qs.append(el('fieldset', { class: 'q' }, el('legend', {}, 'Avoiding ' + a.plain), choices));
+  }
+  return qs;
+}
+function renderResearchIntake() {
+  setStage('intake', false); $('#steps').hidden = true;
+  const s = $('#stage-intake'); s.replaceChildren();
+  const draft = state.study.assessment_draft || { weights: {}, ruled_out: [], max_rate: {}, notes: '' };
+  state.study.assessment_draft = draft;
+  const save = () => saveDraft();
+  s.append(el('h2', { tabindex: '-1' }, 'Before you meet the assistant'),
+    el('p', { class: 'lede' }, 'For the study, record your own priorities. Everyone answers the same questions here. These responses are kept for evaluation and are not given to either assistant. Choose “Not sure” where needed.'));
+  const notes = el('textarea', { 'aria-label': 'Your priorities before the assistant', placeholder: 'What matters to you, in your own words? (optional)' });
+  notes.value = draft.notes; notes.addEventListener('input', () => { draft.notes = notes.value; save(); });
+  s.append(el('div', { class: 'q', style: 'margin-top:16px' }, el('label', {}, 'Your priorities in your own words'), notes), studyRatings('intake', draft.weights, save));
+  const limits = el('details', { class: 'disclosure' }, el('summary', {}, 'Any firm limits? (optional)'));
+  const fields = el('div', { class: 'limits', style: 'margin-top:12px' });
+  for (const o of DECISION.options) {
+    const input = el('input', { type: 'checkbox', checked: draft.ruled_out.includes(o.id) });
+    input.addEventListener('change', () => { draft.ruled_out = input.checked ? [...new Set([...draft.ruled_out, o.id])] : draft.ruled_out.filter(id => id !== o.id); save(); });
+    fields.append(el('label', {}, input, 'I would not consider ' + o.name.toLowerCase()));
+  }
+  for (const a of scored) {
+    const input = el('input', { type: 'number', min: 0, max: 100, value: draft.max_rate[a.id] ?? '', 'aria-label': 'Research limit for ' + a.name });
+    input.addEventListener('input', () => { if (input.value === '') delete draft.max_rate[a.id]; else draft.max_rate[a.id] = Number(input.value); save(); });
+    fields.append(el('label', {}, el('span', { style: 'flex:1' }, 'Highest acceptable chance in 100 of ' + a.plain), input));
+  }
+  limits.append(fields); s.append(limits);
+  const error = el('p', { class: 'error', role: 'alert' });
+  s.append(error, el('div', { class: 'actions' }, el('button', { class: 'btn primary', onclick: () => {
+    if (scored.some(a => !Object.hasOwn(draft.weights, a.id))) { error.textContent = 'Answer each outcome, or choose Not sure.'; return; }
+    if (Object.values(draft.max_rate).some(v => !validWeight(v))) { error.textContent = 'Enter limits between 0 and 100, or leave them blank.'; return; }
+    // Freeze a separate reference. Neither arm's elicitation or edits can replace it.
+    state.study.assessment = JSON.parse(JSON.stringify({ ...draft, recorded_at: new Date().toISOString(), instrument: 'common-pre-assistant-v1' }));
+    delete state.study.assessment_draft;
+    log('research_assessment', { instrument: 'common-pre-assistant-v1' });
+    showStudyArm();
+  } }, 'Save research answers and continue')));
+}
+function renderBaseline() {
+  const s = $('#stage-baseline'); s.hidden = false; s.innerHTML = '';
+  s.append(el('h2', { tabindex: '-1' }, 'An AI assistant looks at this decision'), el('p', { class: 'lede' }, 'The assistant reads the situation and the evidence. It has not received your research answers.'));
+  const out = el('div', { class: 'why' });
+  const btn = el('button', { class: 'btn primary' }, 'Ask the assistant what to do');
+  const status = el('span', { class: 'hint' });
+  const show = data => {
+    out.replaceChildren(el('div', { class: 'rcard top', style: `--oc:${optColor(data.recommendation)}` }, el('div', { class: 'pos' }, 'AI'), el('div', {}, el('h3', {}, option(data.recommendation).name), el('p', {}, data.explanation))));
+    s.append(renderSurvey({ ai_top: data.recommendation, arm: 'baseline' }));
+    btn.disabled = true;
+  };
+  btn.addEventListener('click', async () => {
+    btn.disabled = true; status.textContent = 'Thinking...';
+    const prompt = `A patient has this diagnosis: ${DECISION.title}. ${DECISION.context}\n\nOptions:\n${DECISION.options.map(o => `- ${o.id}: ${o.name}. ${o.short} ${o.burden}`).join('\n')}\n\nTrial evidence, rates per 100 people:\n${scored.map(a => `- ${a.plain}: ` + Object.entries(a.values).map(([o, v]) => `${option(o).name} ${fmt(v)}`).join(', ')).join('\n')}\n\nAs a medical AI assistant, recommend one option and explain why in four to six short sentences of plain English using only this evidence. Reply with only JSON: {"recommendation": <option id>, "explanation": <string>}`;
+    try {
+      let data;
+      const renderer = state.sample ? 'claude' : 'offline_example';
+      if (state.sample) data = await state.sample.json(prompt, { cache: false });
+      else { const base = scoreOptions(Object.fromEntries(scored.map(a => [a.id, 50])))[0].option_id; data = { recommendation: base, explanation: `Offline example, not a live AI response: weighting the trial outcomes equally puts ${option(base).name.toLowerCase()} first.` }; }
+      if (!option(data.recommendation) || typeof data.explanation !== 'string' || !data.explanation.trim()) throw new Error('The assistant did not return a valid recommendation. Please try again.');
+      state.study.baseline_response = { ...data, renderer, prompt };
+      log('baseline_recommendation', { ...state.study.baseline_response });
+      show(data); status.textContent = '';
+    } catch (e) { status.textContent = `Could not get a recommendation (${e.code || e.message}).`; btn.disabled = false; }
+  });
+  s.append(el('div', { class: 'actions' }, btn, status), out);
+  if (state.study.baseline_response) show(state.study.baseline_response);
+}
+function decisionMeasures(assessment, choice, aiTop) {
+  const agreement = aiTop && option(choice) ? choice === aiTop : null;
+  const base = { agreement_with_ai: agreement, rated_outcome_alignment: null, alignment_status: 'no_reference', reference_leaders: [], disagreement_consistent_with_reference: null };
+  if (!assessment) return base;
+  const allowed = allowedOptions(assessment);
+  if (!allowed.length) return { ...base, alignment_status: 'no_options_within_reference_limits' };
+  if (weightError(assessment.weights)) return { ...base, alignment_status: 'uncertain_or_zero_reference_ratings' };
+  const ranking = scoreOptions(assessment.weights, allowed);
+  const leaders = ranking.filter(r => Math.abs(r.burden - ranking[0].burden) < 1e-9).map(r => r.option_id);
+  if (!option(choice)) return { ...base, reference_leaders: leaders, alignment_status: 'no_treatment_selected' };
+  const alignment = leaders.includes(choice);
+  return { ...base, rated_outcome_alignment: alignment, alignment_status: 'rated_outcome_proxy', reference_leaders: leaders,
+    disagreement_consistent_with_reference: aiTop && !leaders.includes(aiTop) ? choice !== aiTop && alignment : null };
+}
+function renderSurvey({ ai_top, arm }) {
+  const box = el('div', { class: 'survey' }, el('h3', {}, 'Your decision'), el('p', { class: 'hint' }, 'For the study. You can choose differently, remain undecided, or reject these options.'));
+  const answers = state.study.survey_draft || {};
+  state.study.survey_draft = answers;
+  const save = () => saveDraft();
+  const q = (text, node) => box.append(el('div', { class: 'q' }, el('div', { class: 'lbl' }, text), node));
+  const radios = (name, opts) => {
+    const r = el('div', { class: 'scale' });
+    for (const [v, l] of opts) { const i = el('input', { type: 'radio', name, value: v, checked: answers[name] === v }); i.addEventListener('change', () => { answers[name] = v; save(); }); r.append(el('label', {}, i, l)); }
+    return r;
+  };
+  q('Where do you stand today?', radios('choice', [...DECISION.options.map(o => [o.id, o.name]), ['undecided', 'I am not ready to decide'], ['none', 'None of these options is acceptable to me']]));
+  const why = el('textarea', { 'aria-label': 'Why', placeholder: 'Your reasons, remaining questions, or why you are unsure.' });
+  why.value = answers.why || ''; why.addEventListener('input', () => { answers.why = why.value; save(); });
+  q('In your own words, what led you to that answer?', why);
+  const cite = el('div', { class: 'checks' });
+  for (const a of scored) { const c = el('input', { type: 'checkbox', value: a.id, checked: (answers.cited || []).includes(a.id) }); c.addEventListener('change', () => { answers.cited = Array.from(cite.querySelectorAll('input:checked')).map(i => i.value); save(); }); cite.append(el('label', {}, c, 'Avoiding ' + a.plain)); }
+  q('Which outcomes played a part? (optional)', cite);
+  const scale = [['1', 'Not at all'], ['2', 'A little'], ['3', 'Somewhat'], ['4', 'A lot'], ['5', 'Completely']];
+  q('Does this answer reflect what matters to you?', radios('ownership', scale));
+  q('How comfortable would you be choosing differently from the assistant if your priorities pointed elsewhere?', radios('disagree', scale));
+  q('How much did the assistant help you understand the trade-offs?', radios('understanding', scale));
+  q('Do you feel ready to make a decision?', radios('sure', [['yes', 'Yes'], ['no', 'No'], ['unsure', 'Not sure']]));
+  const status = el('p', { class: 'hint', role: 'status' });
+  const submit = el('button', { class: 'btn primary', onclick: () => {
+    if (!answers.choice) { status.textContent = 'Choose an option, undecided, or none of these.'; return; }
+    const measures = decisionMeasures(state.study.assessment, answers.choice, ai_top);
+    const record = { arm, choice: answers.choice, ai_top, ...measures, why: answers.why || '', cited: answers.cited || [],
+      ownership_self_report: answers.ownership || null, disagreement_comfort: answers.disagree || null,
+      understanding_self_report: answers.understanding || null, readiness: answers.sure || null,
+      rationale_review: 'not_scored', trust_calibration: 'not_measured', clinical_decision_quality: 'not_measured', recorded_at: new Date().toISOString() };
+    state.study.decision = JSON.parse(JSON.stringify(record));
+    log('decision', record);
+    status.textContent = 'Recorded. Agreement with the assistant is not a success score. Save your session record and keep your participant code for follow-up.';
+    submit.disabled = true;
+  } }, 'Record my decision');
+  box.append(status, el('div', { class: 'actions' }, submit));
+  return box;
+}
+function renderFollowup() {
+  setStage('followup', false); $('#steps').hidden = true;
+  const s = $('#stage-followup'); s.replaceChildren();
+  const assessment = state.study?.assessment;
+  s.append(el('h2', { tabindex: '-1' }, 'What do you remember about your priorities?'),
+    el('p', { class: 'lede' }, 'Before seeing a list of outcomes, describe what mattered to you in the first session and why. It is fine to say you do not remember.'));
+  if (!assessment) s.append(el('p', { class: 'callout' }, 'No earlier research assessment was found for this participant in this browser. We can record these responses, but cannot compare them with a first session.'));
+  const recall = el('textarea', { 'aria-label': 'Earlier priorities and reasons from memory' });
+  const status = el('p', { role: 'status' });
+  const next = el('button', { class: 'btn primary', onclick: () => {
+    if (!recall.value.trim()) { status.textContent = 'Describe what you remember, or say that you do not remember.'; return; }
+    const recalled = recall.value.trim();
+    const recalledAt = new Date().toISOString();
+    recall.disabled = true; next.disabled = true;
+    const now = {};
+    const current = el('div', { class: 'qs' }, el('h3', {}, 'What matters to you now?'),
+      el('p', {}, 'Your priorities can change. A change is recorded separately from what you remember.'));
+    current.append(studyRatings('fu', now, () => {}));
+    const reason = el('textarea', { 'aria-label': 'Why your priorities changed', placeholder: 'If anything changed, what led to that change? (optional)' });
+    current.append(reason);
+    const output = el('p', { role: 'status' });
+    const save = el('button', { class: 'btn primary', onclick: () => {
+      if (scored.some(a => !Object.hasOwn(now, a.id))) { output.textContent = 'Answer each outcome, or choose Not sure.'; return; }
+      const drift = scored.map(a => ({ id: a.id, then: assessment?.weights?.[a.id] ?? null, now: now[a.id] }));
+      const comparable = drift.filter(d => validWeight(d.then) && validWeight(d.now));
+      const mean = comparable.length ? comparable.reduce((sum, d) => sum + Math.abs(d.now - d.then), 0) / comparable.length : null;
+      const record = { recalled_priorities_and_reasons: recalled, recalled_at: recalledAt, recall_review: 'not_scored',
+        original_priorities_text: assessment?.notes ?? null, reference_recorded_at: assessment?.recorded_at ?? null,
+        elapsed_days: assessment ? (Date.now() - Date.parse(assessment.recorded_at)) / 86400000 : null,
+        drift, comparable_outcomes: comparable.length, mean_abs_preference_change: mean, change_reason: reason.value.trim(), recorded_at: new Date().toISOString() };
+      log('followup', record);
+      if (state.study) { state.study.followups = [...(state.study.followups || []), record]; saveDraft(); }
+      output.textContent = mean === null ? 'Recorded. There are no comparable earlier ratings.' : `Recorded. Your current ratings changed by ${fmt(mean)} points on average across ${comparable.length} comparable outcomes. This is preference change, not a memory score.`;
+      save.disabled = true;
+      current.append(el('button', { class: 'btn', onclick: exportRecord }, 'Save my session record'));
+    } }, 'Record follow-up');
+    current.append(output, el('div', { class: 'actions' }, save)); s.append(current);
+  } }, 'Record recall and continue');
+  s.append(el('div', { class: 'q', style: 'margin-top:16px' }, recall), status, el('div', { class: 'actions' }, next));
+}
+
+/* -------------------------------------------------------------------- boot */
+loadDraft();
+renderIntro(); setStage('values', false);
+initStudy();
+if (!state.study && location.hash === '#example' && DECISION.id === 'prostate_localized') loadExample(false);
+if (location.hash === '#followup') renderFollowup();
+(async () => {
+  try {
+    if (!window.claude || typeof window.claude.use !== 'function') return;
+    const capabilities = await Promise.allSettled([window.claude.use('sample'), window.claude.use('downloads')]);
+    const sample = capabilities[0].status === 'fulfilled' ? capabilities[0].value : null;
+    state.downloads = capabilities[1].status === 'fulfilled' ? capabilities[1].value : null;
+    if (!sample) return;
+    state.sample = sample;
+    $('#chat-tab').hidden = false; $('#tabs').hidden = false;
+    renderChat();
+    if (!state.answers.length && state.profile.source !== 'interview') selectTab('chat');
+  } catch (e) { /* the questions still work */ }
+})();
+</script>
