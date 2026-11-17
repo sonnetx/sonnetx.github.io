@@ -1,0 +1,242 @@
+/* Site skin for the Preference-First demo. index.html loads this after the demo's own styles,
+   so these rules restyle the demo to match the rest of the site: a white page, Georgia text,
+   #0066cc for links and selected states, thin grey rules, no shadows, and the shared sidebar.
+   The page stays light even when the system is in dark mode, like every other page here. */
+
+:root {
+    color-scheme: light;
+    --ground: #fff;
+    --surface: #fff;
+    --panel: #fafafa;
+    --ink: #333;
+    --muted: #666;
+    --rule: #e0e0e0;
+    --rule-soft: #eee;
+    --accent: #0066cc;
+    --accent-ink: #fff;
+    --accent-soft: #eef4fb;
+    --warn: #9a5b12;
+    --warn-soft: #fbf4ea;
+    --shadow: none;
+    --display: Georgia, 'Times New Roman', serif;
+    --body: Georgia, 'Times New Roman', serif;
+    --ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+    padding: 40px 20px;
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: auto;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+    letter-spacing: 0;
+}
+
+.wrap {
+    max-width: 760px;
+    padding: 0 0 64px;
+    gap: 30px;
+}
+
+/* Page header, set like the title on Projects and Research. The top-ranked option card also
+   carries a "top" class, so these rules name the header element. */
+header.top {
+    display: block;
+}
+
+.page-title {
+    font-size: 36px;
+    line-height: 1.25;
+    margin-bottom: 14px;
+}
+
+header.top .meta {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+}
+
+/* Sections sit flat on the page under a ruled heading instead of in shadowed boxes. */
+.card {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+.intro h1 {
+    font-size: 26px;
+}
+
+.stage h2 {
+    font-size: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.stage .lede {
+    margin-top: 14px;
+}
+
+/* Interface text uses the same sans as the dates and links on the Projects page. */
+button, input, select, textarea, pre,
+.btn, .step, .tabs, .playrow, .hint, .progress, .error, .belief, .chip, .msg .kick,
+.studybar, .demobar, .rates, .contrib, .assume, .base, .fit, .sources, .disclaimer,
+.q .note, .limits, .choices label, .radios label, .survey .scale label, .checks label,
+.whatif, .legend, summary {
+    font-family: var(--ui);
+}
+
+summary {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.step {
+    border-radius: 6px;
+}
+
+.step b {
+    font-weight: 600;
+}
+
+.step .n {
+    font-weight: 600;
+}
+
+.btn {
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.btn:not(.primary):hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.tabs {
+    border-radius: 6px;
+}
+
+.tabs button {
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.tabs button[aria-selected="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+/* The conversation. */
+.msg {
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.msg.ai {
+    background: var(--panel);
+    border-color: var(--rule-soft);
+    border-bottom-left-radius: 3px;
+}
+
+.msg.me {
+    font-family: var(--ui);
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom-right-radius: 3px;
+}
+
+.qcard .ans button,
+.playrow button {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.qcard .ans button {
+    color: var(--accent);
+}
+
+.qcard .ans button.skip {
+    color: var(--muted);
+}
+
+.setup {
+    border-radius: 8px;
+}
+
+.belief {
+    background: var(--panel);
+    border-radius: 8px;
+}
+
+.belief h3 {
+    font-family: var(--ui);
+    font-weight: 600;
+}
+
+.radios label,
+.choices label,
+.survey .scale label {
+    border-radius: 6px;
+}
+
+.rcard,
+.opt,
+.framing,
+.whatif,
+.survey {
+    border-radius: 8px;
+}
+
+.survey {
+    background: var(--panel);
+}
+
+.rcard .pos {
+    font-weight: normal;
+}
+
+.callout,
+.demobar {
+    border-radius: 4px;
+}
+
+.quotes blockquote {
+    font-size: 17px;
+}
+
+a {
+    color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .wrap {
+        padding: 0 0 40px;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 20px 15px;
+        font-size: 16px;
+    }
+
+    .page-title {
+        font-size: 28px;
+    }
+
+    .intro h1 {
+        font-size: 22px;
+    }
+
+    .stage h2 {
+        font-size: 21px;
+    }
+}

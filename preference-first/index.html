@@ -1,9 +1,12 @@
+---
+---
 <!doctype html>
+<html lang="en" data-theme="light">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Preference First</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<title>Preference-First Medical AI - Sonnet Xu</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+<link rel="stylesheet" href="/sidebar.css">
 <style>
   :root {
     --ground: #F2F4F1; --surface: #FBFCFA; --ink: #1E2422; --muted: #5F6A66; --rule: #D5DBD6; --rule-soft: #E6EAE6;
@@ -250,11 +253,14 @@
   }
   @media (prefers-reduced-motion: no-preference) { .btn, .step, .tabs button { transition: background-color 120ms, border-color 120ms; } }
 </style>
+<link rel="stylesheet" href="/preference-first/site.css">
+
+{% include sidebar.html active="projects" %}
 
 <div class="wrap">
   <header class="top">
-    <div class="brand">Preference First <small>prototype</small></div>
-    <div class="meta">Your values first. Nothing is compared until you have said what matters to you and confirmed it.</div>
+    <h1 class="page-title">Preference-First Medical AI</h1>
+    <p class="meta">A research prototype for choosing a treatment for early prostate cancer. It asks what matters to you and has you confirm it before it compares any option, using results from the ProtecT trial. It is not medical advice.</p>
   </header>
   <div class="studybar" id="studybar" hidden></div>
 
