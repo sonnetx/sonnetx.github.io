@@ -56,20 +56,16 @@
             margin-bottom: 50px;
         }
 
-        /* Project list. Each row has a small picture beside the text. The title link stretches
-           over the whole row, and the links underneath sit above it so they stay clickable. */
-        .project-list {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
+        /* A card is its picture above its text. The title link stretches over the whole card,
+           and the links underneath sit above it so they stay clickable. align-content keeps a
+           shorter card's text right under its picture when the grid stretches it to match the
+           card beside it. */
         .card {
             position: relative;
             display: grid;
-            grid-template-columns: 200px minmax(0, 1fr);
-            gap: 22px;
-            align-items: start;
+            grid-template-columns: minmax(0, 1fr);
+            align-content: start;
+            gap: 14px;
         }
 
         .card-thumb {
@@ -166,19 +162,63 @@
             border-bottom-color: var(--link-color);
         }
 
-        /* Highlighted projects sit in a two-column grid, each with its picture on top. */
+        /* Highlighted projects sit in a two-column grid. */
         .highlight-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 36px 28px;
         }
 
-        /* align-content keeps a shorter card's text right under its picture when the grid
-           stretches it to match the card beside it. */
-        .card.feature {
-            grid-template-columns: minmax(0, 1fr);
-            align-content: start;
-            gap: 14px;
+        /* Other projects are smaller tiles, as many to a row as fit (three on a wide screen).
+           Their pictures stay a little muted until hovered so the highlights lead the page. */
+        .tile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px 22px;
+        }
+
+        .card.tile {
+            gap: 11px;
+        }
+
+        .card.tile .card-thumb img {
+            filter: grayscale(45%);
+            opacity: 0.85;
+            transition: transform 0.4s ease, filter 0.3s, opacity 0.3s;
+        }
+
+        .card.tile:hover .card-thumb img {
+            filter: none;
+            opacity: 1;
+        }
+
+        .card.tile .card-thumb.placeholder {
+            background: #f3f5f8;
+            color: #a4b4c8;
+        }
+
+        .card.tile .card-title {
+            font-size: 16px;
+        }
+
+        .card.tile .card-venue {
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .card.tile .card-desc {
+            margin-bottom: 6px;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .card.tile .card-links {
+            gap: 2px 14px;
+            font-size: 13px;
+        }
+
+        .card.tile .card-thumb.placeholder {
+            font-size: 28px;
         }
 
         footer {
@@ -201,21 +241,8 @@
                 font-size: 28px;
             }
 
-            .project-list {
-                gap: 26px;
-            }
-
             .project-section {
                 margin-bottom: 44px;
-            }
-
-            .card {
-                grid-template-columns: 112px minmax(0, 1fr);
-                gap: 14px;
-            }
-
-            .card-thumb.placeholder {
-                font-size: 24px;
             }
 
             .card-desc {
@@ -230,10 +257,26 @@
                 grid-template-columns: minmax(0, 1fr);
                 gap: 30px;
             }
+
+            /* On a phone each tile becomes a row with a small picture beside the text. */
+            .tile-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 24px;
+            }
+
+            .card.tile {
+                grid-template-columns: 112px minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .card.tile .card-thumb.placeholder {
+                font-size: 24px;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .card-thumb img {
+            .card-thumb img,
+            .card.tile .card-thumb img {
                 transition: none;
             }
         }
@@ -248,14 +291,15 @@
 
             <!--
                 To add a project, save a 16:10 image in photos/projects/ (1000x625 works) and copy
-                a card into a section. Highlighted cards carry the extra "feature" class. The title
-                link is the one the whole card opens. A project without an image uses
+                a card into the highlight grid or into the tile grid under Other projects (those
+                cards carry the extra "tile" class). The title link is the one the
+                whole card opens. A project without an image uses
                 <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
             -->
             <section class="project-section">
                 <h2 class="section-title">Highlighted projects</h2>
                 <div class="highlight-grid">
-                    <article class="card feature">
+                    <article class="card">
                         <div class="card-thumb"><img src="photos/projects/torch-measure.jpg" width="1000" height="625" alt="Five item response curves rising from zero to one, with observed responses scattered along the top and bottom" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://github.com/aims-foundations/torch_measure" target="_blank">torch_measure</a></h2>
@@ -268,7 +312,7 @@
                         </div>
                     </article>
 
-                    <article class="card feature">
+                    <article class="card">
                         <div class="card-thumb"><img src="photos/projects/condor-rs.jpg" width="1000" height="625" alt="A grid of lattice points with two basis vectors and the cell they span" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://github.com/NethermindEth/condor-rs" target="_blank">condor-rs</a></h2>
@@ -281,7 +325,7 @@
                         </div>
                     </article>
 
-                    <article class="card feature">
+                    <article class="card">
                         <div class="card-thumb"><img src="photos/projects/ai-for-design.jpg" width="1000" height="625" alt="Three generated versions of a city block side by side, with the middle one selected" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://github.com/OETBoston/ai-for-design" target="_blank">AI for Design</a></h2>
@@ -293,7 +337,7 @@
                         </div>
                     </article>
 
-                    <article class="card feature">
+                    <article class="card">
                         <div class="card-thumb"><img src="photos/projects/plastivis.jpg" width="1000" height="625" alt="Four 3D renders of a simulated brain colored by electrical activity" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
@@ -311,8 +355,8 @@
 
             <section class="project-section">
                 <h2 class="section-title">Other projects</h2>
-                <div class="project-list">
-                    <article class="card">
+                <div class="tile-grid">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/preference-first.jpg" width="1000" height="625" alt="A conversation asking a patient about their priorities beside a panel that estimates how much each outcome matters to them" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="preference-first/">Preference-First Medical AI</a></h2>
@@ -324,7 +368,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
@@ -337,7 +381,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/datacenter-map.jpg" width="1000" height="625" alt="A US map shading each state by its 2026 stance on datacenter development" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
@@ -350,7 +394,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/datacenter-listings.jpg" width="1000" height="625" alt="A map of AI datacenter campuses beside listing cards with satellite photos and estimated costs" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
@@ -362,7 +406,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/ai-demand-supply.jpg" width="1000" height="625" alt="AI revenue forecasts with headline figures and a revenue chart through 2030" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
@@ -374,7 +418,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/chip-supply-chain.jpg" width="1000" height="625" alt="A 3D model of the NVIDIA B200 package with its two dies and eight memory stacks" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
@@ -387,7 +431,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/treetrash.jpg" width="1000" height="625" alt="A laptop showing an ecological footprint report beside a camera, a breadboard and a screen reading Correct!" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
@@ -400,7 +444,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb placeholder"><i class="ri-sailboat-line" aria-hidden="true"></i></div>
                         <div class="card-body">
                             <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
@@ -409,7 +453,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb"><img src="photos/projects/rational-learning.jpg" width="1000" height="625" alt="Two simulation panels plotting group confidence as individuals are added" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
@@ -421,7 +465,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card tile">
                         <div class="card-thumb placeholder"><i class="ri-video-on-ai-line" aria-hidden="true"></i></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
