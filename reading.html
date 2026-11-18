@@ -14,6 +14,7 @@
             --link-color: #0066cc;
             --border-color: #e0e0e0;
             --max-width: 760px;
+            --cover-height: 200px;
         }
 
         * {
@@ -55,23 +56,85 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .book-list {
+        /* Each list is a shelf of covers that scrolls sideways once it outgrows the page. */
+        .shelf {
             list-style: none;
+            display: flex;
+            gap: 22px;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x proximity;
+            scrollbar-width: thin;
+            margin: 0 -6px;
+            padding: 6px 6px 14px;
         }
 
+        .shelf:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+        }
+
+        /* A book is as wide as its cover, so the title and author wrap under it. */
         .book {
-            margin-bottom: 15px;
+            flex: none;
+            width: min-content;
+            scroll-snap-align: start;
+        }
+
+        .book-cover {
+            display: block;
+            height: var(--cover-height);
+            width: auto;
+            max-width: none;
+            /* Holds a typical cover's shape until the image loads, then uses the real one. */
+            aspect-ratio: auto 2 / 3;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+            filter: grayscale(40%);
+            transition: filter 0.2s, transform 0.2s;
+        }
+
+        .book:hover .book-cover {
+            filter: none;
+            transform: translateY(-3px);
+        }
+
+        /* Stands in for a book with no file in photos/books. */
+        .book-cover-blank {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: calc(var(--cover-height) * 2 / 3);
+            padding: 12px;
+            background: #f1ede4;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.3;
+            text-align: center;
+            filter: none;
         }
 
         .book-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            margin-top: 10px;
+            font-size: 15px;
+            line-height: 1.3;
+        }
+
+        .book-author,
+        .book-date {
             display: block;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         .book-author {
-            display: block;
-            font-size: 14px;
-            color: #999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-top: 3px;
         }
 
         footer {
@@ -93,6 +156,14 @@
             .page-title {
                 font-size: 28px;
             }
+
+            :root {
+                --cover-height: 160px;
+            }
+
+            .shelf {
+                gap: 16px;
+            }
         }
     </style>
 </head>
@@ -105,7 +176,9 @@
 
             {%- comment -%}
                 The book lists live in _data/reading.yml. Each entry below pairs a list name there
-                with its heading here, in page order. Empty lists are skipped.
+                with its heading here, in page order. Empty lists are skipped. A book's cover is
+                photos/books/<slugified title>.jpg (scripts/fetch_covers.py downloads them), and a
+                book without that file gets a plain title card.
             {%- endcomment -%}
             {%- assign lists = "current:Currently reading|to_read:To read|finished:Finished|shelved:Shelved" | split: "|" -%}
             {%- for list in lists -%}
@@ -116,11 +189,21 @@
 
             <section class="reading-section">
                 <h2 class="section-title">{{ parts[1] }}</h2>
-                <ul class="book-list">
+                <ul class="shelf" tabindex="0" aria-label="{{ parts[1] }}">
                     {%- for book in books %}
+                    {%- assign cover = book.title | slugify | prepend: "/photos/books/" | append: ".jpg" %}
+                    {%- assign has_cover = site.static_files | where: "path", cover | size %}
                     <li class="book">
-                        <cite class="book-title">{{ book.title }}</cite>
-                        <span class="book-author">{{ book.author }}{% if book.added %} &middot; <time datetime="{{ book.added | date: '%Y-%m' }}">{{ book.added | date: "%b %Y" }}</time>{% endif %}</span>
+                        {%- if has_cover > 0 %}
+                        <img class="book-cover" src="{{ cover }}" alt="">
+                        {%- else %}
+                        <span class="book-cover book-cover-blank" aria-hidden="true">{{ book.title }}</span>
+                        {%- endif %}
+                        <cite class="book-title" title="{{ book.title }}">{{ book.title }}</cite>
+                        <span class="book-author">{{ book.author }}</span>
+                        {%- if book.added %}
+                        <time class="book-date" datetime="{{ book.added | date: '%Y-%m' }}">{{ book.added | date: "%b %Y" }}</time>
+                        {%- endif %}
                     </li>
                     {%- endfor %}
                 </ul>

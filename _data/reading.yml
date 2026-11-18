@@ -5,6 +5,8 @@
 # add or move a book. The Reading page shows its month and year next to the author.
 # While current is empty, the About popup shows the three most recent finished books instead.
 # to_read and shelved only appear on the Reading page.
+# After adding a book, run python3 scripts/fetch_covers.py to download its cover into
+# photos/books/. Until it has one, the Reading page shows a plain title card.
 
 current:
   - title: "Surely You're Joking, Mr. Feynman!"

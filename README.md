@@ -2,7 +2,9 @@
 
 The About page text lives in `about.md`. Edit it as plain markdown and GitHub Pages builds it into `about.html` using `_layouts/about.html`. It has a tab in the sidebar, and the name at the top of the sidebar links there too. A hover note on a word in the text comes from `_includes/note.html`, as on brunch.
 
-Books live in `_data/reading.yml`, split into `current`, `to_read`, `finished` and `shelved` (abandoned). Each book has an `added` date for when it went into its list. The Reading page (`reading.html`) lists all four with those dates, and the popup over the word reading on About shows the current books, or the three most recent finished ones when nothing is current.
+Books live in `_data/reading.yml`, split into `current`, `to_read`, `finished` and `shelved` (abandoned). Each book has an `added` date for when it went into its list. The Reading page (`reading.html`) shows each list as a shelf of covers that scrolls sideways once it outgrows the page, with the title, author and date under each cover. The popup over the word reading on About shows the current books, or the three most recent finished ones when nothing is current.
+
+Covers live in `photos/books/`, named after the slugified title (`photos/books/the-painted-veil.jpg` for The Painted Veil), so the YAML needs no cover field. After adding a book, run `python3 scripts/fetch_covers.py` to download any missing covers from Open Library. A book without a cover file shows a plain title card. If the script picks a poor edition, find a better one on openlibrary.org and run `python3 scripts/fetch_covers.py --cover "<title>" <cover id>`.
 
 There is no Writing page for now, and the old `writing.html` and `blog.html` URLs redirect to the homepage. The old Compute page is gone too, and `compute/` redirects to Projects. Community (`community.html`) has no tab, and About links to it.
 
