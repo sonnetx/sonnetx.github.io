@@ -62,7 +62,6 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
-            margin-bottom: 70px;
         }
 
         .card {
@@ -167,79 +166,19 @@
             border-bottom-color: var(--link-color);
         }
 
-        /* Repository cards */
-        .repo-grid {
+        /* Highlighted projects sit in a two-column grid, each with its picture on top. */
+        .highlight-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 36px 28px;
+        }
+
+        /* align-content keeps a shorter card's text right under its picture when the grid
+           stretches it to match the card beside it. */
+        .card.feature {
+            grid-template-columns: minmax(0, 1fr);
+            align-content: start;
             gap: 14px;
-        }
-
-        .repo-card {
-            display: flex;
-            flex-direction: column;
-            padding: 14px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: inherit;
-            text-decoration: none;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .repo-card:hover {
-            border-color: var(--link-color);
-            box-shadow: 0 1px 6px rgba(0, 102, 204, 0.12);
-        }
-
-        .repo-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--link-color);
-            overflow-wrap: anywhere;
-        }
-
-        .repo-owner {
-            font-weight: normal;
-        }
-
-        .repo-desc {
-            flex: 1;
-            margin: 6px 0 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #555;
-        }
-
-        .repo-meta {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 14px;
-            font-size: 13px;
-            color: #777;
-        }
-
-        .repo-meta > span {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .repo-meta > span[hidden] {
-            display: none;
-        }
-
-        .lang-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .repo-meta svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
         }
 
         footer {
@@ -264,7 +203,10 @@
 
             .project-list {
                 gap: 26px;
-                margin-bottom: 56px;
+            }
+
+            .project-section {
+                margin-bottom: 44px;
             }
 
             .card {
@@ -284,8 +226,9 @@
                 font-size: 18px;
             }
 
-            .repo-grid {
-                grid-template-columns: 1fr;
+            .highlight-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 30px;
             }
         }
 
@@ -305,216 +248,190 @@
 
             <!--
                 To add a project, save a 16:10 image in photos/projects/ (1000x625 works) and copy
-                a card into the list. The title link is the one the whole card opens. A project
-                without an image uses <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
+                a card into a section. Highlighted cards carry the extra "feature" class. The title
+                link is the one the whole card opens. A project without an image uses
+                <div class="card-thumb placeholder"><i class="ri-...-line"></i></div>.
             -->
-            <div class="project-list">
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/preference-first.jpg" width="1000" height="625" alt="A conversation asking a patient about their priorities beside a panel that estimates how much each outcome matters to them" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="preference-first/">Preference-First Medical AI</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">A decision aid that asks a patient what matters to them and has them confirm it before it ranks any treatment. The demo compares active monitoring, surgery and radiotherapy for early prostate cancer using results from the ProtecT trial.</p>
-                        <p class="card-links">
-                            <a href="preference-first/">Live demo</a>
-                        </p>
-                    </div>
-                </article>
+            <section class="project-section">
+                <h2 class="section-title">Highlighted projects</h2>
+                <div class="highlight-grid">
+                    <article class="card feature">
+                        <div class="card-thumb"><img src="photos/projects/torch-measure.jpg" width="1000" height="625" alt="Five item response curves rising from zero to one, with observed responses scattered along the top and bottom" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://github.com/aims-foundations/torch_measure" target="_blank">torch_measure</a></h2>
+                            <p class="card-venue">Stanford AIMS Lab, 2026</p>
+                            <p class="card-desc">A PyTorch toolkit that treats AI evaluation as a prediction problem. It fits latent-variable models such as item response theory to sparse benchmark results and predicts how a model will do on tasks it hasn't been tested on.</p>
+                            <p class="card-links">
+                                <a href="https://github.com/aims-foundations/torch_measure" target="_blank">Code</a>
+                                <a href="https://pypi.org/project/torch_measure/" target="_blank">PyPI</a>
+                            </p>
+                        </div>
+                    </article>
 
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">A guide to the companies that rent GPUs and other AI accelerators, with a map of who supplies whom, a timeline, current H100 prices and profiles of 97 providers.</p>
-                        <p class="card-links">
-                            <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
-                            <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
+                    <article class="card feature">
+                        <div class="card-thumb"><img src="photos/projects/condor-rs.jpg" width="1000" height="625" alt="A grid of lattice points with two basis vectors and the cell they span" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://github.com/NethermindEth/condor-rs" target="_blank">condor-rs</a></h2>
+                            <p class="card-venue">Nethermind, 2025</p>
+                            <p class="card-desc">A Rust implementation of LaBRADOR, a lattice-based proof system, for aggregating Falcon post-quantum signatures.</p>
+                            <p class="card-links">
+                                <a href="https://github.com/NethermindEth/condor-rs" target="_blank">Code</a>
+                                <a href="https://nethermindeth.github.io/condor-rs/labrador/" target="_blank">Docs</a>
+                            </p>
+                        </div>
+                    </article>
 
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/datacenter-map.jpg" width="1000" height="625" alt="A US map shading each state by its 2026 stance on datacenter development" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">A map of how each state treats datacenter development in 2026, with local moratoriums, public pushback and a siting model that ranks states for new projects.</p>
-                        <p class="card-links">
-                            <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
-                            <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
+                    <article class="card feature">
+                        <div class="card-thumb"><img src="photos/projects/ai-for-design.jpg" width="1000" height="625" alt="Three generated versions of a city block side by side, with the middle one selected" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://github.com/OETBoston/ai-for-design" target="_blank">AI for Design</a></h2>
+                            <p class="card-venue">Google Summer of Code 2024 &middot; City of Boston</p>
+                            <p class="card-desc">A web app that lets residents take part in city planning. They generate designs for bus stops, plazas and other parts of the city from a prompt, edit them, and send the ones they like to planners.</p>
+                            <p class="card-links">
+                                <a href="https://github.com/OETBoston/ai-for-design" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
 
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/datacenter-listings.jpg" width="1000" height="625" alt="A map of AI datacenter campuses beside listing cards with satellite photos and estimated costs" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">A listings site for AI data centers, laid out like a real estate search, with 94 frontier campuses and 30 signed AI leases priced as rent per kW a month.</p>
-                        <p class="card-links">
-                            <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/ai-demand-supply.jpg" width="1000" height="625" alt="AI revenue forecasts with headline figures and a revenue chart through 2030" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">An interactive model that asks whether AI revenue can pay for the AI buildout, starting from OpenAI and Anthropic revenue forecasts through 2030.</p>
-                        <p class="card-links">
-                            <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/chip-supply-chain.jpg" width="1000" height="625" alt="A 3D model of the NVIDIA B200 package with its two dies and eight memory stacks" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
-                        <p class="card-venue">2026</p>
-                        <p class="card-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on.</p>
-                        <p class="card-links">
-                            <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
-                            <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/treetrash.jpg" width="1000" height="625" alt="A laptop showing an ecological footprint report beside a camera, a breadboard and a screen reading Correct!" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
-                        <p class="card-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
-                        <p class="card-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
-                        <p class="card-links">
-                            <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
-                            <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb placeholder"><i class="ri-sailboat-line" aria-hidden="true"></i></div>
-                    <div class="card-body">
-                        <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
-                        <p class="card-venue">Stanford Student Robotics, 2024</p>
-                        <p class="card-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/rational-learning.jpg" width="1000" height="625" alt="Two simulation panels plotting group confidence as individuals are added" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
-                        <p class="card-venue">CS 109, Stanford, 2024</p>
-                        <p class="card-desc">An interactive simulation of how people update their beliefs from private information and the choices of others.</p>
-                        <p class="card-links">
-                            <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb placeholder"><i class="ri-video-on-ai-line" aria-hidden="true"></i></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
-                        <p class="card-venue">National Security Hackathon, 2023</p>
-                        <p class="card-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
-                        <p class="card-links">
-                            <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-thumb"><img src="photos/projects/plastivis.jpg" width="1000" height="625" alt="Four 3D renders of a simulated brain colored by electrical activity" loading="lazy"></div>
-                    <div class="card-body">
-                        <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
-                        <p class="card-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
-                        <p class="card-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity.</p>
-                        <p class="card-links">
-                            <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
-                            <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
-                            <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
-                        </p>
-                    </div>
-                </article>
-            </div>
+                    <article class="card feature">
+                        <div class="card-thumb"><img src="photos/projects/plastivis.jpg" width="1000" height="625" alt="Four 3D renders of a simulated brain colored by electrical activity" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">PlastiVis</a></h2>
+                            <p class="card-venue">IEEE VIS 2023 SciVis Contest &middot; Award Winner</p>
+                            <p class="card-desc">A web tool for exploring how synaptic networks change over time, with a 3D overview and a 2D panel for a closer look at synaptic activity.</p>
+                            <p class="card-links">
+                                <a href="https://ieeevis.b-cdn.net/vis_2023/pdfs/a-scivis-contest-1005.pdf" target="_blank">Paper</a>
+                                <a href="https://www.youtube.com/watch?v=c_U5FwFP6OQ" target="_blank">Video</a>
+                                <a href="https://github.com/sonnetx/PlastiVis" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </section>
 
             <section class="project-section">
-                <h2 class="section-title">Open Source</h2>
-                <svg width="0" height="0" style="position: absolute" aria-hidden="true">
-                    <symbol id="icon-star" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"/></symbol>
-                    <symbol id="icon-fork" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/></symbol>
-                </svg>
-                <div class="repo-grid">
-                    <a class="repo-card" href="https://github.com/aims-foundations/torch_measure" target="_blank" data-repo="aims-foundations/torch_measure">
-                        <span class="repo-name"><span class="repo-owner">aims-foundations/</span>torch_measure</span>
-                        <span class="repo-desc">A package for AI measurement science</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #3572a5"></span>Python</span>
-                            <span data-stat="stars" title="Stars"><svg aria-hidden="true"><use href="#icon-star"/></svg><span>20</span></span>
-                            <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>32</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/sonnetx/tracing-sycophancy" target="_blank" data-repo="sonnetx/tracing-sycophancy">
-                        <span class="repo-name"><span class="repo-owner">sonnetx/</span>tracing-sycophancy</span>
-                        <span class="repo-desc">Code for our NeurIPS 2026 paper on factual sycophancy across post-training</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #3572a5"></span>Python</span>
-                            <span data-stat="stars" title="Stars" hidden><svg aria-hidden="true"><use href="#icon-star"/></svg><span>0</span></span>
-                            <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/sonnetx/demographic-calibration" target="_blank" data-repo="sonnetx/demographic-calibration">
-                        <span class="repo-name"><span class="repo-owner">sonnetx/</span>demographic-calibration</span>
-                        <span class="repo-desc">Code for our AIES 2026 paper on demographic calibration of vision-language models in medicine</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #3572a5"></span>Python</span>
-                            <span data-stat="stars" title="Stars" hidden><svg aria-hidden="true"><use href="#icon-star"/></svg><span>0</span></span>
-                            <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/NethermindEth/condor-rs" target="_blank" data-repo="NethermindEth/condor-rs">
-                        <span class="repo-name"><span class="repo-owner">NethermindEth/</span>condor-rs</span>
-                        <span class="repo-desc">Falcon post-quantum signature aggregation with LaBRADOR in Rust, built at Nethermind</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #dea584"></span>Rust</span>
-                            <span data-stat="stars" title="Stars"><svg aria-hidden="true"><use href="#icon-star"/></svg><span>22</span></span>
-                            <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>4</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/DaneshjouLab/BiasICL" target="_blank" data-repo="DaneshjouLab/BiasICL">
-                        <span class="repo-name"><span class="repo-owner">DaneshjouLab/</span>BiasICL</span>
-                        <span class="repo-desc">In-context learning and demographic biases of vision-language models (MICCAI 2025)</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #3572a5"></span>Python</span>
-                            <span data-stat="stars" title="Stars"><svg aria-hidden="true"><use href="#icon-star"/></svg><span>4</span></span>
-                            <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>1</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/DaneshjouLab/med-reduce" target="_blank" data-repo="DaneshjouLab/med-reduce">
-                        <span class="repo-name"><span class="repo-owner">DaneshjouLab/</span>med-reduce</span>
-                        <span class="repo-desc">Representation transfer and efficiency under resolution constraints (Medical Image Analysis 2026)</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #3572a5"></span>Python</span>
-                            <span data-stat="stars" title="Stars"><svg aria-hidden="true"><use href="#icon-star"/></svg><span>1</span></span>
-                            <span data-stat="forks" title="Forks" hidden><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>0</span></span>
-                        </span>
-                    </a>
-                    <a class="repo-card" href="https://github.com/OETBoston/ai-for-design" target="_blank" data-repo="OETBoston/ai-for-design">
-                        <span class="repo-name"><span class="repo-owner">OETBoston/</span>ai-for-design</span>
-                        <span class="repo-desc">Generative AI for urban design, Google Summer of Code with the City of Boston</span>
-                        <span class="repo-meta">
-                            <span><span class="lang-dot" style="background: #f1e05a"></span>JavaScript</span>
-                            <span data-stat="stars" title="Stars"><svg aria-hidden="true"><use href="#icon-star"/></svg><span>2</span></span>
-                            <span data-stat="forks" title="Forks"><svg aria-hidden="true"><use href="#icon-fork"/></svg><span>3</span></span>
-                        </span>
-                    </a>
+                <h2 class="section-title">Other projects</h2>
+                <div class="project-list">
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/preference-first.jpg" width="1000" height="625" alt="A conversation asking a patient about their priorities beside a panel that estimates how much each outcome matters to them" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="preference-first/">Preference-First Medical AI</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">A decision aid that asks a patient what matters to them and has them confirm it before it ranks any treatment. The demo compares active monitoring, surgery and radiotherapy for early prostate cancer using results from the ProtecT trial.</p>
+                            <p class="card-links">
+                                <a href="preference-first/">Live demo</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/neoclouds.jpg" width="1000" height="625" alt="The Neocloud Guide's network map linking power developers, clouds, labs and buyers" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://sonnetx.github.io/neoclouds/">The Neocloud Guide</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">A guide to the companies that rent GPUs and other AI accelerators, with a map of who supplies whom, a timeline, current H100 prices and profiles of 97 providers.</p>
+                            <p class="card-links">
+                                <a href="https://sonnetx.github.io/neoclouds/">Read the guide</a>
+                                <a href="https://github.com/sonnetx/neoclouds" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/datacenter-map.jpg" width="1000" height="625" alt="A US map shading each state by its 2026 stance on datacenter development" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Datacenter Map</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">A map of how each state treats datacenter development in 2026, with local moratoriums, public pushback and a siting model that ranks states for new projects.</p>
+                            <p class="card-links">
+                                <a href="https://sonnetx.github.io/datacenter-map/" target="_blank">Live site</a>
+                                <a href="https://github.com/sonnetx/datacenter-map" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/datacenter-listings.jpg" width="1000" height="625" alt="A map of AI datacenter campuses beside listing cards with satellite photos and estimated costs" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Datacenter Listings</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">A listings site for AI data centers, laid out like a real estate search, with 94 frontier campuses and 30 signed AI leases priced as rent per kW a month.</p>
+                            <p class="card-links">
+                                <a href="https://sonnetx.github.io/datacenter-listings/" target="_blank">Live site</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/ai-demand-supply.jpg" width="1000" height="625" alt="AI revenue forecasts with headline figures and a revenue chart through 2030" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">AI Demand and Supply</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">An interactive model that asks whether AI revenue can pay for the AI buildout, starting from OpenAI and Anthropic revenue forecasts through 2030.</p>
+                            <p class="card-links">
+                                <a href="https://sonnetx.github.io/ai-demand-supply/" target="_blank">Live site</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/chip-supply-chain.jpg" width="1000" height="625" alt="A 3D model of the NVIDIA B200 package with its two dies and eight memory stacks" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://sonnetx.github.io/chip-supply-chain/">Inside an AI Chip</a></h2>
+                            <p class="card-venue">2026</p>
+                            <p class="card-desc">A 3D teardown of the NVIDIA B200 that traces its components to the firms, countries and materials they depend on.</p>
+                            <p class="card-links">
+                                <a href="https://sonnetx.github.io/chip-supply-chain/">Live site</a>
+                                <a href="https://github.com/sonnetx/chip-supply-chain" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/treetrash.jpg" width="1000" height="625" alt="A laptop showing an ecological footprint report beside a camera, a breadboard and a screen reading Correct!" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://devpost.com/software/treetrash" target="_blank">TreeTrash</a></h2>
+                            <p class="card-venue">TreeHacks 2025 &middot; OpenAI Winner</p>
+                            <p class="card-desc">A computer vision system that watches a trash bin, flags items that land in the wrong bin, and writes a report on the environmental impact of each mistake.</p>
+                            <p class="card-links">
+                                <a href="https://devpost.com/software/treetrash" target="_blank">Devpost</a>
+                                <a href="https://github.com/sonnetx/treehacks-2025" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb placeholder"><i class="ri-sailboat-line" aria-hidden="true"></i></div>
+                        <div class="card-body">
+                            <h2 class="card-title">Pacific Nurse Shark Conservation</h2>
+                            <p class="card-venue">Stanford Student Robotics, 2024</p>
+                            <p class="card-desc">Scaling conservation data for an endangered species with autonomous drones.</p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb"><img src="photos/projects/rational-learning.jpg" width="1000" height="625" alt="Two simulation panels plotting group confidence as individuals are added" loading="lazy"></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://github.com/sonnetx/rational-learning" target="_blank">Rational Social Learning</a></h2>
+                            <p class="card-venue">CS 109, Stanford, 2024</p>
+                            <p class="card-desc">An interactive simulation of how people update their beliefs from private information and the choices of others.</p>
+                            <p class="card-links">
+                                <a href="https://github.com/sonnetx/rational-learning" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-thumb placeholder"><i class="ri-video-on-ai-line" aria-hidden="true"></i></div>
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="https://github.com/sonnetx/scarecrow" target="_blank">Scarecrow</a></h2>
+                            <p class="card-venue">National Security Hackathon, 2023</p>
+                            <p class="card-desc">Software for a monitoring drone that turns camera footage into a written report, an audio warning, and a phone call that briefs an operator.</p>
+                            <p class="card-links">
+                                <a href="https://github.com/sonnetx/scarecrow" target="_blank">Code</a>
+                            </p>
+                        </div>
+                    </article>
                 </div>
             </section>
         </main>
@@ -523,23 +440,6 @@
             <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
         </footer>
     </div>
-    <script>
-        // Refresh star and fork counts from the GitHub API. The static
-        // numbers in the markup stay if a request fails or is rate limited.
-        document.querySelectorAll('.repo-card[data-repo]').forEach(function (card) {
-            fetch('https://api.github.com/repos/' + card.dataset.repo)
-                .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-                .then(function (repo) {
-                    [['stars', repo.stargazers_count], ['forks', repo.forks_count]].forEach(function (s) {
-                        var el = card.querySelector('[data-stat="' + s[0] + '"]');
-                        if (!el || typeof s[1] !== 'number') return;
-                        el.lastElementChild.textContent = s[1].toLocaleString('en-US');
-                        el.hidden = s[1] === 0;
-                    });
-                })
-                .catch(function () {});
-        });
-    </script>
     <script data-goatcounter="https://sonnetx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
 </body>
