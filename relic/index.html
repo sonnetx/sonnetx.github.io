@@ -159,7 +159,7 @@
             <p class="meta">September 2026 &middot; <a href="https://github.com/sonnetx/relic-bench">Code</a><a href="https://github.com/sonnetx/relic-bench/blob/main/results/RESULTS.md">Results</a><a href="https://github.com/sonnetx/relic-bench/blob/main/paper/blog.md">Long version</a></p>
 
             <article class="essay">
-                <p>Anthropic's C compiler project showed that a team of agents can sustain a large engineering effort, with 16 parallel agents working across roughly 2,000 sessions to produce a working C compiler (<a href="#ref-anthropic">Anthropic, 2026</a>). Chris Lattner read the project's source history and found a design that reproduces the GCC and LLVM lineage in every subsystem. He also found that the compiler hard-codes what its own tests need, and he concludes that it will not generalize beyond its test suite (<a href="#ref-lattner">Lattner, 2026</a>). Neither observation can be measured on C. C is among the best-represented languages in any training corpus, so a correct C compiler is equally consistent with reading the standard and with recalling an existing implementation.</p>
+                <p>Anthropic's C compiler project showed that a team of agents can sustain a large engineering effort, with 16 parallel agents working across roughly 2,000 sessions to produce a working C compiler (<a href="#ref-carlini">Carlini, 2026</a>). Chris Lattner reviewed the compiler and found an LLVM-like design that consistently reflects well-established compiler practice. He also found that the compiler appears to hard-code what its own tests need, and he concludes that it will not generalize beyond its test suite (<a href="#ref-lattner">Lattner, 2026</a>). Neither observation can be measured on C. C is among the best-represented languages in any training corpus, so a correct C compiler is equally consistent with reading the standard and with recalling an existing implementation.</p>
 
                 <p>Choosing an obscure language does not fix the problem, because claims about how often a language appears in training data are unfalsifiable, so RELIC generates the language instead. It starts from B, the 1972 predecessor of C (<a href="#ref-thompson">Thompson, 1972</a>), and treats 18 of its design decisions as knobs, among them the quote character for strings, the meaning of each arithmetic operator, the resolution of the dangling else, and whether a pointer steps by a word or a byte. A seeded generator permutes some of the knobs. Every variant stays exactly as complex as B, and habits learned from C give wrong answers in it. The same definition renders a self-contained manual of about 2,000 lines and configures the reference interpreter that grades the compiler, so the manual and the oracle cannot disagree.</p>
 
@@ -201,9 +201,9 @@
                 <h2>References</h2>
 
                 <ol class="refs">
-                    <li id="ref-anthropic">Anthropic. 2026. <a href="https://www.anthropic.com/engineering/building-c-compiler">Building a C compiler with a team of parallel Claudes</a>. Anthropic Engineering Blog.</li>
+                    <li id="ref-carlini">Carlini, N. 2026. <a href="https://www.anthropic.com/engineering/building-c-compiler">Building a C compiler with a team of parallel Claudes</a>. Anthropic Engineering Blog, 5 February 2026.</li>
                     <li id="ref-lattner">Lattner, C. 2026. <a href="https://www.modular.com/blog/the-claude-c-compiler-what-it-reveals-about-the-future-of-software">The Claude C compiler: What it reveals about the future of software</a>. Modular Blog, 18 February 2026.</li>
-                    <li id="ref-thompson">Thompson, K. 1972. Users' reference to B. Bell Laboratories Technical Memorandum MM-72-1271-1.</li>
+                    <li id="ref-thompson">Thompson, K. 1972. Users' reference to B. Bell Laboratories Technical Memorandum MM-72-1271-1, 7 January 1972.</li>
                 </ol>
             </article>
         </main>
