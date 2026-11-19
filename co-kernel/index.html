@@ -11,7 +11,7 @@
     <meta property="og:description" content="co-kernel measures a kernel alone and next to a neighbor you control. On one H100, the isolated winner lost.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://sonnetx.github.io/co-kernel/">
-    <meta property="og:image" content="https://sonnetx.github.io/photos/projects/co-kernel.jpg">
+    <meta property="og:image" content="https://sonnetx.github.io/photos/projects/co-kernel-slope.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
     <link rel="stylesheet" href="/sidebar.css">
@@ -175,8 +175,8 @@
             <p>On one H100 at Stanford's Sherlock cluster, it flipped. Two agent-written kernels for the same matrix-vector multiply traded places. Alone, a 512-thread scalar kernel took 66.6 microseconds and a 256-thread vectorized kernel took 82.4, a 24% lead for the scalar kernel. A neighbor holding 127 registers per thread, about half the register file, stretched those times to 143 and 131 microseconds. The kernel you would have shipped was 10% slower.</p>
 
             <figure>
-                <img src="/photos/projects/co-kernel.jpg" width="1000" height="625" alt="Bar chart. Alone, the scalar kernel is at 67 microseconds and the vectorized kernel at 82. Shared, the scalar kernel is at 143 and the vectorized kernel at 130.">
-                <figcaption>Median latency in microseconds. Alone, the lighter bar wins. Shared, the darker bar wins. The neighbor is synthetic: one block per multiprocessor, spinning on register-resident arithmetic.</figcaption>
+                <img src="/photos/projects/co-kernel-slope.png" width="1600" height="900" alt="Slope chart. Alone, the 512-thread scalar kernel takes 66.6 microseconds and the 256-thread vectorized kernel takes 82.4. Shared, they take 143.0 and 130.5, so the lines cross.">
+                <figcaption>Median latency in microseconds. The lines cross because the two kernels slow down by different factors. The neighbor is synthetic, one block per multiprocessor spinning on register-resident arithmetic.</figcaption>
             </figure>
 
             <table>
