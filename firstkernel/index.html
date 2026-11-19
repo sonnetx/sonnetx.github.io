@@ -1,0 +1,419 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The kernel got 22% faster. vLLM got 12%. - Sonnet Xu</title>
+    <meta name="description" content="Coding agents fused the MoE layer in Qwen3-30B from five GPU launches to two. The layer was 1.216× at prefill. Inside vLLM, 1.116×.">
+    <meta property="og:title" content="The kernel got 22% faster. vLLM got 12%.">
+    <meta property="og:description" content="Coding agents fused the MoE layer in Qwen3-30B from five GPU launches to two. About half of the speedup survived inside vLLM.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sonnetx.github.io/firstkernel/">
+    <meta property="og:image" content="https://sonnetx.github.io/photos/projects/firstkernel.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+    <link rel="stylesheet" href="/sidebar.css">
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 760px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: var(--max-width); margin: 0 auto; }
+
+        h1 {
+            font-size: 36px;
+            font-weight: normal;
+            line-height: 1.25;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin: 48px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        p { margin-bottom: 14px; }
+
+        a { color: var(--link-color); text-decoration: none; border-bottom: 1px solid transparent; }
+        a:hover { border-bottom-color: var(--link-color); }
+
+        .lede { font-size: 20px; line-height: 1.6; }
+
+        .meta {
+            margin: 6px 0 28px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin: 26px 0 8px;
+        }
+
+        .stat {
+            padding: 12px 12px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .stat b {
+            display: block;
+            font-weight: normal;
+            font-size: 26px;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .stat span {
+            display: block;
+            margin-top: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            line-height: 1.35;
+            color: #777;
+        }
+
+        figure { margin: 22px 0 8px; }
+
+        .chart {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .chart .grid { stroke: #ececec; stroke-width: 1; }
+        .chart .axis { stroke: #ddd; stroke-width: 1; }
+        .chart .line { fill: none; stroke: #0066cc; stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; }
+        .chart .pt { cursor: pointer; }
+        .chart .pt circle { fill: #fff; stroke: #0066cc; stroke-width: 2; }
+        .chart .pt.mark circle { fill: #0066cc; }
+        .chart .pt:hover circle,
+        .chart .pt:focus circle { stroke-width: 3; }
+        .chart text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
+            fill: #999;
+        }
+
+        figcaption, .note {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #777;
+        }
+
+        #readout { min-height: 1.5em; margin-top: 8px; color: #444; }
+
+        .paths {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 8px 0 16px;
+        }
+
+        .path {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px 14px 12px;
+        }
+
+        .path .who {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .path ol { margin-left: 1.1em; }
+        .path li { margin: 3px 0; }
+
+        .cases { margin-top: 8px; }
+
+        .cases input { position: absolute; opacity: 0; pointer-events: none; }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tabs label {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .tabs label:hover { border-color: #b9cfe8; }
+
+        #c1:checked ~ .tabs label[for="c1"],
+        #c2:checked ~ .tabs label[for="c2"],
+        #c3:checked ~ .tabs label[for="c3"] {
+            background: #eef4fb;
+            border-color: #b9cfe8;
+            color: var(--link-color);
+        }
+
+        #c1:focus-visible ~ .tabs label[for="c1"],
+        #c2:focus-visible ~ .tabs label[for="c2"],
+        #c3:focus-visible ~ .tabs label[for="c3"] {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+        }
+
+        .panel { display: none; padding: 4px 0 8px; }
+        #c1:checked ~ .p1,
+        #c2:checked ~ .p2,
+        #c3:checked ~ .p3 { display: block; }
+
+        .panel .num {
+            font-size: 22px;
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 16px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px 10px 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+        }
+
+        th {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        td.num, th.num { text-align: right; }
+
+        pre {
+            margin: 8px 0 16px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            background: #f7f7f7;
+            border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13.5px;
+            line-height: 1.55;
+        }
+
+        .links {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+        }
+
+        .links a { margin-right: 16px; }
+
+        footer {
+            margin-top: 72px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 700px) {
+            body { font-size: 16px; padding: 20px 15px; }
+            h1 { font-size: 28px; }
+            .lede { font-size: 18px; }
+            .stats, .paths { grid-template-columns: 1fr 1fr; }
+            .stat b { font-size: 22px; }
+        }
+
+        @media (max-width: 420px) {
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    {% include sidebar.html active="projects" %}
+
+    <div class="container">
+        <main>
+            <h1>The kernel got 22% faster. vLLM got 12%.</h1>
+            <p class="lede">Coding agents rewrote the mixture-of-experts layer that dominates Qwen3-30B-A3B on one H100. It runs in two GPU launches instead of five. At long prefill the layer was 1.216× the tuned kernel. Inside vLLM, the same change was 1.116×.</p>
+            <p class="meta">Qwen3-30B-A3B, bf16, one H100 80GB, vLLM 0.28.0. Held-out shapes. Nothing was tuned after the final run.</p>
+
+            <div class="stats">
+                <div class="stat"><b>1.216×</b><span>layer, 16,384 tokens</span></div>
+                <div class="stat"><b>1.116×</b><span>vLLM, prefill workload</span></div>
+                <div class="stat"><b>1.037×</b><span>layer, 64-token decode</span></div>
+                <div class="stat"><b>1.020×</b><span>vLLM, decode workload</span></div>
+            </div>
+
+            <figure>
+                <svg class="chart" viewBox="0 0 640 286" role="img" aria-labelledby="chart-title">
+                    <title id="chart-title">Layer speedup rises from about 1.04× at short decode to 1.22× at long prefill.</title>
+                    <line class="grid" x1="36" y1="22.8" x2="628" y2="22.8"></line>
+                    <line class="grid" x1="36" y1="66.6" x2="628" y2="66.6"></line>
+                    <line class="grid" x1="36" y1="110.5" x2="628" y2="110.5"></line>
+                    <line class="grid" x1="36" y1="154.3" x2="628" y2="154.3"></line>
+                    <line class="grid" x1="36" y1="198.2" x2="628" y2="198.2"></line>
+                    <line class="axis" x1="36" y1="242" x2="628" y2="242"></line>
+                    <text x="4" y="26">1.25×</text>
+                    <text x="4" y="70">1.20</text>
+                    <text x="4" y="114">1.15</text>
+                    <text x="4" y="158">1.10</text>
+                    <text x="4" y="202">1.05</text>
+                    <text x="4" y="246">1.00</text>
+                    <text x="92" y="268" text-anchor="middle">32</text>
+                    <text x="148" y="268" text-anchor="middle">64</text>
+                    <text x="260" y="268" text-anchor="middle">256</text>
+                    <text x="373" y="268" text-anchor="middle">1k</text>
+                    <text x="485" y="268" text-anchor="middle">4k</text>
+                    <text x="597" y="268" text-anchor="middle">16k</text>
+                    <polyline class="line" points="68.8,195.5 124.9,208.7 148.2,209.6 181.0,201.7 237.2,191.1 293.3,207.8 349.4,198.2 405.5,170.1 461.6,139.4 517.7,105.2 541.0,70.1 573.8,50.0 597.1,52.6"></polyline>
+                    <g class="pt" tabindex="0" data-label="24 tokens, 1.053×"><circle cx="68.8" cy="195.5" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="48 tokens, 1.038×"><circle cx="124.9" cy="208.7" r="4"></circle></g>
+                    <g class="pt mark" tabindex="0" data-label="64 tokens, decode, 1.037×. This shape is 96% of layer calls."><circle cx="148.2" cy="209.6" r="5.5"></circle></g>
+                    <g class="pt" tabindex="0" data-label="96 tokens, 1.046×"><circle cx="181.0" cy="201.7" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="192 tokens, 1.058×"><circle cx="237.2" cy="191.1" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="384 tokens, 1.039×"><circle cx="293.3" cy="207.8" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="768 tokens, 1.050×"><circle cx="349.4" cy="198.2" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="1,536 tokens, 1.082×"><circle cx="405.5" cy="170.1" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="3,072 tokens, 1.117×"><circle cx="461.6" cy="139.4" r="4"></circle></g>
+                    <g class="pt" tabindex="0" data-label="6,144 tokens, 1.156×"><circle cx="517.7" cy="105.2" r="4"></circle></g>
+                    <g class="pt mark" tabindex="0" data-label="8,192 tokens, production prefill, 1.196×"><circle cx="541.0" cy="70.1" r="5.5"></circle></g>
+                    <g class="pt" tabindex="0" data-label="12,288 tokens, 1.219×"><circle cx="573.8" cy="50.0" r="4"></circle></g>
+                    <g class="pt mark" tabindex="0" data-label="16,384 tokens, production prefill, 1.216×"><circle cx="597.1" cy="52.6" r="5.5"></circle></g>
+                </svg>
+                <figcaption id="readout">Held-out token counts, paired against the tuned kernel in one process. Hover a point. The token axis is logarithmic.</figcaption>
+            </figure>
+
+            <p>The curve is the mechanism. Fusion and TMA remove traffic whose share of the layer grows with the number of tokens. Decode is already streaming expert weights at about 75% of peak HBM bandwidth, so the same change has little left to take. Ninety-six percent of layer calls in the profiled serving mix were the 64-token shape.</p>
+
+            <h2>Two launches</h2>
+            <div class="paths">
+                <div class="path">
+                    <div class="who">Stock, five launches</div>
+                    <ol>
+                        <li>Gate and up GEMM</li>
+                        <li>SwiGLU</li>
+                        <li>Down GEMM</li>
+                        <li>Router-weighted top-k reduction</li>
+                        <li>Write the output</li>
+                    </ol>
+                </div>
+                <div class="path">
+                    <div class="who">This kernel, two launches</div>
+                    <ol>
+                        <li>Gate and up GEMM, SwiGLU in the fp32 epilogue</li>
+                        <li>Down GEMM, router weight and top-k sum in relaxed bf16 atomics</li>
+                    </ol>
+                </div>
+            </div>
+            <p>At 1,024 tokens and above, both kernels load expert weights through Hopper TMA. Four agents each got one strategy and ten benchmark submissions. A fifth composed the three that were compatible. The fourth, on small decode shapes, mostly found that the tuned kernel was already hard to beat.</p>
+            <p>The atomic sum is not bitwise deterministic. Across repeated runs the spread was a few bf16 ulps, about 700× under the correctness tolerance. Greedy decode still matched stock token for token over 2,048 steps.</p>
+
+            <h2>Checks that removed more than the kernel added</h2>
+            <p>Before the final numbers, the same pipeline produced larger speedups that were wrong. Fixing the measurement threw out more than the optimization eventually found.</p>
+
+            <div class="cases">
+                <input type="radio" name="case" id="c1" checked>
+                <input type="radio" name="case" id="c2">
+                <input type="radio" name="case" id="c3">
+                <div class="tabs">
+                    <label for="c1">A 2× cliff</label>
+                    <label for="c2">A lucky tuner</label>
+                    <label for="c3">52 microseconds</label>
+                </div>
+                <div class="panel p1">
+                    <p class="num">16 tokens measured 0.630 ms. The same config later measured 0.280 ms.</p>
+                    <p>Thirty-two tokens went from 0.719 ms to 0.325 ms. The first writeup blamed vLLM’s untuned launch config. The interquartile range at 32 tokens was 0.306 ms against a 0.719 ms median: the repetitions disagreed by more than 40%. Another job was on the shared node, and Sherlock does not let an unprivileged user lock the GPU clocks. Routing luck moves a timing by up to 1.16×, which is already larger than most of the gains here, and it still does not explain that cliff.</p>
+                </div>
+                <div class="panel p2">
+                    <p class="num">A one-stage search overstated itself at 15 of 15 shapes.</p>
+                    <p>The config tuner kept the fastest of a noisy set of trials, so it preferred lucky samples. One apparent winner was slower when the same configs were measured again. The search that shipped ranks candidates cheaply, then remeasures the finalists before choosing. The table that survived, for 128 experts of width 768, was a 1.015× improvement, and every kernel after that was compared with it. Beating the untuned heuristic would have proved nothing.</p>
+                </div>
+                <div class="panel p3">
+                    <p class="num">An unchanged copy of vLLM looked 1.13× faster.</p>
+                    <p>The gap was about 52 microseconds at every token count from 1 to 16,384. That is deleted dispatch and workspace overhead, not faster math. CUDA graphs amortize much of it once the kernel is back in the engine. Kernel numbers in this project are paired against that same scaffold. Claims about vLLM are made only after the kernel is installed back into it.</p>
+                </div>
+            </div>
+
+            <h2>What reached the engine</h2>
+            <p>Fixed batches, three H100 allocations, three timed rounds each, CUDA graphs on. This includes the model and the in-process scheduler. It does not include an HTTP server, a queue, or per-request tail latency.</p>
+            <table>
+                <thead>
+                    <tr><th>Workload</th><th class="num">Stock</th><th class="num">This kernel</th><th class="num">Gain</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Decode, 64 × 128 in, 256 out</td><td class="num">4,548 tok/s</td><td class="num">4,637 tok/s</td><td class="num">1.020×</td></tr>
+                    <tr><td>Prefill, 16 × 4,096 in, 1 out</td><td class="num">14.3 tok/s</td><td class="num">16.0 tok/s</td><td class="num">1.116×</td></tr>
+                    <tr><td>Mixed, 32 × 512 in, 128 out</td><td class="num">3,473 tok/s</td><td class="num">3,566 tok/s</td><td class="num">1.027×</td></tr>
+                </tbody>
+            </table>
+            <p>Every workload, allocation, and round improved. Prefill batch latency went from 1.117 s to 1.001 s. Decode step time went from 14.07 ms to 13.80 ms. Relative to the layer, about half the gain was left: 1.037× became 1.020×, and 1.216× became 1.116×.</p>
+            <p>Decode sits on a 2% bar written down before the run. Pooling every round gives 1.96%. The median across allocations gives 2.45%, and the worst allocation was 1.92%, with all nine comparisons positive. Both readings are real. The summary is about 2%.</p>
+
+            <h2>Use it</h2>
+            <p>Hopper only, bf16, unquantized SwiGLU. Quantized paths, LoRA, and expert remapping stay on the stock kernel. The bundled launch table is for E=128, N=768. Output is tolerance-correct and not bitwise reproducible, so leave it off where vLLM’s batch-invariant mode matters.</p>
+<pre>import os
+os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
+import vllm, firstkernel
+firstkernel.install()
+llm = vllm.LLM(model="Qwen/Qwen3-30B-A3B")</pre>
+            <p class="links">
+                <a href="https://github.com/sonnetx/firstkernel">Code</a>
+                <a href="https://github.com/sonnetx/firstkernel/blob/main/docs/article.md">Longer note</a>
+                <a href="https://github.com/sonnetx/firstkernel/blob/main/PROTOCOL.md">Protocol</a>
+                <a href="https://github.com/sonnetx/firstkernel/blob/main/results/MEASUREMENT.md">The retracted cliff</a>
+            </p>
+        </main>
+        <footer><p>&copy; 2026 Sonnet Xu. All rights reserved.</p></footer>
+    </div>
+    <script>
+        const readout = document.getElementById("readout");
+        const idle = readout.textContent;
+        document.querySelectorAll(".pt").forEach((pt) => {
+            const show = () => { readout.textContent = pt.dataset.label; };
+            pt.addEventListener("pointerenter", show);
+            pt.addEventListener("focus", show);
+            pt.addEventListener("pointerleave", () => { readout.textContent = idle; });
+            pt.addEventListener("blur", () => { readout.textContent = idle; });
+        });
+    </script>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
