@@ -254,27 +254,47 @@
   @media (prefers-reduced-motion: no-preference) { .btn, .step, .tabs button { transition: background-color 120ms, border-color 120ms; } }
 </style>
 <link rel="stylesheet" href="/preference-first/site.css">
+<script src="/preference-first/generate.js"></script>
 
 {% include sidebar.html active="projects" %}
 
 <div class="wrap">
   <header class="top">
     <h1 class="page-title">Preference-First Medical AI</h1>
-    <p class="meta">A research prototype for choosing a treatment for early prostate cancer. It asks what matters to you and has you confirm it before it compares any option, using results from the ProtecT trial. It is not medical advice.</p>
+    <p class="meta">A few common decisions are ready to use. You can also describe a different one and generate it from PubMed abstracts with your own API key. The questions use those rates. Nothing is ranked until you confirm them. Not medical advice, and not a prediction for you.</p>
   </header>
+  <div class="chooser" id="chooser">
+    <div class="chooser-row" id="chooser-row"></div>
+    <details class="disclosure" id="generate">
+      <summary>Describe a different situation</summary>
+      <div class="q generate">
+        <label for="gen-problem">What is the decision?</label>
+        <textarea id="gen-problem" placeholder="For example: my doctor says the knee is ready for replacement, and I want to know how that compares with doing the exercise program instead."></textarea>
+        <p class="note">The page sends your description and your key to Anthropic, then reads PubMed abstracts in this browser. A number is kept only when the quoted sentence in the abstract contains that number. The key stays in this tab.</p>
+        <label for="gen-key">Anthropic API key</label>
+        <input id="gen-key" type="password" autocomplete="off" spellcheck="false">
+        <label for="gen-model">Model</label>
+        <input id="gen-model" type="text" value="claude-sonnet-4-5" autocomplete="off" spellcheck="false">
+        <div class="actions">
+          <button class="btn primary" id="gen-go" type="button">Generate from the trials</button>
+        </div>
+        <p class="hint" id="gen-status" role="status"></p>
+      </div>
+    </details>
+  </div>
   <div class="studybar" id="studybar" hidden></div>
 
   <section class="card intro" id="intro"></section>
 
   <nav class="steps" aria-label="Steps" id="steps">
-    <button class="step" data-stage="values" aria-current="step"><span class="n">1</span><div><b>What matters to you</b><span>A short conversation</span></div></button>
-    <button class="step" data-stage="confirm" disabled><span class="n">2</span><div><b>Check we understood</b><span>Review and change anything</span></div></button>
-    <button class="step" data-stage="compare" disabled><span class="n">3</span><div><b>How the options compare for you</b><span>Unlocked after you confirm</span></div></button>
+    <button class="step" data-stage="values" aria-current="step"><span class="n">1</span><div><b>Questions</b><span>About the rates above</span></div></button>
+    <button class="step" data-stage="confirm" disabled><span class="n">2</span><div><b>Check</b><span>Correct anything wrong</span></div></button>
+    <button class="step" data-stage="compare" disabled><span class="n">3</span><div><b>Comparison</b><span>After you confirm</span></div></button>
   </nav>
 
   <section class="card stage" id="stage-values">
-    <h2 tabindex="-1">What matters to you</h2>
-    <p class="lede">Before anything is compared, we need to know what you are hoping for and what you most want to avoid. There are no right answers, and each question is chosen to tell your priorities apart as quickly as possible.</p>
+    <h2 tabindex="-1">Questions about these rates</h2>
+    <p class="lede">Each question puts two of the trial results next to each other. Pick the one you would rather live with. Three answers are enough to continue. The comparison stays closed until you confirm the ratings.</p>
     <div class="tabs" role="tablist" id="tabs" hidden>
       <button role="tab" aria-selected="false" data-tab="chat" id="chat-tab" hidden>In your own words</button>
       <button role="tab" aria-selected="true" data-tab="form" id="form-tab">Guided questions</button>
@@ -291,7 +311,7 @@
 </div>
 
 <script>
-const DECISION = {"id":"prostate_localized","title":"Localized prostate cancer found by PSA screening","question":"Which approach fits you best: active monitoring, surgery, or radiotherapy?","context":"You have prostate cancer that has not spread beyond the prostate, found through a PSA blood test. Most such cancers grow slowly. There are three reasonable approaches, and the trial that compared them found no clear difference in the chance of dying from prostate cancer over fifteen years. What differs is how likely the cancer is to spread or progress, and the side effects you live with. That makes this a decision where what matters to you should drive the answer.","population":"Men aged 50 to 69 with PSA-detected localized prostate cancer, as enrolled in the UK ProtecT trial (1,643 men randomized 1999 to 2009).","options":[{"id":"monitoring","name":"Active monitoring","short":"Regular PSA tests, with treatment only if the cancer shows signs of progressing.","burden":"A PSA blood test every three months in the first year, then every six to twelve months. Repeat scans or biopsies if PSA rises. No immediate treatment side effects. Living with an untreated cancer, and the possibility of needing surgery or radiotherapy later."},{"id":"surgery","name":"Surgery (radical prostatectomy)","short":"An operation to remove the prostate.","burden":"A hospital stay of one to three days, a catheter for one to two weeks, and four to six weeks off normal activity. The largest early side effects are on urine control and erections, some of which improve over the first one to two years."},{"id":"radiotherapy","name":"Radiotherapy with short-course hormone therapy","short":"External beam radiation to the prostate over several weeks, with three to six months of hormone therapy.","burden":"Daily radiotherapy sessions, five days a week for about seven weeks, plus three to six months of hormone injections that cause hot flushes, tiredness, and loss of sex drive while they last. Bowel and urinary irritation during and shortly after treatment."}],"attributes":[{"id":"cancer_death","name":"Dying from prostate cancer","plain":"dying from prostate cancer within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"The differences between the three groups were not statistically significant. About 97 in 100 men in every group were alive without dying of prostate cancer at 15 years.","values":{"monitoring":3.1,"surgery":2.2,"radiotherapy":2.9},"levels":{},"evidence":[],"category":"disease"},{"id":"metastasis","name":"Cancer spreading beyond the prostate","plain":"the cancer spreading to other parts of the body within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Spread was about twice as common with monitoring, but this did not translate into more deaths within 15 years. Spread usually means hormone therapy and living with advanced cancer.","values":{"monitoring":9.4,"surgery":4.7,"radiotherapy":5.0},"levels":{},"evidence":[],"category":"disease"},{"id":"hormone_therapy","name":"Needing long-term hormone therapy","plain":"needing long-term hormone therapy to control the cancer within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Long-term hormone therapy causes hot flushes, tiredness, weight gain, loss of sex drive, and weaker bones for as long as it continues.","values":{"monitoring":12.7,"surgery":7.2,"radiotherapy":7.7},"levels":{},"evidence":[],"category":"disease"},{"id":"incontinence_6mo","name":"Urine leakage needing pads in the first six months","plain":"using one or more absorbent pads a day for urine leakage during the first six months","kind":"rate","unit":"out of 100 men at 6 months","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)","note":"The early effect of surgery on urine control. For most men it improves over the first one to two years, though not to zero.","values":{"monitoring":4,"surgery":46,"radiotherapy":5},"levels":{},"evidence":[],"category":"function"},{"id":"erectile_6mo","name":"Losing erections firm enough for sex in the first six months","plain":"not having erections firm enough for intercourse during the first six months","kind":"rate","unit":"out of 100 men at 6 months","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)","note":"Before treatment, 33 in 100 men already lacked firm erections. Radiotherapy's early number includes the months of hormone therapy, which suppresses sexual function while it lasts.","values":{"monitoring":48,"surgery":88,"radiotherapy":78},"levels":{},"evidence":[],"category":"function"},{"id":"incontinence","name":"Urine leakage needing pads, six years on","plain":"using one or more absorbent pads a day for urine leakage, six years on","kind":"rate","unit":"out of 100 men at 6 years","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)","note":"Right after surgery it is much higher: 46 in 100 men used pads at six months, falling to 17 in 100 by six years. Some men on monitoring later had surgery, which is why their number is above radiotherapy's.","values":{"monitoring":8,"surgery":17,"radiotherapy":4},"levels":{},"evidence":[],"category":"function"},{"id":"erectile","name":"Losing erections firm enough for sex, six years on","plain":"not having erections firm enough for intercourse, six years on","kind":"rate","unit":"out of 100 men at 6 years","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)","note":"Before treatment, 67 in 100 men had erections firm enough for sex, so 33 in 100 already did not. At six months the gap was widest: 88 in 100 after surgery, 78 after radiotherapy, and 48 on monitoring lacked firm erections. Ageing lowers everyone's number over time.","values":{"monitoring":70,"surgery":83,"radiotherapy":73},"levels":{},"evidence":[],"category":"function"},{"id":"radical_later","name":"Ending up having surgery or radiotherapy anyway","plain":"starting on monitoring but going on to have surgery or radiotherapy within 15 years","kind":"rate","unit":"out of 100 men over 15 years","direction":"lower_is_better","source":"Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)","note":"Most men who start with monitoring eventually have treatment, usually because PSA rises. Monitoring is a delay for most and an avoidance for some. Men who choose surgery or radiotherapy up front have already had it, so their number is zero by definition.","values":{"monitoring":61.1,"surgery":0,"radiotherapy":0},"levels":{},"evidence":[],"category":"disease"},{"id":"bowel","name":"Bowel problems","plain":"bowel problems such as blood in the stool or leakage","kind":"ordinal","unit":"how common, compared across options","direction":"lower_is_better","source":"Donovan et al., NEJM 2016 and NEJM Evidence 2023 (ProtecT patient-reported outcomes)","note":"Blood in the stool was more common after radiotherapy from year two onward, and leakage of stool increased in the radiotherapy group in years seven to twelve. The trial reports these in figures rather than as single percentages, so this page shows them in words.","values":{},"levels":{"monitoring":"uncommon","surgery":"uncommon","radiotherapy":"more common"},"evidence":[],"category":"function"}],"tradeoff_checks":[{"id":"spread_vs_sideeffects","prompt":"Suppose surgery lowered the chance of the cancer spreading from about 9 in 100 to about 5 in 100 over fifteen years, but raised the chance of needing pads for urine leakage from about 8 in 100 to about 17 in 100. Which would you lean toward?","options":{"surgery":"Take the lower chance of spread, accept the leakage risk","monitoring":"Keep the lower leakage risk, accept the higher chance of spread"},"attributes":["metastasis","incontinence"]},{"id":"treat_now_vs_later","prompt":"About 61 in 100 men who start with monitoring end up having surgery or radiotherapy later anyway. Some see that as a reason to treat now and be done with it. Others see the years without side effects as worth having even if treatment comes later. Which is closer to you?","options":{"surgery":"Treat now and be done with it","monitoring":"Take the side-effect-free years, even if treatment comes later"},"attributes":["radical_later","erectile"]}],"default_weights_note":"Before your values are recorded, the comparison treats every outcome as mattering equally. That is not a recommendation. It is the placeholder your answers replace.","sources":["Hamdy FC, Donovan JL, Lane JA, et al. Fifteen-Year Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2023;388:1547-1558.","Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2016;375:1425-1437.","Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes 12 Years after Localized Prostate Cancer Treatment. NEJM Evidence 2023;2(4)."],"provenance":{}};
+let DECISION = null;
 
 /* ------------------------------------------------------------------ helpers */
 const $ = (s, el = document) => el.querySelector(s);
@@ -309,11 +329,27 @@ const el = (tag, attrs = {}, ...kids) => {
   return n;
 };
 const fmt = v => Number.isInteger(v) ? String(v) : String(Math.round(v * 10) / 10);
-const optIndex = Object.fromEntries(DECISION.options.map((o, i) => [o.id, i]));
+const shortOpt = o => {
+  const base = String(o.name).replace(/\s*\([^)]*\)/, '').trim();
+  return base.length <= 22 ? base : base.split(/\s+/)[0];
+};
+function ratesTable(attrs, caption) {
+  const tbl = el('table', { class: 'rates' });
+  if (caption) tbl.append(el('caption', {}, caption));
+  tbl.append(el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Outcome'), ...DECISION.options.map(o => el('th', { scope: 'col' }, shortOpt(o))))));
+  const tb = el('tbody');
+  for (const a of attrs) {
+    const cells = DECISION.options.map(o => el('td', {}, a.kind === 'rate' ? fmt(a.values[o.id]) : (a.levels[o.id] || '')));
+    tb.append(el('tr', {}, el('th', { scope: 'row' }, a.name, a.unit ? el('small', {}, a.kind === 'rate' ? a.unit : 'reported in words') : null, a.note ? el('small', {}, a.note) : null), ...cells));
+  }
+  tbl.append(tb);
+  return el('div', { class: 'tbl-wrap', tabindex: '0' }, tbl);
+}
+let optIndex = {};
 const optColor = oid => `var(--opt-${optIndex[oid]})`;
 const option = oid => DECISION.options.find(o => o.id === oid);
 const attribute = aid => DECISION.attributes.find(a => a.id === aid);
-const scored = DECISION.attributes.filter(a => a.kind === 'rate');
+let scored = [];
 const isEarly = a => (a.unit || '').toLowerCase().includes('month');
 const ANCHORS = [[0, 'does not matter to me'], [25, 'matters a little'], [50, 'matters'], [75, 'matters a lot'], [100, 'matters as much as anything could']];
 const anchorLabel = w => { let l = ANCHORS[0][1]; for (const [lo, lbl] of ANCHORS) if (w >= lo) l = lbl; return l; };
@@ -352,9 +388,9 @@ function drivers(top, runner, k = 2) {
   return Object.keys(diffs).sort((x, y) => diffs[y] - diffs[x]).slice(0, k).filter(a => diffs[a] > 0);
 }
 const FRAMINGS = [
-  { id: 'survival_first', name: 'Survival first', description: 'Disease outcomes matter most; side effects matter a little.', rule: a => a.category === 'disease' ? 100 : 15 },
-  { id: 'quality_of_life_first', name: 'Quality of life first', description: 'Living well matters most; disease outcomes matter a little.', rule: a => a.category !== 'disease' ? 100 : 15 },
-  { id: 'minimal_intervention', name: 'Minimal intervention', description: 'Avoid treatment and its early effects unless the disease outcome gap is large.', rule: a => a.category !== 'disease' && isEarly(a) ? 100 : (a.category !== 'disease' ? 60 : 25) },
+  { id: 'survival_first', name: 'The illness first', description: 'Disease outcomes matter most; side effects and burden matter a little.', rule: a => a.category === 'disease' ? 100 : 15 },
+  { id: 'quality_of_life_first', name: 'Daily life first', description: 'Side effects and burden matter most; disease outcomes matter a little.', rule: a => a.category !== 'disease' ? 100 : 15 },
+  { id: 'minimal_intervention', name: 'Least treatment', description: 'Avoid treatment and its early effects unless the disease outcome gap is large.', rule: a => a.category !== 'disease' && isEarly(a) ? 100 : (a.category !== 'disease' ? 60 : 25) },
 ];
 function framings(allowed) {
   return FRAMINGS.map(f => { const w = Object.fromEntries(scored.map(a => [a.id, f.rule(a)])); return { id: f.id, name: f.name, description: f.description, weights: w, ranking: scoreOptions(w, allowed).map(s => s.option_id) }; });
@@ -499,7 +535,7 @@ if ((location.hash === '#study' || sessionParams.has('arm')) && !sessionParams.g
   sessionParams.set('pid', Math.random().toString(36).slice(2, 10).toUpperCase());
   history.replaceState(null, '', location.pathname + '?' + sessionParams + location.hash);
 }
-const SKEY = 'preference-first-draft-v4-' + DECISION.id + '-' + (sessionParams.get('pid') || ('personal-' + (sessionParams.get('arm') || 'demo')));
+const draftKey = () => 'preference-first-draft-v4-' + DECISION.id + '-' + (sessionParams.get('pid') || ('personal-' + (sessionParams.get('arm') || 'demo')));
 const limited = () => allowedOptions(state.profile).length < 2;
 const canReview = () => complete() || limited() || state.answers.length >= 3;
 const comparisonError = () => limited() ? '' : weightError(state.profile.weights);
@@ -507,11 +543,11 @@ const complete = () => scored.every(a => validWeight(state.profile.weights[a.id]
 function log(event, data = {}) { state.record.events.push({ t: new Date().toISOString(), event, ...data }); saveDraft(); }
 function saveDraft() {
   if (state.profile.source === 'example') return;
-  try { localStorage.setItem(SKEY, JSON.stringify({ profile: state.profile, openText: state.openText, answers: state.answers, study: state.study, record: state.record })); } catch (e) {}
+  try { localStorage.setItem(draftKey(), JSON.stringify({ profile: state.profile, openText: state.openText, answers: state.answers, study: state.study, record: state.record })); } catch (e) {}
 }
 function loadDraft() {
   try {
-    const d = JSON.parse(localStorage.getItem(SKEY));
+    const d = JSON.parse(localStorage.getItem(draftKey()));
     if (!d?.profile || d.profile.source === 'example') return;
     const p = blankProfile();
     for (const a of scored) { const w = d.profile.weights?.[a.id]; if (validWeight(w)) p.weights[a.id] = w; }
@@ -539,9 +575,13 @@ function invalidateProfile() {
   $('#stage-compare').replaceChildren(); syncSteps(); saveDraft();
 }
 function startOver() {
-  try { localStorage.removeItem(SKEY); } catch (e) {}
-  history.replaceState(null, '', location.href.split('#')[0].split('?')[0]);
-  location.reload();
+  try { localStorage.removeItem(draftKey()); } catch (e) {}
+  const url = new URL(location.href);
+  const keep = url.searchParams.get('d');
+  url.hash = '';
+  url.search = '';
+  if (keep) url.searchParams.set('d', keep);
+  location.href = url.pathname + url.search;
 }
 function scopeNote() {
   const unscored = DECISION.attributes.filter(a => a.kind !== 'rate').map(a => a.name.toLowerCase());
@@ -556,11 +596,14 @@ function exampleNotice() {
 /* ------------------------------------------------------------------- intro */
 function renderIntro() {
   const s = $('#intro'); s.innerHTML = '';
-  s.append(el('h1', {}, DECISION.title));
-  const info = el('details', { class: 'disclosure', open: !!state.study }, el('summary', {}, 'About this decision and the treatments'), el('p', { class: 'ctx' }, DECISION.context), el('p', { class: 'pop' }, 'Evidence: ' + DECISION.population));
+  s.append(el('p', { class: 'ctx' }, DECISION.context));
+  s.append(el('p', { class: 'pop' }, DECISION.population));
   const grid = el('div', { class: 'options' });
-  DECISION.options.forEach(o => grid.append(el('div', { class: 'opt', style: `--oc:${optColor(o.id)}` }, el('b', {}, o.name), el('p', {}, o.short), el('details', {}, el('summary', {}, 'What it involves'), o.burden))));
-  info.append(grid); s.append(info);
+  for (const o of DECISION.options) grid.append(el('div', { class: 'opt' }, el('b', {}, o.name), el('p', {}, o.short + ' ' + o.burden)));
+  s.append(grid);
+  s.append(el('h2', {}, 'What the trial measured'), el('p', { class: 'pop' }, 'Counted rows are men in 100. Lower is better. Bowel problems are in words because the papers show them in figures rather than one percentage.'));
+  s.append(ratesTable(DECISION.attributes));
+  s.append(el('ol', { class: 'sources' }, ...DECISION.sources.map(x => el('li', {}, x))));
 }
 
 /* ------------------------------------------------------------------- steps */
@@ -585,11 +628,34 @@ document.querySelectorAll('.step').forEach(b => b.addEventListener('click', () =
 /* ------------------------------------------------ values: the conversation */
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const playing = () => !!(state.demo && !state.demo.cancel);
-const OPENING = 'Before anything is compared, I want to understand what you are hoping for and what you most want to avoid. There are no right answers here, and I will not suggest a treatment until you have checked what I heard.';
-const KICKER = { tradeoff: 'A trade-off', option_pair: 'Two sets of numbers', rating: 'How much it matters' };
-const WHYLINE = { tradeoff: 'Your answer says how these two outcomes weigh against each other for you.',
-  option_pair: 'Whole outcomes side by side tell us more than rating them one at a time.',
-  rating: 'A direct rating. It anchors the scale for the trade-off questions.' };
+const OPENING = 'Use the table above. Pick the result you would rather live with. You can correct the ratings before anything is ranked.';
+function questionLead(q) {
+  if (!q) return '';
+  const names = q.attributes.map(id => attribute(id).name.toLowerCase());
+  if (q.kind === 'option_pair') return `Which would you rather live with? These two outcomes differ: ${names[0]}, and ${names[1]}.`;
+  if (q.kind === 'tradeoff') return 'Would you take this trade?';
+  return `How much would it matter to you to avoid ${names[0]}?`;
+}
+function questionFacts(q) {
+  if (q.kind === 'option_pair') {
+    const [aid, bid] = q.attributes, p = q.params, A = attribute(aid), B = attribute(bid);
+    const tbl = el('table', { class: 'rates qtable' });
+    const head = label => { const o = DECISION.options.find(x => x.name === label); return o ? shortOpt(o) : label; };
+    tbl.append(el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Men in 100'), el('th', { scope: 'col' }, head(q.answers[0].label)), el('th', { scope: 'col' }, head(q.answers[1].label)))));
+    tbl.append(el('tbody', {},
+      el('tr', {}, el('th', { scope: 'row' }, A.name), el('td', {}, fmt(p.ax)), el('td', {}, fmt(p.ay))),
+      el('tr', {}, el('th', { scope: 'row' }, B.name), el('td', {}, fmt(p.bx)), el('td', {}, fmt(p.by)))));
+    return el('div', { class: 'tbl-wrap' }, tbl);
+  }
+  if (q.kind === 'tradeoff') {
+    const [A, B] = q.attributes.map(attribute);
+    return el('div', { class: 'qfacts' },
+      el('p', {}, `About ${fmt(q.params.da)} fewer men in 100 would have ${A.name.toLowerCase()}.`),
+      el('p', {}, `About ${fmt(q.params.db)} more would have ${B.name.toLowerCase()}.`));
+  }
+  const A = attribute(q.attributes[0]);
+  return el('p', { class: 'qfacts' }, 'In the trial, men in 100: ' + DECISION.options.map(o => `${shortOpt(o)} ${fmt(A.values[o.id])}`).join(', ') + '.');
+}
 function msg(role, text, kicker) {
   const node = el('div', { class: 'msg ' + role });
   if (kicker) node.append(el('span', { class: 'kick' }, kicker));
@@ -652,7 +718,7 @@ function notesBlock() {
   const ta = el('textarea', { id: 'open', placeholder: 'What are you hoping for, or hoping to avoid? Anything about your life the numbers would miss?' });
   ta.value = state.openText;
   ta.addEventListener('input', () => { state.openText = ta.value; state.profile.statements = ta.value.trim() ? [ta.value.trim()] : []; invalidateProfile(); });
-  notes.append(el('div', { class: 'q', style: 'margin-top:12px' }, el('label', { for: 'open' }, 'In your own words'), ta, el('p', { class: 'note' }, 'Kept for the comparison and for your clinician. Your answers below determine the ranking.')));
+  notes.append(el('div', { class: 'q', style: 'margin-top:12px' }, el('label', { for: 'open' }, 'In your own words'), ta, el('p', { class: 'note' }, 'Saved with your results so you can raise it at the appointment. It is not scored.')));
   return notes;
 }
 /* The live panel: what the engine currently believes, redrawn in place so the bars move. */
@@ -677,9 +743,10 @@ function buildBelief() {
     wbars.append(row);
   }
   const root = el('aside', { class: 'belief', id: 'belief', 'aria-label': 'What we have learned so far' },
-    el('h3', {}, 'Which option fits you'), stack, legend, el('div', {}, progress, pbar),
-    el('h3', {}, 'What we think matters to you'), wbars,
-    el('p', { class: 'hint', style: 'font-size:12px' }, 'The mark is the current reading, the band is how far it is pinned down. Estimates from your answers, not a medical finding.'));
+    el('div', { class: 'forecast', hidden: true }, el('h3', {}, 'Which option fits you'), stack, legend),
+    el('div', {}, progress, pbar),
+    el('h3', {}, 'How pinned down each priority is'), wbars,
+    el('p', { class: 'hint', style: 'font-size:12px' }, 'The mark is the current reading and the band is the range still open. A wide band means the questions have not settled that priority. This is not a medical finding, and it is not a ranking.'));
   belief = { root, bars, pcts, progress, pbar, rows };
   return root;
 }
@@ -706,14 +773,18 @@ function updateBelief(asking = []) {
 }
 function questionCard(q) {
   const card = el('div', { class: 'qcard' });
-  const bubble = msg('ai', q.text, KICKER[q.kind]); bubble.classList.add('qt', 'enter');
+  const bubble = msg('ai', questionLead(q)); bubble.classList.add('qt', 'enter');
   const help = el('details', {}, el('summary', {}, 'Help me understand this question'),
     el('p', {}, 'Think about which effects you would find harder to live with. You can skip any question you cannot answer yet.'));
   for (const aid of q.attributes) { const a = attribute(aid); help.append(el('p', {}, el('b', {}, a.name + '. '), a.note)); }
   const ans = el('div', { class: 'ans enter', role: 'group', 'aria-label': 'Answers' });
-  for (const a of q.answers) ans.append(el('button', { type: 'button', disabled: playing(), onclick: () => submitAnswer(q, a.id) }, a.label));
+  for (const a of q.answers) {
+    const named = DECISION.options.find(o => o.name === a.label);
+    ans.append(el('button', { type: 'button', disabled: playing(), onclick: () => submitAnswer(q, a.id) }, named && q.kind === 'option_pair' ? shortOpt(named) : a.label));
+  }
   ans.append(el('button', { type: 'button', class: 'skip', disabled: playing(), onclick: () => submitAnswer(q, 'unsure') }, 'I am not sure / skip'));
-  card.append(bubble, help, el('p', { class: 'why' }, WHYLINE[q.kind]), ans);
+  const caveats = q.attributes.map(attribute).filter(a => a.note).map(a => el('p', { class: 'hint' }, /by definition|the operation itself|had the operation at the start/i.test(a.note) ? a.note : a.note.split(/(?<=\.)\s+/).slice(0, 2).join(' ')));
+  card.append(bubble, questionFacts(q), ans, ...caveats, help);
   return card;
 }
 function renderForm() {
@@ -721,9 +792,9 @@ function renderForm() {
   if (!$('#thread')) {
     f.className = 'convo';
     f.replaceChildren(el('div', { class: 'threadcol' },
-      el('div', { id: 'playhost' }),
-      el('div', { class: 'thread', id: 'thread', role: 'log', 'aria-live': 'polite', 'aria-label': 'What matters to you' }),
-      el('div', { id: 'threadfoot', style: 'display:flex;flex-direction:column;gap:12px' })), buildBelief());
+      el('div', { class: 'thread', id: 'thread', role: 'log', 'aria-live': 'polite', 'aria-label': 'Questions' }),
+      el('div', { id: 'threadfoot', style: 'display:flex;flex-direction:column;gap:12px' }),
+      el('div', { id: 'playhost' })), buildBelief());
   }
   if (!state.elicitor) rebuildElicitor();
   const E = state.elicitor, thread = $('#thread'), foot = $('#threadfoot'), playhost = $('#playhost');
@@ -731,21 +802,19 @@ function renderForm() {
   let seen = 0;
   const say = node => { if (seen++ >= state.shown) node.classList.add('enter'); thread.append(node); };
   thread.append(exampleNotice());
-  say(msg('ai', OPENING));
-  if (!E.asked.length) thread.append(el('div', { class: 'setup' }, el('p', { class: 'hint' }, 'Optional before we start.'), notesBlock(),
-    limitsBlock(() => { state.answers = []; rebuildElicitor(); renderForm(); $('#tab-form .limits')?.closest('details')?.setAttribute('open', ''); })));
+  if (!E.asked.length) say(msg('ai', OPENING));
   const byId = Object.fromEntries(E.bank.map(q => [q.id, q]));
-  E.asked.forEach((a, i) => {
-    say(msg('ai', a.text, KICKER[a.kind]));
-    say(msg('me', answerLabel(byId[a.question_id], a.answer)));
-    if (state.trace[i]) say(msg('sys', state.trace[i]));
+  E.asked.forEach((a) => {
+    const q = byId[a.question_id];
+    say(msg('ai', q ? questionLead(q) : a.text));
+    say(msg('me', answerLabel(q, a.answer)));
   });
   state.shown = seen;
   const finished = limited() || E.done() || state.pending === 'none';
   if (finished) {
     thread.append(el('div', { class: 'msg ai enter' }, limited()
-      ? 'Your limits are recorded. You can keep them and see a summary without answering any more questions.'
-      : 'I think I have enough. Nothing is compared until you check what I heard and confirm it.'));
+      ? 'Those limits leave fewer than two options. You can review them and take a summary to your clinician, without answering more questions.'
+      : 'That is enough to tell the options apart under these rates. Check the ratings before the comparison opens.'));
   } else if (state.pending) {
     thread.append(questionCard(state.pending));
   } else {
@@ -762,9 +831,12 @@ function renderForm() {
   actions.append(el('button', { class: 'btn' + (finished ? ' primary' : ''), disabled: locked, onclick: () => { if (!complete() && !limited()) adoptAdaptive(); setStage('confirm'); } }, 'Review what we heard'),
     el('span', { class: 'hint' }, E.asked.length < 3 && !canReview() ? 'Available after three answers.' : 'Nothing is compared until you confirm.'));
   foot.append(actions);
+  if (!playing()) foot.append(el('div', { class: 'setup' },
+    notesBlock(),
+    limitsBlock(() => { state.answers = []; rebuildElicitor(); renderForm(); $('#tab-form .limits')?.closest('details')?.setAttribute('open', ''); })));
   if (!state.study && !state.demo && !E.asked.length && state.profile.source !== 'example') {
-    const row = el('div', { class: 'playrow' }, el('span', {}, 'In a hurry? Watch a simulated patient answer:'));
-    for (const persona of personas()) row.append(el('button', { type: 'button', onclick: () => playDemo(persona) }, '▶ ' + persona.name));
+    const row = el('div', { class: 'playrow' }, el('span', {}, 'See how one set of priorities runs through:'));
+    for (const persona of personas()) row.append(el('button', { type: 'button', onclick: () => playDemo(persona) }, persona.name));
     playhost.append(row);
   }
   playhost.hidden = !playhost.childElementCount;
@@ -927,7 +999,7 @@ function ratingChoices(a, context, onChange) {
 function renderConfirm() {
   const s = $('#stage-confirm'); s.innerHTML = '';
   const p = state.profile;
-  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'Check we understood'), el('p', { class: 'lede' }, 'These are your priorities for avoiding each outcome. Open any line to change it. Nothing is compared until you confirm.'));
+  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'Check the ratings'), el('p', { class: 'lede' }, 'These are the weights the comparison will use. The trial rates sit beside each one. Open a line to change it. Nothing is ranked until you confirm.'));
   if (p.source === 'interview') s.append(el('p', { class: 'hint', style: 'margin-top:12px' }, 'These ratings were inferred from your conversation. Please check each one before confirming.'));
   if (p.source === 'adaptive' && p.posterior) s.append(el('p', { id: 'posterior-note', class: 'hint', style: 'margin-top:12px' }, `Inferred from ${p.posterior.questions_asked} answers. The range shows how far each rating is pinned down; where it is wide, we are still unsure. Check whether anything important was missed.`));
   const heard = el('div', { class: 'heard' });
@@ -936,7 +1008,8 @@ function renderConfirm() {
   function refresh() { error.textContent = comparisonError(); confirm.disabled = !!error.textContent || !p.coverage?.reviewed; confirm.textContent = limited() ? 'Yes, show my summary' : 'Yes, compare the options'; }
   for (const a of [...scored].sort((a, b) => p.weights[b.id] - p.weights[a.id])) {
     const label = el('small', { 'data-rating-label': a.id }, (validWeight(p.weights[a.id]) ? anchorLabel(p.weights[a.id]) : 'Not yet discussed') + (p.posterior?.interval_90?.[a.id] ? ` (range ${p.posterior.interval_90[a.id][0]} to ${p.posterior.interval_90[a.id][1]})` : ''));
-    const row = el('details', { class: 'review-item' }, el('summary', {}, el('span', {}, a.name, el('span', {}, label)), el('span', { class: 'edit' }, 'Edit')));
+    const rates = el('small', { class: 'ratehint' }, DECISION.options.map(o => `${shortOpt(o)} ${fmt(a.values[o.id])}`).join(' · ') + ' in 100');
+    const row = el('details', { class: 'review-item' }, el('summary', {}, el('span', {}, a.name, rates, el('span', {}, label)), el('span', { class: 'edit' }, 'Edit')));
     row.append(el('fieldset', { style: 'margin-top:14px' }, el('legend', {}, 'How much does avoiding this matter?'), ratingChoices(a, 'review', () => { label.textContent = anchorLabel(p.weights[a.id]); refresh(); })));
     heard.append(row);
   }
@@ -968,6 +1041,39 @@ function renderConfirm() {
 
 /* ----------------------------------------------------------------- compare */
 function chip(oid) { return el('span', { class: 'chip', style: `--oc:${optColor(oid)}` }, el('i'), option(oid).name); }
+function clinicBrief(profile, rec) {
+  const box = el('div', { class: 'brief' });
+  box.append(el('h3', {}, 'What to take to the appointment'));
+  box.append(el('p', {}, DECISION.context));
+  const tight = scored.map(a => {
+    const vs = DECISION.options.map(o => a.values[o.id]);
+    return { a, gap: Math.max(...vs) - Math.min(...vs) };
+  }).sort((x, y) => x.gap - y.gap)[0];
+  if (tight && tight.gap < 3 && tight.a.note) box.append(el('p', {}, `${tight.a.name} is close across the options. ${tight.a.note.split(/(?<=\.)\s+/)[0]}`));
+  const ranked = [...scored].filter(a => (profile.weights[a.id] || 0) > 0).sort((a, b) => profile.weights[b.id] - profile.weights[a.id] || a.name.localeCompare(b.name));
+  if (ranked.length) {
+    box.append(el('p', {}, 'The rows are ordered by how much you said avoiding that outcome matters. Counts are men in 100.'));
+    const tbl = el('table', { class: 'rates' });
+    tbl.append(el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Outcome'), el('th', { scope: 'col' }, 'How much it matters'), ...DECISION.options.map(o => el('th', { scope: 'col' }, shortOpt(o))))));
+    const tb = el('tbody');
+    for (const a of ranked) tb.append(el('tr', {}, el('th', { scope: 'row' }, a.name), el('td', {}, `${Math.round(profile.weights[a.id])} · ${anchorLabel(profile.weights[a.id])}`), ...DECISION.options.map(o => el('td', {}, fmt(a.values[o.id])))));
+    tbl.append(tb);
+    box.append(el('div', { class: 'tbl-wrap' }, tbl));
+  }
+  const allowed = rec.available_options.map(option);
+  const topW = ranked[0];
+  if (topW && allowed.length) {
+    const best = [...allowed].sort((x, y) => topW.values[x.id] - topW.values[y.id])[0];
+    const worst = [...allowed].sort((x, y) => topW.values[y.id] - topW.values[x.id])[0];
+    box.append(el('p', {}, `The outcome you weighted most is ${topW.name.toLowerCase()}. On that, ${best.name.toLowerCase()} is lowest at ${fmt(topW.values[best.id])} in 100, and ${worst.name.toLowerCase()} is highest at ${fmt(topW.values[worst.id])} in 100.`));
+  }
+  if (rec.flips?.length) {
+    const f = rec.flips[0];
+    const a = attribute(f.attribute_id);
+    box.append(el('p', {}, `The nearest way for another option to come first is ${a.name.toLowerCase()}: if that rating moved from ${fmt(f.current_weight)} to ${fmt(f.flip_weight)}, ${option(f.new_top).name.toLowerCase()} would lead or tie. The slider below tries other ratings without changing what you confirmed.`));
+  }
+  return box;
+}
 function renderCompare() {
   const s = $('#stage-compare'); s.innerHTML = '';
   const p = state.profile;
@@ -976,9 +1082,10 @@ function renderCompare() {
   const [top, runner] = rec.ranking;
   const topName = option(top.option_id).name, runnerName = option(runner.option_id).name;
   const tied = top.burden === runner.burden;
-  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'How the options compare for you'));
+  s.append(exampleNotice(), el('h2', { tabindex: '-1' }, 'How the options compare'));
   if (rec.excluded.length) s.append(el('p', { class: 'hint', style: 'margin-top:8px' }, `You ruled out ${rec.excluded.map(o => option(o).name.toLowerCase()).join(' and ')}, so the comparison is between the options you would consider.`));
-  s.append(el('p', { class: 'result-lead' }, tied ? 'There is no single leader on the outcomes you rated. The leading options have the same score.' : `${topName} ranks first on the outcomes you rated.`));
+  s.append(clinicBrief(p, rec));
+  s.append(el('p', { class: 'result-lead' }, tied ? 'On the outcomes you rated, there is no single leader. The leading options come out the same.' : `${topName} fits the priorities you confirmed better than the others.`));
   const pb = p.posterior?.p_best?.[top.option_id];
   if (!tied && pb != null) s.append(el('p', { class: 'hint', style: 'margin-top:8px' }, `Your answers do not pin your values down exactly. Across the values consistent with them, ${topName.toLowerCase()} comes first about ${Math.round(100 * pb)} times in 100 under this preference model. This is not the chance that the treatment is medically right.`));
   if (!tied && rec.close_call) s.append(el('p', { class: 'callout' }, `It is a close call with ${runnerName.toLowerCase()}. Small differences in these scores should not decide your treatment.`));
@@ -988,8 +1095,8 @@ function renderCompare() {
   const advantage = rec.drivers[0];
   const disadvantage = scored.filter(a => top.contributions[a.id] > runner.contributions[a.id]).sort((a, b) => (top.contributions[b.id] - runner.contributions[b.id]) - (top.contributions[a.id] - runner.contributions[a.id]))[0];
   const describe = (a, lead) => el('div', {}, el('p', {}, el('b', {}, lead + ' '), `${a.plain.replace(/^./, c => c.toUpperCase())}: ${fmt(a.values[top.option_id])} in 100 with ${topName.toLowerCase()}, compared with ${fmt(a.values[runner.option_id])} in 100 with ${runnerName.toLowerCase()}.`), a.note ? el('details', { class: 'hint', style: 'margin-top:8px' }, el('summary', {}, 'About this outcome'), el('p', {}, a.note)) : null);
-  if (advantage) why.append(describe(attribute(advantage), 'What favors the first option:'));
-  if (disadvantage) why.append(describe(disadvantage, 'What you give up:'));
+  if (advantage) why.append(describe(attribute(advantage), `Why ${topName.toLowerCase()} comes out ahead:`));
+  if (disadvantage) why.append(describe(disadvantage, `What you take on by choosing it:`));
   if (!advantage && !disadvantage) why.append(el('p', {}, 'Your ratings do not separate these options on individual outcomes.'));
   if (p.context_notes.length) why.append(el('p', { class: 'callout ok' }, el('b', {}, 'You also said: '), p.context_notes.join(' '), ' The numbers do not capture this. Raise it with your clinician; it can matter more than any rate here.'));
   s.append(why);
@@ -997,8 +1104,9 @@ function renderCompare() {
   const rank = el('div', { class: 'rank', 'aria-label': 'Treatment options in score order' });
   rec.ranking.forEach((r, i) => {
     const o = option(r.option_id); const shared = rec.ranking.filter(x => x.burden === r.burden).length > 1;
+    const focus = [...scored].filter(a => (p.weights[a.id] || 0) > 0).sort((a, b) => p.weights[b.id] - p.weights[a.id])[0];
     rank.append(el('div', { class: 'rcard' + (r.burden === top.burden ? ' top' : ''), style: `--oc:${optColor(o.id)}` }, el('div', { class: 'pos' }, rec.ranking.findIndex(x => x.burden === r.burden) + 1),
-      el('div', {}, el('h3', {}, o.name), el('p', { class: 'fit' }, shared ? 'Joint position on the rated outcomes' : i === 0 ? 'First on the rated outcomes' : 'Another option to discuss'), el('p', {}, o.short))));
+      el('div', {}, el('h3', {}, o.name), el('p', { class: 'fit' }, shared ? 'Tied on the outcomes you rated' : i === 0 ? 'Closest to the priorities you confirmed' : 'The other option, on those same priorities'), el('p', {}, o.short), focus ? el('p', { class: 'fit' }, `On ${focus.name.toLowerCase()}, the outcome you weighted most: ${fmt(focus.values[o.id])} in 100.`) : null)));
   });
   s.append(rank, el('p', { class: 'disclaimer' }, scopeNote()));
 
@@ -1288,11 +1396,114 @@ function renderFollowup() {
 }
 
 /* -------------------------------------------------------------------- boot */
-loadDraft();
-renderIntro(); setStage('values', false);
-initStudy();
-if (!state.study && location.hash === '#example' && DECISION.id === 'prostate_localized') loadExample(false);
-if (location.hash === '#followup') renderFollowup();
+const PRESETS = [
+  { id: 'prostate_localized', label: 'Prostate cancer' },
+  { id: 'knee_osteoarthritis', label: 'Knee arthritis' },
+  { id: 'appendicitis', label: 'Appendicitis' },
+];
+function renderChooser() {
+  const row = $('#chooser-row');
+  if (!row || !DECISION) return;
+  row.replaceChildren();
+  const items = PRESETS.slice();
+  if (!items.some(p => p.id === DECISION.id)) items.push({ id: DECISION.id, label: 'This situation' });
+  for (const item of items) {
+    const b = el('button', { type: 'button', class: item.id === DECISION.id ? 'current' : '', onclick: () => { if (item.id !== DECISION.id) selectDecision(item.id); } }, item.label);
+    row.append(b);
+  }
+  $('#chooser').hidden = !!state.study;
+}
+function resetFlow() {
+  state.stage = 'values';
+  state.profile = blankProfile();
+  state.openText = '';
+  state.chat = [];
+  state.answers = [];
+  state.elicitor = null;
+  state.trace = [];
+  state.pending = null;
+  state.busy = false;
+  state.shown = 0;
+  state.demo = null;
+  state.focusNext = false;
+  $('#tab-form')?.replaceChildren();
+  $('#stage-confirm')?.replaceChildren();
+  $('#stage-compare')?.replaceChildren();
+}
+function bindDecision(d) {
+  DECISION = d;
+  scored = d.attributes.filter(a => a.kind === 'rate');
+  optIndex = Object.fromEntries(d.options.map((o, i) => [o.id, i]));
+}
+async function selectDecision(id) {
+  if (id === 'custom') {
+    const saved = sessionStorage.getItem('preference-first-custom');
+    if (!saved) throw new Error('That generated decision is no longer in this tab.');
+    bindDecision(JSON.parse(saved));
+  } else {
+    const res = await fetch('decisions/' + id + '.json');
+    if (!res.ok) throw new Error('Could not load this decision.');
+    bindDecision(await res.json());
+  }
+  resetFlow();
+  loadDraft();
+  renderIntro();
+  renderChooser();
+  setStage('values', false);
+  if (!state.study) {
+    const url = new URL(location.href);
+    url.searchParams.set('d', id);
+    history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
+}
+function rememberKey() {
+  const input = $('#gen-key');
+  if (!input) return;
+  const saved = sessionStorage.getItem('preference-first-api-key');
+  if (saved && !input.value) input.value = saved;
+  input.addEventListener('change', () => {
+    if (input.value.trim()) sessionStorage.setItem('preference-first-api-key', input.value.trim());
+    else sessionStorage.removeItem('preference-first-api-key');
+  });
+}
+async function generateDecision() {
+  const status = $('#gen-status');
+  const button = $('#gen-go');
+  const problem = $('#gen-problem').value.trim();
+  const key = $('#gen-key').value.trim();
+  const model = $('#gen-model').value.trim() || 'claude-sonnet-4-5';
+  if (!problem) { status.textContent = 'Describe the decision first.'; return; }
+  if (!key) { status.textContent = 'Add an Anthropic API key. It stays in this tab.'; return; }
+  sessionStorage.setItem('preference-first-api-key', key);
+  button.disabled = true;
+  try {
+    const built = await buildFromDescription(problem, key, model, text => { status.textContent = text; });
+    built.decision.id = 'custom';
+    built.decision.provenance.problem = problem;
+    sessionStorage.setItem('preference-first-custom', JSON.stringify(built.decision));
+    await selectDecision('custom');
+    const dropped = (built.decision.provenance.dropped || []).length;
+    status.textContent = `Using ${built.scored.length} scored outcomes from ${built.checked} abstracts. ${built.rejected} claims were dropped because the quote or the number was not in the abstract.` + (dropped ? ` ${dropped} outcomes had no verified number.` : '');
+  } catch (e) {
+    status.textContent = e.message || 'Could not generate this decision.';
+  } finally {
+    button.disabled = false;
+  }
+}
+$('#gen-go')?.addEventListener('click', generateDecision);
+rememberKey();
+(async function boot() {
+  const wanted = sessionParams.get('d') || 'prostate_localized';
+  try { await selectDecision(wanted); }
+  catch (e) {
+    $('#intro').textContent = e.message || 'Could not load this decision.';
+    try { await selectDecision('prostate_localized'); } catch (err) { return; }
+  }
+  initStudy();
+  renderChooser();
+  if (!state.study && location.hash === '#example' && DECISION.id === 'prostate_localized') loadExample(false);
+  if (location.hash === '#followup') renderFollowup();
+})();
 (async () => {
   try {
     if (!window.claude || typeof window.claude.use !== 'function') return;

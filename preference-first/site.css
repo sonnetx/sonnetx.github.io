@@ -133,23 +133,237 @@ summary {
     color: var(--accent);
 }
 
-/* The conversation. */
+/* The questions sit in one column, under the trial table, rather than in a chat beside a dashboard. */
+.convo {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.belief {
+    position: static;
+}
+
+.forecast {
+    display: none;
+}
+
+.chooser {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.chooser-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+}
+
+.chooser-row button {
+    padding: 0 0 2px;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    color: var(--accent);
+}
+
+.chooser-row button.current {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+    cursor: default;
+}
+
+.generate {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 66ch;
+}
+
+.generate input[type="password"],
+.generate input[type="text"] {
+    width: min(100%, 420px);
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: #fff;
+    font-family: var(--ui);
+    font-size: 14px;
+}
+
+.intro h2 {
+    font-size: 24px;
+    font-weight: normal;
+    margin-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.intro .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 18px;
+}
+
+.intro .opt {
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 14px 0;
+    gap: 4px;
+}
+
+.intro .opt b {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.intro .sources,
+.stage .sources {
+    margin-top: 12px;
+}
+
+.rates caption {
+    caption-side: bottom;
+    text-align: left;
+    padding-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.rates th[scope="row"] {
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: normal;
+}
+
+.rates td {
+    white-space: nowrap;
+}
+
+.rates th[scope="row"] small {
+    display: block;
+    max-width: 36ch;
+    margin-top: 3px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.qtable {
+    margin: 4px 0 2px;
+}
+
+.qfacts {
+    max-width: 62ch;
+    color: var(--ink);
+}
+
+.qfacts p + p {
+    margin-top: 6px;
+}
+
+.brief {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 70ch;
+}
+
+.brief h3 {
+    font-size: 22px;
+}
+
+.ratehint {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+.steps {
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+.step {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+    padding: 10px 16px 10px 0;
+}
+
+.step[aria-current="step"] {
+    background: none;
+    border-bottom-color: var(--accent);
+}
+
+.step .n {
+    background: none;
+    color: var(--muted);
+    width: auto;
+    height: auto;
+    font-family: var(--ui);
+}
+
+.step[aria-current="step"] .n,
+.step.done .n {
+    background: none;
+    color: var(--accent);
+}
+
+/* The questions. */
 .msg {
-    font-size: 16px;
-    border-radius: 10px;
+    font-size: 18px;
+    max-width: 66ch;
+    border-radius: 0;
+    padding: 0;
+}
+
+.thread {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+    padding: 0;
 }
 
 .msg.ai {
-    background: var(--panel);
-    border-color: var(--rule-soft);
-    border-bottom-left-radius: 3px;
+    background: none;
+    border: 0;
+    font-family: Georgia, 'Times New Roman', serif;
 }
 
 .msg.me {
     font-family: var(--ui);
     font-size: 15px;
     font-weight: 500;
-    border-bottom-right-radius: 3px;
+    color: var(--muted);
+    background: none;
+    align-self: flex-start;
+    padding: 0 0 14px;
+}
+
+.msg.me::before {
+    content: 'You said: ';
+}
+
+.qcard .ans {
+    justify-content: flex-start;
+    align-self: flex-start;
 }
 
 .qcard .ans button,
@@ -167,7 +381,9 @@ summary {
 }
 
 .setup {
-    border-radius: 8px;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
 }
 
 .belief {
@@ -187,7 +403,6 @@ summary {
 }
 
 .rcard,
-.opt,
 .framing,
 .whatif,
 .survey {

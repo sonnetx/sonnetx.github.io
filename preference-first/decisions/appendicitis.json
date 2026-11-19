@@ -1,0 +1,114 @@
+{
+  "id": "appendicitis",
+  "title": "Appendicitis seen on a scan",
+  "question": "Which approach fits you: antibiotics first, or surgery to remove the appendix?",
+  "context": "A scan shows appendicitis. One choice is a course of antibiotics, with surgery later if that fails. The other is an appendectomy now, usually laparoscopic. At 30 days, general health was about the same. What differs is the chance of still needing surgery, a complication, and another stay in hospital. A stone in the appendix made antibiotics less likely to be enough.",
+  "population": "1,552 adults with appendicitis at 25 hospitals in the United States, including 414 with a stone in the appendix. Flum et al., NEJM 2020 (CODA trial), first 90 days.",
+  "options": [
+    {
+      "id": "antibiotics",
+      "name": "Antibiotics",
+      "short": "A 10-day course, with surgery if the appendicitis does not settle.",
+      "burden": "Antibiotics for 10 days. In the trial, about half of this group went home from the emergency department without being admitted. Some people need surgery hours or days later, and some need it in the following months."
+    },
+    {
+      "id": "surgery",
+      "name": "Appendectomy",
+      "short": "Surgery to remove the appendix, usually through small incisions.",
+      "burden": "An operation during this illness. In the trial, 96 in 100 of these operations were laparoscopic. Most people were admitted for the operation. Recovery includes missed work in the first weeks."
+    }
+  ],
+  "attributes": [
+    {
+      "id": "later_surgery",
+      "name": "Having the appendix removed within 90 days",
+      "plain": "having the appendix removed within 90 days",
+      "kind": "rate",
+      "unit": "out of 100 people within 90 days",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "By 90 days, 29 in 100 people who started with antibiotics had an appendectomy: 41 if a stone was seen in the appendix, and 25 if not. The surgery figure is 100 because that group had the operation at the start. A later report from the same trial found about 46 in 100 of the antibiotics group had surgery by 2 years.",
+      "values": { "antibiotics": 29, "surgery": 100 },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "complication",
+      "name": "A surgical complication within 90 days",
+      "plain": "a surgical complication within 90 days",
+      "kind": "rate",
+      "unit": "complications per 100 people within 90 days",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "National Surgical Quality Improvement Program complications per 100 people through 90 days: 8.1 with antibiotics and 3.5 with surgery. The higher rate with antibiotics was among people with a stone in the appendix (20.2 versus 3.6). Without a stone the rates were 3.7 and 3.5.",
+      "values": { "antibiotics": 8.1, "surgery": 3.5 },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "serious",
+      "name": "A serious adverse event within 90 days",
+      "plain": "a serious adverse event within 90 days",
+      "kind": "rate",
+      "unit": "serious adverse events per 100 people within 90 days",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "4.0 per 100 with antibiotics and 3.0 per 100 with surgery. The confidence interval included no real difference. There were no deaths in either group.",
+      "values": { "antibiotics": 4, "surgery": 3 },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "readmit",
+      "name": "Another hospital stay within 90 days",
+      "plain": "another hospital stay within 90 days",
+      "kind": "rate",
+      "unit": "out of 100 people within 90 days",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "Any hospitalization after the first treatment, within 90 days, including a later appendectomy: 24 in 100 with antibiotics and 5 in 100 with surgery.",
+      "values": { "antibiotics": 24, "surgery": 5 },
+      "levels": {},
+      "evidence": [],
+      "category": "burden"
+    },
+    {
+      "id": "urgent_visit",
+      "name": "An emergency or urgent-care visit within 90 days",
+      "plain": "an emergency or urgent-care visit within 90 days",
+      "kind": "rate",
+      "unit": "out of 100 people within 90 days",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "A visit to an emergency department or urgent care after the first treatment, within 90 days: 9 in 100 with antibiotics and 4 in 100 with surgery.",
+      "values": { "antibiotics": 9, "surgery": 4 },
+      "levels": {},
+      "evidence": [],
+      "category": "burden"
+    },
+    {
+      "id": "missed_work",
+      "name": "Days of work missed within 90 days",
+      "plain": "days of work missed within 90 days",
+      "kind": "ordinal",
+      "unit": "mean days, not a rate",
+      "direction": "lower_is_better",
+      "source": "Flum et al., NEJM 2020 (CODA)",
+      "note": "Mean days of missed work within 90 days were 5.26 with antibiotics and 8.73 with surgery. This is a count of days, not a rate out of 100, so it is shown here and not used in the ranking.",
+      "values": {},
+      "levels": { "antibiotics": "about 5 days", "surgery": "about 9 days" },
+      "evidence": [],
+      "category": "burden"
+    }
+  ],
+  "tradeoff_checks": [],
+  "default_weights_note": "Before your values are recorded, the comparison treats every outcome as mattering equally. That is not a recommendation. It is the placeholder your answers replace.",
+  "sources": [
+    "Flum DR, Davidson GH, Monsell SE, et al. A Randomized Trial Comparing Antibiotics with Appendectomy for Appendicitis. N Engl J Med 2020;383:1907-1919.",
+    "CODA Collaborative. Antibiotics versus Appendectomy for Acute Appendicitis — Longer-Term Outcomes. N Engl J Med 2021;385:2395-2397."
+  ],
+  "provenance": {}
+}

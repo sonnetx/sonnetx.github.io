@@ -1,0 +1,72 @@
+{
+  "id": "knee_osteoarthritis",
+  "title": "Knee osteoarthritis eligible for replacement",
+  "question": "Which approach fits you: a knee replacement, or the exercise program alone?",
+  "context": "The knee has osteoarthritis and a surgeon has said a replacement is reasonable. One choice is the operation, followed by 12 weeks of exercise, education, diet advice, insoles, and pain medicine. The other is that program alone. At one year, replacement improved pain and function more. It also caused more serious problems in the knee. Most people who started with the program still had their own knee.",
+  "population": "100 adults in Denmark with moderate to severe osteoarthritis of one knee who were eligible for replacement. People whose pain in the past week was above 60 on a 100-point scale were not included. Skou et al., NEJM 2015.",
+  "options": [
+    {
+      "id": "replacement",
+      "name": "Knee replacement",
+      "short": "The operation, then the same 12-week program.",
+      "burden": "Surgery on one knee, a hospital stay, and then 12 weeks of exercise, education, dietary advice, insoles, and pain medicine. The largest early risks are a clot, stiffness that needs the knee bent under anesthetic, infection, and fracture."
+    },
+    {
+      "id": "program",
+      "name": "Exercise program",
+      "short": "Twelve weeks of exercise and the other nonsurgical care, with no operation unless you later choose one.",
+      "burden": "Exercise, education, dietary advice, insoles, and pain medicine for 12 weeks, with physiotherapists and dietitians. No operation unless the knee is still unacceptable. In the trial, 13 of 50 people in this group had a replacement before the year was out."
+    }
+  ],
+  "attributes": [
+    {
+      "id": "replacement_1y",
+      "name": "Having a knee replacement within a year",
+      "plain": "having a knee replacement within 12 months",
+      "kind": "rate",
+      "unit": "out of 100 people within 12 months",
+      "direction": "lower_is_better",
+      "source": "Skou et al., NEJM 2015",
+      "note": "13 of 50 people who started with the program had a replacement before 12 months. 49 of 50 assigned to replacement had the operation. The replacement figure is the operation itself, not a later failure. About 74 in 100 who started with the program still had their own knee at a year.",
+      "values": { "replacement": 98, "program": 26 },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "serious_knee",
+      "name": "A serious problem in the treated knee",
+      "plain": "a serious problem in the treated knee within 12 months",
+      "kind": "rate",
+      "unit": "serious events in the treated knee per 100 people within 12 months",
+      "direction": "lower_is_better",
+      "source": "Skou et al., NEJM 2015",
+      "note": "The trial recorded 8 events in the knee among 50 people assigned to replacement, and 1 among 50 assigned to the program. This counts events, and one person can have more than one. Counts of serious events anywhere in the body were 24 versus 6, and many of those were unrelated to the knee.",
+      "values": { "replacement": 16, "program": 2 },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "pain_not_improved",
+      "name": "Pain not meaningfully better at one year",
+      "plain": "not having a meaningful improvement in knee pain at one year",
+      "kind": "rate",
+      "unit": "out of 100 people at 12 months",
+      "direction": "lower_is_better",
+      "source": "Katz, NEJM 2015, reporting Skou et al.",
+      "note": "An improvement of at least 15 percent on the pain score at one year was reached by 85 in 100 people after replacement and 68 in 100 after the program. The figures here are the people who did not reach that mark, 15 and 32 in 100. The mean gain on a broader 0 to 100 knee score was 32.5 after replacement and 16.0 after the program. Both groups improved.",
+      "values": { "replacement": 15, "program": 32 },
+      "levels": {},
+      "evidence": [],
+      "category": "function"
+    }
+  ],
+  "tradeoff_checks": [],
+  "default_weights_note": "Before your values are recorded, the comparison treats every outcome as mattering equally. That is not a recommendation. It is the placeholder your answers replace.",
+  "sources": [
+    "Skou ST, Roos EM, Laursen MB, et al. A Randomized, Controlled Trial of Total Knee Replacement. N Engl J Med 2015;373:1597-1606.",
+    "Katz JN. Parachutes and Preferences — A Trial of Knee Replacement. N Engl J Med 2015;373:1668-1669."
+  ],
+  "provenance": {}
+}

@@ -1,0 +1,224 @@
+{
+  "id": "prostate_localized",
+  "title": "Localized prostate cancer found by PSA screening",
+  "question": "Which approach fits you best: active monitoring, surgery, or radiotherapy?",
+  "context": "You have prostate cancer that has not spread beyond the prostate, found through a PSA blood test. Most such cancers grow slowly. There are three reasonable approaches, and the trial that compared them found no clear difference in the chance of dying from prostate cancer over fifteen years. What differs is how likely the cancer is to spread or progress, and the side effects you live with. That makes this a decision where what matters to you should drive the answer.",
+  "population": "Men aged 50 to 69 with PSA-detected localized prostate cancer, as enrolled in the UK ProtecT trial (1,643 men randomized 1999 to 2009).",
+  "options": [
+    {
+      "id": "monitoring",
+      "name": "Active monitoring",
+      "short": "Regular PSA tests, with treatment only if the cancer shows signs of progressing.",
+      "burden": "A PSA blood test every three months in the first year, then every six to twelve months. Repeat scans or biopsies if PSA rises. No immediate treatment side effects. Living with an untreated cancer, and the possibility of needing surgery or radiotherapy later."
+    },
+    {
+      "id": "surgery",
+      "name": "Surgery (radical prostatectomy)",
+      "short": "An operation to remove the prostate.",
+      "burden": "A hospital stay of one to three days, a catheter for one to two weeks, and four to six weeks off normal activity. The largest early side effects are on urine control and erections, some of which improve over the first one to two years."
+    },
+    {
+      "id": "radiotherapy",
+      "name": "Radiotherapy with short-course hormone therapy",
+      "short": "External beam radiation to the prostate over several weeks, with three to six months of hormone therapy.",
+      "burden": "Daily radiotherapy sessions, five days a week for about seven weeks, plus three to six months of hormone injections that cause hot flushes, tiredness, and loss of sex drive while they last. Bowel and urinary irritation during and shortly after treatment."
+    }
+  ],
+  "attributes": [
+    {
+      "id": "cancer_death",
+      "name": "Dying from prostate cancer",
+      "plain": "dying from prostate cancer within 15 years",
+      "kind": "rate",
+      "unit": "out of 100 men over 15 years",
+      "direction": "lower_is_better",
+      "source": "Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)",
+      "note": "The differences between the three groups were not statistically significant. About 97 in 100 men in every group were alive without dying of prostate cancer at 15 years.",
+      "values": {
+        "monitoring": 3.1,
+        "surgery": 2.2,
+        "radiotherapy": 2.9
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "metastasis",
+      "name": "Cancer spreading beyond the prostate",
+      "plain": "the cancer spreading to other parts of the body within 15 years",
+      "kind": "rate",
+      "unit": "out of 100 men over 15 years",
+      "direction": "lower_is_better",
+      "source": "Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)",
+      "note": "Spread was about twice as common with monitoring, but this did not translate into more deaths within 15 years. Spread usually means hormone therapy and living with advanced cancer.",
+      "values": {
+        "monitoring": 9.4,
+        "surgery": 4.7,
+        "radiotherapy": 5.0
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "hormone_therapy",
+      "name": "Needing long-term hormone therapy",
+      "plain": "needing long-term hormone therapy to control the cancer within 15 years",
+      "kind": "rate",
+      "unit": "out of 100 men over 15 years",
+      "direction": "lower_is_better",
+      "source": "Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)",
+      "note": "Long-term hormone therapy causes hot flushes, tiredness, weight gain, loss of sex drive, and weaker bones for as long as it continues.",
+      "values": {
+        "monitoring": 12.7,
+        "surgery": 7.2,
+        "radiotherapy": 7.7
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "incontinence_6mo",
+      "name": "Urine leakage needing pads in the first six months",
+      "plain": "using one or more absorbent pads a day for urine leakage during the first six months",
+      "kind": "rate",
+      "unit": "out of 100 men at 6 months",
+      "direction": "lower_is_better",
+      "source": "Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)",
+      "note": "The early effect of surgery on urine control. For most men it improves over the first one to two years, though not to zero.",
+      "values": {
+        "monitoring": 4,
+        "surgery": 46,
+        "radiotherapy": 5
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "function"
+    },
+    {
+      "id": "erectile_6mo",
+      "name": "Losing erections firm enough for sex in the first six months",
+      "plain": "not having erections firm enough for intercourse during the first six months",
+      "kind": "rate",
+      "unit": "out of 100 men at 6 months",
+      "direction": "lower_is_better",
+      "source": "Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 months)",
+      "note": "Before treatment, 33 in 100 men already lacked firm erections. Radiotherapy's early number includes the months of hormone therapy, which suppresses sexual function while it lasts.",
+      "values": {
+        "monitoring": 48,
+        "surgery": 88,
+        "radiotherapy": 78
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "function"
+    },
+    {
+      "id": "incontinence",
+      "name": "Urine leakage needing pads, six years on",
+      "plain": "using one or more absorbent pads a day for urine leakage, six years on",
+      "kind": "rate",
+      "unit": "out of 100 men at 6 years",
+      "direction": "lower_is_better",
+      "source": "Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)",
+      "note": "Right after surgery it is much higher: 46 in 100 men used pads at six months, falling to 17 in 100 by six years. Some men on monitoring later had surgery, which is why their number is above radiotherapy's.",
+      "values": {
+        "monitoring": 8,
+        "surgery": 17,
+        "radiotherapy": 4
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "function"
+    },
+    {
+      "id": "erectile",
+      "name": "Losing erections firm enough for sex, six years on",
+      "plain": "not having erections firm enough for intercourse, six years on",
+      "kind": "rate",
+      "unit": "out of 100 men at 6 years",
+      "direction": "lower_is_better",
+      "source": "Donovan et al., NEJM 2016 (ProtecT patient-reported outcomes, 6 years)",
+      "note": "Before treatment, 67 in 100 men had erections firm enough for sex, so 33 in 100 already did not. At six months the gap was widest: 88 in 100 after surgery, 78 after radiotherapy, and 48 on monitoring lacked firm erections. Ageing lowers everyone's number over time.",
+      "values": {
+        "monitoring": 70,
+        "surgery": 83,
+        "radiotherapy": 73
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "function"
+    },
+    {
+      "id": "radical_later",
+      "name": "Ending up having surgery or radiotherapy anyway",
+      "plain": "starting on monitoring but going on to have surgery or radiotherapy within 15 years",
+      "kind": "rate",
+      "unit": "out of 100 men over 15 years",
+      "direction": "lower_is_better",
+      "source": "Hamdy et al., NEJM 2023 (ProtecT 15-year outcomes)",
+      "note": "Most men who start with monitoring eventually have treatment, usually because PSA rises. Monitoring is a delay for most and an avoidance for some. Men who choose surgery or radiotherapy up front have already had it, so their number is zero by definition.",
+      "values": {
+        "monitoring": 61.1,
+        "surgery": 0,
+        "radiotherapy": 0
+      },
+      "levels": {},
+      "evidence": [],
+      "category": "disease"
+    },
+    {
+      "id": "bowel",
+      "name": "Bowel problems",
+      "plain": "bowel problems such as blood in the stool or leakage",
+      "kind": "ordinal",
+      "unit": "how common, compared across options",
+      "direction": "lower_is_better",
+      "source": "Donovan et al., NEJM 2016 and NEJM Evidence 2023 (ProtecT patient-reported outcomes)",
+      "note": "Blood in the stool was more common after radiotherapy from year two onward, and leakage of stool increased in the radiotherapy group in years seven to twelve. The trial reports these in figures rather than as single percentages, so this page shows them in words.",
+      "values": {},
+      "levels": {
+        "monitoring": "uncommon",
+        "surgery": "uncommon",
+        "radiotherapy": "more common"
+      },
+      "evidence": [],
+      "category": "function"
+    }
+  ],
+  "tradeoff_checks": [
+    {
+      "id": "spread_vs_sideeffects",
+      "prompt": "Suppose surgery lowered the chance of the cancer spreading from about 9 in 100 to about 5 in 100 over fifteen years, but raised the chance of needing pads for urine leakage from about 8 in 100 to about 17 in 100. Which would you lean toward?",
+      "options": {
+        "surgery": "Take the lower chance of spread, accept the leakage risk",
+        "monitoring": "Keep the lower leakage risk, accept the higher chance of spread"
+      },
+      "attributes": [
+        "metastasis",
+        "incontinence"
+      ]
+    },
+    {
+      "id": "treat_now_vs_later",
+      "prompt": "About 61 in 100 men who start with monitoring end up having surgery or radiotherapy later anyway. Some see that as a reason to treat now and be done with it. Others see the years without side effects as worth having even if treatment comes later. Which is closer to you?",
+      "options": {
+        "surgery": "Treat now and be done with it",
+        "monitoring": "Take the side-effect-free years, even if treatment comes later"
+      },
+      "attributes": [
+        "radical_later",
+        "erectile"
+      ]
+    }
+  ],
+  "default_weights_note": "Before your values are recorded, the comparison treats every outcome as mattering equally. That is not a recommendation. It is the placeholder your answers replace.",
+  "sources": [
+    "Hamdy FC, Donovan JL, Lane JA, et al. Fifteen-Year Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2023;388:1547-1558.",
+    "Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes after Monitoring, Surgery, or Radiotherapy for Prostate Cancer. N Engl J Med 2016;375:1425-1437.",
+    "Donovan JL, Hamdy FC, Lane JA, et al. Patient-Reported Outcomes 12 Years after Localized Prostate Cancer Treatment. NEJM Evidence 2023;2(4)."
+  ],
+  "provenance": {}
+}
