@@ -1,0 +1,204 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The faster kernel was slower - Sonnet Xu</title>
+    <meta name="description" content="On one H100, two agent-written kernels for the same matrix-vector problem swapped rank. A 24% lead became a 10% loss.">
+    <meta property="og:title" content="The faster kernel was slower">
+    <meta property="og:description" content="On one H100, two agent-written kernels for the same problem swapped rank once a neighbor held half the register file.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sonnetx.github.io/co-kernel/">
+    <meta property="og:image" content="https://sonnetx.github.io/photos/projects/co-kernel.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+    <link rel="stylesheet" href="/sidebar.css">
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 760px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: normal;
+            line-height: 1.25;
+            margin-bottom: 28px;
+        }
+
+        p {
+            margin-bottom: 18px;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        figure {
+            margin: 28px 0 32px;
+        }
+
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #f4f7fb;
+        }
+
+        figcaption {
+            margin-top: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #777;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 22px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 500;
+            color: #666;
+        }
+
+        td.num, th.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .links {
+            margin-top: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+        }
+
+        .links a {
+            margin-right: 16px;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include sidebar.html active="projects" %}
+
+    <div class="container">
+        <main>
+            <h1 class="page-title">The faster kernel was slower</h1>
+
+            <p>Kernel benchmarks time one kernel on an empty GPU, then keep whichever finished first. The GPU a kernel actually runs on is usually doing something else at the same time.</p>
+
+            <p>On one H100 at Stanford's Sherlock cluster, two kernels an agent wrote for the same matrix-vector multiply traded places. Alone, a 512-thread scalar kernel took 66.6 microseconds and a 256-thread vectorized kernel took 82.4, so the scalar kernel led by 24%. A neighbor holding 127 registers per thread, about half the register file, stretched those times to 143 and 131 microseconds. The old leader was then 10% behind.</p>
+
+            <figure>
+                <img src="/photos/projects/co-kernel.jpg" width="1000" height="625" alt="Bar chart. Alone, the scalar kernel is at 67 microseconds and the vectorized kernel at 82. Shared, the scalar kernel is at 143 and the vectorized kernel at 130.">
+                <figcaption>Median latency in microseconds. Alone, the lighter bar wins. Shared, the darker bar wins. The neighbor is synthetic: one block per multiprocessor, spinning on register-resident arithmetic.</figcaption>
+            </figure>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kernel</th>
+                        <th class="num">Alone</th>
+                        <th class="num">Shared</th>
+                        <th class="num">Slowdown</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>512-thread scalar</td>
+                        <td class="num">66.6 &micro;s</td>
+                        <td class="num">143.0 &micro;s</td>
+                        <td class="num">2.15&times;</td>
+                    </tr>
+                    <tr>
+                        <td>256-thread vectorized</td>
+                        <td class="num">82.4 &micro;s</td>
+                        <td class="num">130.5 &micro;s</td>
+                        <td class="num">1.58&times;</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>The ranking flips because the faster kernel is also the more fragile one, and by more than its original lead. Here that ratio is 2.15 / 1.58 = 1.36, against an isolated margin of 1.24. Slowing both kernels by the same amount leaves the order alone. An earlier set of near-duplicate kernels, the two fastest for each problem, never flipped, for that reason.</p>
+
+            <p>This is one pair, measured once, on one H100, beside a neighbor that only burns registers. Both kernels passed a correctness check in the same process, and the shared timings do not overlap between their 10th and 90th percentiles. It is an existence result. A leaderboard taken on an idle device is a property of the kernel and of whoever else is on the GPU.</p>
+
+            <p class="links">
+                <a href="https://github.com/sonnetx/co-kernel" target="_blank">Code</a>
+                <a href="https://github.com/sonnetx/co-kernel/blob/main/results/day_one_report.md" target="_blank">Full note</a>
+            </p>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
