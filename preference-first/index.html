@@ -261,7 +261,7 @@
 <div class="wrap">
   <header class="top">
     <h1 class="page-title">Preference-First Medical AI</h1>
-    <p class="meta">A few common decisions are ready to use. You can also describe a different one and generate it from PubMed abstracts with your own API key. The questions use those rates. Nothing is ranked until you confirm them. Not medical advice, and not a prediction for you.</p>
+    <p class="meta">Start from a common decision, then change the description and the options so they match what your doctor offered. You can also paste a handout from the clinic. Nothing is ranked until you confirm. Not medical advice, and not a prediction for you.</p>
   </header>
   <div class="chooser" id="chooser">
     <div class="chooser-row" id="chooser-row"></div>
@@ -270,12 +270,17 @@
       <div class="q generate">
         <label for="gen-problem">What is the decision?</label>
         <textarea id="gen-problem" placeholder="For example: my doctor says the knee is ready for replacement, and I want to know how that compares with doing the exercise program instead."></textarea>
-        <p class="note">The page sends your description and your key to Anthropic, then reads PubMed abstracts in this browser. A number is kept only when the quoted sentence in the abstract contains that number. The key stays in this tab.</p>
+        <label for="gen-handout">Handout from your doctor</label>
+        <input id="gen-file" type="file" accept=".txt,.md,.pdf,text/plain,application/pdf">
+        <textarea id="gen-handout" placeholder="Paste the handout here. A scan will not work; the page needs the words."></textarea>
+        <p class="note">You can use the handout as the description without a key, and then edit it. With a key, the page reads that handout and keeps a number only when the handout itself contains it. It will not add a treatment the handout does not offer. The key stays in this tab. Generating from trials is separate: that path reads PubMed abstracts, and a number is kept only when the quoted sentence contains it.</p>
         <label for="gen-key">Anthropic API key</label>
         <input id="gen-key" type="password" autocomplete="off" spellcheck="false">
         <label for="gen-model">Model</label>
         <input id="gen-model" type="text" value="claude-sonnet-4-5" autocomplete="off" spellcheck="false">
         <div class="actions">
+          <button class="btn" id="gen-use" type="button">Use this wording</button>
+          <button class="btn" id="gen-handout-go" type="button">Read the handout</button>
           <button class="btn primary" id="gen-go" type="button">Generate from the trials</button>
         </div>
         <p class="hint" id="gen-status" role="status"></p>
@@ -594,16 +599,119 @@ function exampleNotice() {
 }
 
 /* ------------------------------------------------------------------- intro */
+function ratesNote() {
+  const words = DECISION.attributes.filter(a => a.kind !== 'rate').map(a => a.name.toLowerCase());
+  let note = 'Counted rows are people in 100. Lower is better.';
+  if (words.length) {
+    const list = words.join(' and ');
+    const plural = words.length > 1 || /s$/i.test(words[0]);
+    note += ' ' + list.charAt(0).toUpperCase() + list.slice(1) + (plural ? ' are' : ' is') + ' shown in words, because the papers did not give one percentage for every option.';
+  }
+  return note;
+}
+function editsKey() { return 'preference-first-edits:' + DECISION.id; }
+function applyEdits() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(editsKey()) || 'null');
+    if (!saved) return;
+    if (typeof saved.context === 'string') DECISION.context = saved.context;
+    for (const row of saved.options || []) {
+      const o = option(row.id);
+      if (!o) continue;
+      if (typeof row.name === 'string' && row.name.trim()) o.name = row.name;
+      if (typeof row.short === 'string') o.short = row.short;
+      if (typeof row.burden === 'string') o.burden = row.burden;
+    }
+  } catch (e) {}
+}
+function persistEdits() {
+  try {
+    sessionStorage.setItem(editsKey(), JSON.stringify({
+      context: DECISION.context,
+      options: DECISION.options.map(o => ({ id: o.id, name: o.name, short: o.short, burden: o.burden })),
+    }));
+  } catch (e) {}
+}
+function syncOffered() {
+  for (const box of document.querySelectorAll('#intro input[data-option]')) {
+    const on = !state.profile.ruled_out.includes(box.dataset.option);
+    box.checked = on;
+    box.closest('.opt')?.classList.toggle('aside', !on);
+  }
+  const hint = $('#offered-hint');
+  if (hint) hint.textContent = allowedOptions(state.profile).length < 2 ? 'Leave at least two options. These should be the ones your doctor actually offered.' : '';
+}
+function refreshRates() {
+  const note = $('#rates-note');
+  if (note) note.textContent = ratesNote();
+  const mount = $('#rates-mount');
+  if (mount) mount.replaceChildren(ratesTable(DECISION.attributes));
+}
+function optionEditor(o) {
+  const name = el('input', { type: 'text', value: o.name, 'aria-label': 'Name of this option' });
+  const about = el('textarea', { rows: '3', 'aria-label': 'What this option involves' }, [o.short, o.burden].filter(Boolean).join(' '));
+  const saveText = () => {
+    const next = name.value.trim();
+    if (next) o.name = next;
+    else name.value = o.name;
+    o.short = about.value.trim();
+    o.burden = '';
+    persistEdits();
+    state.elicitor = null;
+    refreshRates();
+    if (state.stage === 'values') renderForm();
+  };
+  name.addEventListener('change', saveText);
+  about.addEventListener('change', saveText);
+  const offered = el('input', { type: 'checkbox', 'data-option': o.id });
+  offered.checked = !state.profile.ruled_out.includes(o.id);
+  offered.addEventListener('change', () => {
+    state.profile.ruled_out = offered.checked ? state.profile.ruled_out.filter(id => id !== o.id) : [...new Set([...state.profile.ruled_out, o.id])];
+    state.elicitor = null;
+    invalidateProfile();
+    saveDraft();
+    syncOffered();
+    if (state.stage === 'values') renderForm();
+  });
+  return el('div', { class: 'opt' + (offered.checked ? '' : ' aside') },
+    name, about,
+    el('label', { class: 'offer' }, offered, 'My doctor offered this'));
+}
 function renderIntro() {
   const s = $('#intro'); s.innerHTML = '';
-  s.append(el('p', { class: 'ctx' }, DECISION.context));
+  s.append(el('p', { class: 'note' }, 'This starts from the published description. Change it so it matches what you were told. Uncheck a treatment your doctor did not offer.'));
+  const context = el('textarea', { id: 'situation', rows: '5' }, DECISION.context);
+  context.addEventListener('input', () => { DECISION.context = context.value; persistEdits(); });
+  s.append(el('label', { class: 'field', for: 'situation' }, 'Your situation'), context);
   s.append(el('p', { class: 'pop' }, DECISION.population));
   const grid = el('div', { class: 'options' });
-  for (const o of DECISION.options) grid.append(el('div', { class: 'opt' }, el('b', {}, o.name), el('p', {}, o.short + ' ' + o.burden)));
+  for (const o of DECISION.options) grid.append(optionEditor(o));
   s.append(grid);
-  s.append(el('h2', {}, 'What the trial measured'), el('p', { class: 'pop' }, 'Counted rows are men in 100. Lower is better. Bowel problems are in words because the papers show them in figures rather than one percentage.'));
-  s.append(ratesTable(DECISION.attributes));
+  s.append(el('p', { class: 'hint', id: 'offered-hint' }));
+  s.append(el('div', { class: 'actions' }, el('button', { type: 'button', class: 'btn', onclick: resetEdits }, 'Restore the trial wording')));
+  s.append(el('h2', {}, 'What the trial measured'), el('p', { class: 'pop', id: 'rates-note' }, ratesNote()));
+  s.append(el('div', { id: 'rates-mount' }));
+  refreshRates();
   s.append(el('ol', { class: 'sources' }, ...DECISION.sources.map(x => el('li', {}, x))));
+  syncOffered();
+}
+function resetEdits() {
+  if (!state.base) return;
+  DECISION.context = state.base.context;
+  for (const saved of state.base.options) {
+    const o = option(saved.id);
+    if (!o) continue;
+    o.name = saved.name;
+    o.short = saved.short;
+    o.burden = saved.burden;
+  }
+  try { sessionStorage.removeItem(editsKey()); } catch (e) {}
+  state.profile.ruled_out = [];
+  state.elicitor = null;
+  invalidateProfile();
+  saveDraft();
+  renderIntro();
+  if (state.stage === 'values') renderForm();
 }
 
 /* ------------------------------------------------------------------- steps */
@@ -650,11 +758,11 @@ function questionFacts(q) {
   if (q.kind === 'tradeoff') {
     const [A, B] = q.attributes.map(attribute);
     return el('div', { class: 'qfacts' },
-      el('p', {}, `About ${fmt(q.params.da)} fewer men in 100 would have ${A.name.toLowerCase()}.`),
+      el('p', {}, `About ${fmt(q.params.da)} fewer people in 100 would have ${A.name.toLowerCase()}.`),
       el('p', {}, `About ${fmt(q.params.db)} more would have ${B.name.toLowerCase()}.`));
   }
   const A = attribute(q.attributes[0]);
-  return el('p', { class: 'qfacts' }, 'In the trial, men in 100: ' + DECISION.options.map(o => `${shortOpt(o)} ${fmt(A.values[o.id])}`).join(', ') + '.');
+  return el('p', { class: 'qfacts' }, 'In the trial, people in 100: ' + DECISION.options.map(o => `${shortOpt(o)} ${fmt(A.values[o.id])}`).join(', ') + '.');
 }
 function msg(role, text, kicker) {
   const node = el('div', { class: 'msg ' + role });
@@ -833,7 +941,7 @@ function renderForm() {
   foot.append(actions);
   if (!playing()) foot.append(el('div', { class: 'setup' },
     notesBlock(),
-    limitsBlock(() => { state.answers = []; rebuildElicitor(); renderForm(); $('#tab-form .limits')?.closest('details')?.setAttribute('open', ''); })));
+    limitsBlock(() => { state.answers = []; rebuildElicitor(); renderForm(); syncOffered(); $('#tab-form .limits')?.closest('details')?.setAttribute('open', ''); })));
   if (!state.study && !state.demo && !E.asked.length && state.profile.source !== 'example') {
     const row = el('div', { class: 'playrow' }, el('span', {}, 'See how one set of priorities runs through:'));
     for (const persona of personas()) row.append(el('button', { type: 'button', onclick: () => playDemo(persona) }, persona.name));
@@ -1052,7 +1160,7 @@ function clinicBrief(profile, rec) {
   if (tight && tight.gap < 3 && tight.a.note) box.append(el('p', {}, `${tight.a.name} is close across the options. ${tight.a.note.split(/(?<=\.)\s+/)[0]}`));
   const ranked = [...scored].filter(a => (profile.weights[a.id] || 0) > 0).sort((a, b) => profile.weights[b.id] - profile.weights[a.id] || a.name.localeCompare(b.name));
   if (ranked.length) {
-    box.append(el('p', {}, 'The rows are ordered by how much you said avoiding that outcome matters. Counts are men in 100.'));
+    box.append(el('p', {}, 'The rows are ordered by how much you said avoiding that outcome matters. Counts are people in 100.'));
     const tbl = el('table', { class: 'rates' });
     tbl.append(el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Outcome'), el('th', { scope: 'col' }, 'How much it matters'), ...DECISION.options.map(o => el('th', { scope: 'col' }, shortOpt(o))))));
     const tb = el('tbody');
@@ -1434,6 +1542,10 @@ function bindDecision(d) {
   DECISION = d;
   scored = d.attributes.filter(a => a.kind === 'rate');
   optIndex = Object.fromEntries(d.options.map((o, i) => [o.id, i]));
+  state.base = {
+    context: d.context,
+    options: d.options.map(o => ({ id: o.id, name: o.name, short: o.short, burden: o.burden })),
+  };
 }
 async function selectDecision(id) {
   if (id === 'custom') {
@@ -1447,6 +1559,7 @@ async function selectDecision(id) {
   }
   resetFlow();
   loadDraft();
+  applyEdits();
   renderIntro();
   renderChooser();
   setStage('values', false);
@@ -1491,6 +1604,156 @@ async function generateDecision() {
   }
 }
 $('#gen-go')?.addEventListener('click', generateDecision);
+
+function optionInHandout(text, o) {
+  const hay = text.toLowerCase();
+  const name = o.name.toLowerCase();
+  const keys = new Set(name.split(/[^a-z0-9]+/).filter(w => w.length > 4));
+  const aliases = {
+    monitoring: ['surveillance', 'watchful'],
+    surgery: ['prostatectomy', 'appendectomy', 'arthroplasty'],
+    radiotherapy: ['radiation'],
+    replacement: ['arthroplasty'],
+    program: ['exercise', 'physiotherapy'],
+    antibiotics: ['antibiotic'],
+  };
+  for (const [word, alts] of Object.entries(aliases)) {
+    if (name.includes(word)) { keys.add(word); for (const alt of alts) keys.add(alt); }
+  }
+  return [...keys].some(w => w.length > 3 && hay.includes(w));
+}
+function useHandoutAsDescription(text) {
+  DECISION.context = text;
+  const before = state.profile.ruled_out.slice();
+  let dropped = 0;
+  for (const o of DECISION.options) {
+    if (optionInHandout(text, o) || state.profile.ruled_out.includes(o.id)) continue;
+    state.profile.ruled_out.push(o.id);
+    dropped += 1;
+  }
+  if (allowedOptions(state.profile).length < 2) {
+    state.profile.ruled_out = before;
+    dropped = 0;
+  }
+  persistEdits();
+  state.elicitor = null;
+  invalidateProfile();
+  saveDraft();
+  renderIntro();
+  if (state.stage === 'values') renderForm();
+  return dropped;
+}
+function stringsFromPdf(content) {
+  const out = [];
+  const re = /\((?:\\.|[^\\)])*\)/g;
+  let m;
+  while ((m = re.exec(content))) {
+    out.push(m[0].slice(1, -1)
+      .replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t')
+      .replace(/\\\(/g, '(').replace(/\\\)/g, ')').replace(/\\\\/g, '\\')
+      .replace(/\\([0-7]{1,3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8))));
+  }
+  return out.join(' ');
+}
+async function inflatePdf(slice) {
+  const run = async (format, bytes) => {
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream(format));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  };
+  try { return await run('deflate', slice); }
+  catch (e) {
+    if (slice.length > 6) return await run('deflate-raw', slice.slice(2, -4));
+    throw e;
+  }
+}
+async function pdfToText(buffer) {
+  const bytes = new Uint8Array(buffer);
+  const latin = new TextDecoder('latin1');
+  const raw = latin.decode(bytes);
+  const parts = [];
+  const re = /stream\r?\n/g;
+  let m;
+  while ((m = re.exec(raw))) {
+    const start = m.index + m[0].length;
+    const end = raw.indexOf('endstream', start);
+    if (end < 0) break;
+    const dictStart = raw.lastIndexOf('<<', m.index);
+    const dict = dictStart >= 0 ? raw.slice(dictStart, m.index) : '';
+    let slice = bytes.slice(start, end);
+    while (slice.length && (slice[slice.length - 1] === 10 || slice[slice.length - 1] === 13)) slice = slice.slice(0, -1);
+    let content = '';
+    if (/FlateDecode/.test(dict)) {
+      try { content = latin.decode(await inflatePdf(slice)); }
+      catch (e) { continue; }
+    } else if (/\/Filter/.test(dict)) continue;
+    else content = latin.decode(slice);
+    if (!/Tj|TJ/.test(content)) continue;
+    parts.push(stringsFromPdf(content));
+  }
+  return parts.join('\n').replace(/\s+/g, ' ').trim();
+}
+async function textFromHandoutFile(file) {
+  if (/pdf$/i.test(file.name) || file.type === 'application/pdf') {
+    const text = await pdfToText(await file.arrayBuffer());
+    if (text.length < 40) throw new Error('This PDF did not contain readable text. Open it and paste the words.');
+    return text;
+  }
+  const text = (await file.text()).trim();
+  if (!text) throw new Error('That file was empty.');
+  return text;
+}
+$('#gen-file')?.addEventListener('change', async () => {
+  const status = $('#gen-status');
+  const file = $('#gen-file').files && $('#gen-file').files[0];
+  if (!file) return;
+  try {
+    $('#gen-handout').value = await textFromHandoutFile(file);
+    status.textContent = 'Handout loaded. Read it over, then use the wording or ask the page to read the numbers.';
+  } catch (e) {
+    status.textContent = e.message || 'Could not read that file.';
+  }
+});
+$('#gen-use')?.addEventListener('click', () => {
+  const status = $('#gen-status');
+  const text = $('#gen-handout').value.trim();
+  if (text.length < 40) { status.textContent = 'Paste the handout, or choose a text or PDF file.'; return; }
+  const dropped = useHandoutAsDescription(text);
+  status.textContent = dropped
+    ? 'The description is now your handout. I unchecked options it does not seem to name. Put back any that belong.'
+    : 'The description is now your handout. Change anything that does not match what you were told.';
+});
+async function readHandout() {
+  const status = $('#gen-status');
+  const button = $('#gen-handout-go');
+  const text = $('#gen-handout').value.trim();
+  const key = $('#gen-key').value.trim();
+  const model = $('#gen-model').value.trim() || 'claude-sonnet-4-5';
+  if (text.length < 40) { status.textContent = 'Paste the handout, or choose a text or PDF file.'; return; }
+  if (!key) {
+    const dropped = useHandoutAsDescription(text);
+    status.textContent = (dropped
+      ? 'The description is now your handout. I unchecked options it does not seem to name. Put back any that belong. '
+      : 'The description is now your handout. ') + 'Add an API key if you want the page to keep a number only when the handout contains it.';
+    return;
+  }
+  sessionStorage.setItem('preference-first-api-key', key);
+  button.disabled = true;
+  try {
+    const built = await buildFromHandout(text, key, model, msg => { status.textContent = msg; });
+    built.decision.id = 'custom';
+    built.decision.provenance = built.decision.provenance || {};
+    built.decision.provenance.problem = 'Clinic handout';
+    sessionStorage.setItem('preference-first-custom', JSON.stringify(built.decision));
+    await selectDecision('custom');
+    status.textContent = `Using ${built.scored.length} outcomes whose numbers are written in the handout. ${built.rejected} claims were left out because the quote or the number was not there. You can still edit the wording.`;
+  } catch (e) {
+    useHandoutAsDescription(text);
+    status.textContent = e.message || 'Could not read the handout.';
+  } finally {
+    button.disabled = false;
+  }
+}
+$('#gen-handout-go')?.addEventListener('click', readHandout);
 rememberKey();
 (async function boot() {
   const wanted = sessionParams.get('d') || 'prostate_localized';

@@ -80,11 +80,23 @@
     return (
       'A person has described a medical situation in which they face a choice. Frame the decision so it can be compared using trial evidence weighed by what matters to them.\n\n' +
       'Rules:\n' +
-      '1. Options: the two to four reasonable approaches a guideline would list, including a conservative or waiting option where one exists. Give each a short id, a name, one plain sentence, and what the days look like.\n' +
+      '1. Options: only approaches a clinician would actually offer for this situation. Two to four. Include a conservative or waiting option when that is a real alternative, and leave out anything that would not be on the table.\n' +
       '2. Outcomes: five to eight harms a trial would count, each stated so that lower is better. Include a time horizon in the plain wording.\n' +
       '3. Queries: PubMed searches likely to find the randomized trials comparing these options, including trial names if you know them.\n' +
       '4. Write in plain sentences. Do not recommend anything.\n\n' +
       'Description:\n' + problem
+    );
+  }
+  function handoutPrompt(text) {
+    return (
+      'A person uploaded a handout from their doctor. Frame the decision from that handout alone.\n\n' +
+      'Rules:\n' +
+      '1. Options: only the treatments the handout offers as choices. Two to four. Use the handout\'s own names. Do not add a treatment the handout does not mention, and do not drop one it presents as a real option.\n' +
+      '2. Outcomes: the harms the handout actually discusses, stated so that lower is better. Prefer outcomes for which the handout prints a number.\n' +
+      '3. context: two or three sentences describing this person\'s situation, in words a reader can edit. Stay inside what the handout says.\n' +
+      '4. queries: an empty list.\n' +
+      '5. Do not recommend anything.\n\n' +
+      'Handout:\n' + text.slice(0, 14000)
     );
   }
   function extractPrompt(frame, doc) {
@@ -283,5 +295,42 @@
     return built;
   }
 
+  function handoutMentions(text, name) {
+    const hay = normalize(text).toLowerCase();
+    const words = String(name).toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 3);
+    return words.some(w => hay.includes(w));
+  }
+
+  async function buildFromHandout(text, key, model, onStatus) {
+    const say = onStatus || (() => {});
+    const handout = String(text || '').trim();
+    if (handout.length < 40) throw new Error('Paste more of the handout. A few words is not enough to read the options.');
+    say('Reading the handout.');
+    const frame = await ask(key, model, handoutPrompt(handout), FRAME_SCHEMA);
+    frame.options = (frame.options || []).filter(o => handoutMentions(handout, o.name));
+    if (frame.options.length < 2) throw new Error('The handout does not name two treatments. Edit the description yourself, and uncheck any option your doctor did not offer.');
+    if (!frame.outcomes || frame.outcomes.length < 1) throw new Error('The handout does not describe outcomes with numbers. The description now uses your handout, and the trial rates stay in the table.');
+    frame.queries = [];
+    const doc = { id: 'handout', title: 'Clinic handout', text: normalize(handout), citation: 'Handout from the clinic, as uploaded.', url: '' };
+    const schema = extractSchema(frame.options.map(o => o.id), (frame.outcomes || []).map(o => o.id));
+    say('Checking that each number is written in the handout.');
+    let extracted;
+    try { extracted = await ask(key, model, extractPrompt(frame, doc), schema); }
+    catch (e) { throw new Error(e.message || 'Could not read the handout.'); }
+    const claims = [];
+    for (const c of extracted.claims || []) {
+      const reason = verify({ ...c, source_id: doc.id }, doc);
+      claims.push({ ...c, source_id: doc.id, value: c.kind === 'rate' ? Number(c.value) : c.value, ok: !reason, reason });
+    }
+    const built = assemble(frame, claims, { [doc.id]: doc });
+    built.rejected = claims.filter(c => !c.ok).length;
+    built.checked = 1;
+    if (built.scored.length < 1) {
+      throw new Error('The handout names the options, but it does not give a number for each of them. The description now uses your handout. The trial rates stay in the table, and you can uncheck any option that was not offered.');
+    }
+    return built;
+  }
+
   window.buildFromDescription = buildFromDescription;
+  window.buildFromHandout = buildFromHandout;
 })();
