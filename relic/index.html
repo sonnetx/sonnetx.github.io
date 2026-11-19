@@ -161,8 +161,8 @@
                 <p>Three runs of the same model, on the same manual, with the same prompt, had a median spread of fifty points. The worst was the whole scale. Gemini 3.7 Flash, on the variant whose operators no longer mean what training says they mean, scored 0% on one run and 100% on another. A leaderboard of single agent runs at this size is a coin flip with a model name on it.</p>
 
                 <figure>
-                    <img src="/photos/projects/relic.jpg" width="1000" height="625" alt="Score ranges across three runs. Lexical and syntactic sit at 100. Semantic runs from 0 to 100.">
-                    <figcaption>Gemini 3.7 Flash. Each bar is the lowest and highest hidden score across three runs. Lexical and syntactic variants are a point at 100. The semantic variant covers the scale.</figcaption>
+                    <img src="/photos/projects/relic.jpg" width="1000" height="625" alt="Scatter plot of hidden programs passed by Gemini 3.1 Pro and Gemini 3.7 Flash. On the semantic variant, Flash scores 0, 11, and 100.">
+                    <figcaption>Each point is one run, scored on one hundred hidden programs. On the semantic variant, Gemini 3.7 Flash passes 0, 11, and 100.</figcaption>
                 </figure>
 
                 <p>What survives the repeats is narrower. For Gemini 3.1 Pro, the base language still overlaps the variants that only change spelling or grammar. The two variants that change what the operators mean sit entirely below it, between 0% and 25% where the base language ran from 29% to 100%. Flash scored 100% on every lexical and syntactic run, with no spread at all. A different comment delimiter costs it nothing. Meaning is where the runs come apart.</p>
