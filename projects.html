@@ -300,11 +300,11 @@
                 <h2 class="section-title">Highlighted projects</h2>
                 <div class="highlight-grid">
                     <article class="card">
-                        <div class="card-thumb"><img src="photos/projects/firstkernel.jpg" width="1000" height="625" alt="A curve of MoE kernel speedup, nearly flat at short decode and rising toward long prefill" loading="lazy"></div>
+                        <div class="card-thumb"><img src="photos/projects/firstkernel.jpg" width="1000" height="625" alt="A matplotlib plot of MoE layer speedup versus token count, flat near 1.04× at decode and rising to 1.22× at prefill" loading="lazy"></div>
                         <div class="card-body">
                             <h2 class="card-title"><a href="firstkernel/">firstkernel</a></h2>
                             <p class="card-venue">2026</p>
-                            <p class="card-desc">A fused mixture-of-experts layer for vLLM on an H100. Coding agents took it from five GPU launches to two. The layer was 22% faster at prefill. The engine was 12%.</p>
+                            <p class="card-desc">A fused MoE layer you can drop into vLLM on an H100, or replace. The harness grades the next kernel the same way. Prefill was 1.22× at the layer and 1.12× in the engine.</p>
                             <p class="card-links">
                                 <a href="firstkernel/">Writeup</a>
                                 <a href="https://github.com/sonnetx/firstkernel" target="_blank">Code</a>
