@@ -1,0 +1,197 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RELIC - Sonnet Xu</title>
+    <meta name="description" content="A benchmark that asks a coding agent to write a compiler for a language that cannot exist in its training data. The same model, manual, and prompt scored 0% and 100%.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+    <link rel="stylesheet" href="/sidebar.css">
+    <style>
+        :root {
+            --text-color: #333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --max-width: 760px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .dek {
+            font-size: 20px;
+            line-height: 1.45;
+            color: #444;
+            margin-bottom: 14px;
+        }
+
+        .meta {
+            margin-bottom: 28px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .meta a {
+            color: var(--link-color);
+            text-decoration: none;
+            margin-right: 16px;
+            border-bottom: 1px solid transparent;
+        }
+
+        .meta a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .essay p {
+            margin-bottom: 18px;
+        }
+
+        .essay h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin: 36px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .essay a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+
+        .essay a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        figure {
+            margin: 28px 0 22px;
+        }
+
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #f4f7fb;
+        }
+
+        figcaption {
+            margin-top: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #888;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .dek {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include sidebar.html active="projects" %}
+
+    <div class="container">
+        <main>
+            <h1 class="page-title">RELIC</h1>
+            <p class="dek">A coding agent can write a compiler. This asks whether it wrote the one in the manual.</p>
+            <p class="meta">September 2026 &middot; <a href="https://github.com/sonnetx/relic-bench">Code</a><a href="https://github.com/sonnetx/relic-bench/blob/main/results/RESULTS.md">Results</a></p>
+
+            <article class="essay">
+                <p>C is the language a coding agent has seen most. A perfect C compiler tells you the model can produce a C compiler. It cannot tell you whether the model read the specification or remembered one. RELIC generates the language instead, so the manual is the only place the rules exist.</p>
+
+                <p>The base is B, the language C came from. Eighteen of its design decisions are knobs: which character quotes a string, what the plus sign means, whether <em>else</em> binds to the nearest <em>if</em>, whether a pointer steps by a word or a byte. A seeded generator permutes some of them. Every variant is as hard as B for someone who has never seen either, and wrong for anyone relying on habit. The same seed writes the manual and configures the interpreter that grades the compiler, so the two cannot drift apart.</p>
+
+                <p>The agent receives the manual, a small stack machine, and twenty-two example programs. It gets four rounds of feedback on those examples. The score is one hundred programs it has never seen.</p>
+
+                <h2>The same run is not a measurement</h2>
+
+                <p>The first sweep looked finished. One model scored perfectly on four languages that do not exist. Each cell had been run once.</p>
+
+                <p>Three runs of the same model, on the same manual, with the same prompt, had a median spread of fifty points. The worst was the whole scale. Gemini 3.7 Flash, on the variant whose operators no longer mean what training says they mean, scored 0% on one run and 100% on another. A leaderboard of single agent runs at this size is a coin flip with a model name on it.</p>
+
+                <figure>
+                    <img src="/photos/projects/relic.jpg" width="1000" height="625" alt="Score ranges across three runs. Lexical and syntactic sit at 100. Semantic runs from 0 to 100.">
+                    <figcaption>Gemini 3.7 Flash. Each bar is the lowest and highest hidden score across three runs. Lexical and syntactic variants are a point at 100. The semantic variant covers the scale.</figcaption>
+                </figure>
+
+                <p>What survives the repeats is narrower. For Gemini 3.1 Pro, the base language still overlaps the variants that only change spelling or grammar. The two variants that change what the operators mean sit entirely below it, between 0% and 25% where the base language ran from 29% to 100%. Flash scored 100% on every lexical and syntactic run, with no spread at all. A different comment delimiter costs it nothing. Meaning is where the runs come apart.</p>
+
+                <h2>They read the manual</h2>
+
+                <p>The examples include the output a correct compiler should produce, so a model could induce the language from the tests and never open the prose. An ablation withholds every expected output. Feedback names the failing program and what the compiler printed, never what was right. The manual is the only source of the semantics.</p>
+
+                <p>Five of those six runs still passed hidden programs, and three passed all of them, on variants where a compiler that assumes B scores 8% or nothing. The manual was enough.</p>
+
+                <p>A smaller model did the thing the benchmark was built to catch. Qwen3.5 9B, on the most mutated variant, compiled <em>+</em> as addition, <em>&minus;</em> as subtraction, and <em>/</em> as division. The manual assigns those three spellings division, addition, and subtraction. Its reasoning trace never mentions the operator table. It read a language that cannot exist in any training set and wrote a compiler for the one it already knew.</p>
+
+                <h2>A test suite certifies the rules it decides</h2>
+
+                <p>The hidden suite has a hole, and two perfect scores fall through it. Of the hundred programs, none are decided by the string terminator, the unit of pointer arithmetic, the order of argument evaluation, or one of the truth rules. The semantic variant changes two things, the arithmetic table and the pointer unit, and every program it decides is decided by the arithmetic. A compiler that copies the table and ignores the pointer unit scores 100%.</p>
+
+                <p>Two of Flash's perfect compilers do that. A separate rubric, one small program per rule, fails them on both pointer items. The suite cannot see the miss. Under byte addressing a one-word step is misaligned and traps, so no program that has to stay valid in every variant can contain that step, and the generator had no way to write a step in the variant's own unit.</p>
+
+                <p>The distance between the tests an agent can see and the tests it cannot is the same failure, measured rather than read out of a diff. Of twenty-six runs that passed every program they were shown, twenty-four also passed every hidden program. One passed 55%. One passed none. On the semantic variant, Pro's compilers pass 88% of the programs in front of them and 12% of the programs that are not, in all four runs.</p>
+
+                <p>The <a href="https://github.com/sonnetx/relic-bench">repository</a> is the benchmark, the interpreter, and every compiler these numbers come from. They can be regraded from disk. The suite still does not decide every rule. That limit is written down next to the scores, which is as finished as this measurement gets.</p>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sonnet Xu. All rights reserved.</p>
+        </footer>
+    </div>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
