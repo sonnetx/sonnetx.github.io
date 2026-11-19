@@ -5,10 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The faster kernel was slower - Sonnet Xu</title>
-    <meta name="description" content="On one H100, two agent-written kernels for the same matrix-vector problem swapped rank. A 24% lead became a 10% loss.">
-    <meta property="og:title" content="The faster kernel was slower">
-    <meta property="og:description" content="On one H100, two agent-written kernels for the same problem swapped rank once a neighbor held half the register file.">
+    <title>Does your kernel still win when the GPU is shared? - Sonnet Xu</title>
+    <meta name="description" content="A harness that checks whether a kernel ranking survives a noisy neighbor. On one H100, a 24% lead became a 10% loss.">
+    <meta property="og:title" content="Does your kernel still win when the GPU is shared?">
+    <meta property="og:description" content="co-kernel measures a kernel alone and next to a neighbor you control. On one H100, the isolated winner lost.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://sonnetx.github.io/co-kernel/">
     <meta property="og:image" content="https://sonnetx.github.io/photos/projects/co-kernel.jpg">
@@ -48,6 +48,26 @@
             font-weight: normal;
             line-height: 1.25;
             margin-bottom: 28px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin: 36px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        pre {
+            margin: 0 0 18px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #f7f7f7;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.55;
         }
 
         p {
@@ -148,11 +168,11 @@
 
     <div class="container">
         <main>
-            <h1 class="page-title">The faster kernel was slower</h1>
+            <h1 class="page-title">Does your kernel still win when the GPU is shared?</h1>
 
-            <p>Kernel benchmarks time one kernel on an empty GPU, then keep whichever finished first. The GPU a kernel actually runs on is usually doing something else at the same time.</p>
+            <p>Inference stacks pick a kernel by timing it on an empty GPU. The GPU it then runs on is often shared with another tenant, another phase, or another job. co-kernel measures the same candidates alone and next to a neighbor you control, and reports when the ranking flips.</p>
 
-            <p>On one H100 at Stanford's Sherlock cluster, two kernels an agent wrote for the same matrix-vector multiply traded places. Alone, a 512-thread scalar kernel took 66.6 microseconds and a 256-thread vectorized kernel took 82.4, so the scalar kernel led by 24%. A neighbor holding 127 registers per thread, about half the register file, stretched those times to 143 and 131 microseconds. The old leader was then 10% behind.</p>
+            <p>On one H100 at Stanford's Sherlock cluster, it flipped. Two agent-written kernels for the same matrix-vector multiply traded places. Alone, a 512-thread scalar kernel took 66.6 microseconds and a 256-thread vectorized kernel took 82.4, a 24% lead for the scalar kernel. A neighbor holding 127 registers per thread, about half the register file, stretched those times to 143 and 131 microseconds. The kernel you would have shipped was 10% slower.</p>
 
             <figure>
                 <img src="/photos/projects/co-kernel.jpg" width="1000" height="625" alt="Bar chart. Alone, the scalar kernel is at 67 microseconds and the vectorized kernel at 82. Shared, the scalar kernel is at 143 and the vectorized kernel at 130.">
@@ -184,9 +204,32 @@
                 </tbody>
             </table>
 
-            <p>The ranking flips because the faster kernel is also the more fragile one, and by more than its original lead. Here that ratio is 2.15 / 1.58 = 1.36, against an isolated margin of 1.24. Slowing both kernels by the same amount leaves the order alone. An earlier set of near-duplicate kernels, the two fastest for each problem, never flipped, for that reason.</p>
+            <h2>Why the faster kernel lost</h2>
 
-            <p>This is one pair, measured once, on one H100, beside a neighbor that only burns registers. Both kernels passed a correctness check in the same process, and the shared timings do not overlap between their 10th and 90th percentiles. It is an existence result. A leaderboard taken on an idle device is a property of the kernel and of whoever else is on the GPU.</p>
+            <p>The scalar kernel launches 512 threads per block and loads one float at a time. The vectorized kernel launches 256 threads and loads 16 bytes at a time through the read-only path. On an empty GPU the wider launch wins, because a matrix-vector row is limited by how fast it can be read.</p>
+
+            <p>An H100 has 65,536 registers per multiprocessor. The neighbor in this run held 127 registers on each of 256 threads, about 32,500 registers, and left about 33,000. A 512-thread block can reside only if each of its threads needs fewer than 64 of those. A 256-thread block can use up to 129. The shorter block still fits. The longer one gets squeezed, and it slows by 2.15&times; while the other slows by 1.58&times;.</p>
+
+            <p>A ranking flips only when the isolated winner is also the more fragile one, by more than its lead. Here the fragility ratio is 2.15 / 1.58 = 1.36, and the isolated margin is 82.4 / 66.6 = 1.24. Slowing both kernels by the same amount leaves the order alone. That is why a neighbor that makes everything uniformly worse is not the failure mode to worry about, and why picking the two fastest near-duplicate kernels never produced a flip in an earlier run.</p>
+
+            <h2>Use it on your kernels</h2>
+
+            <p>The neighbor above is synthetic. It exists to hold one resource still while everything else stays put. The harness does not know what the neighbor is. A corpus is a directory of plain files, and a neighbor is a short interface you implement.</p>
+
+            <pre>corpus/&lt;slug&gt;/
+  kernel.cu    a torch extension exposing forward()
+  ref.py       Model, get_inputs, get_init_inputs
+  meta.json    level and task_id, so candidates for one problem rank together</pre>
+
+            <p>Point the sweep at that directory. Each candidate is checked for correctness in the measuring process, timed alone, then timed again at each neighbor level. The result file records the latency summary, the fragility, and whether the isolated winner is still the winner.</p>
+
+            <pre>pip install torch --index-url https://download.pytorch.org/whl/cu124
+pip install -e '.[corpus,clocks]'
+./scripts/run_local.sh --quick</pre>
+
+            <p>To measure against a real neighbor, a decode loop or another tenant, implement <code>CoRunner</code> in <code>cokernel/corunner.py</code>. <code>start</code> returns only once that neighbor is in steady state. <code>stop</code> has to work from another thread, because a starved candidate leaves the main thread blocked inside a CUDA synchronize. The same interface is how you swap the synthetic register sweep for shared memory, or for a workload of your own.</p>
+
+            <p>This pair was measured once, on one H100. The register-headroom account fits it, and it does not fit every kernel in the same run: two matmul kernels made no progress even when the leftover registers should have held them. The harness is the way to check a kernel you might actually ship, against a neighbor you might actually have.</p>
 
             <p class="links">
                 <a href="https://github.com/sonnetx/co-kernel" target="_blank">Code</a>
