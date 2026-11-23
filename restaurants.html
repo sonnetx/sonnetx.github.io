@@ -1,0 +1,1838 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants - Sonnet Xu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
+    <link rel="stylesheet" href="/sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #fbf8f1;
+            --sidebar-bg: var(--paper);
+            --ink: #3f3a34;
+            --ink-soft: #7a6f63;
+            --line: rgba(63, 58, 52, 0.13);
+            --accent: #b5523b;
+            --max-width: 1120px;
+            --hand: 'Caveat', 'Bradley Hand', 'Segoe Print', cursive;
+            --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+            --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --gap: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--paper);
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--ink);
+            background:
+                radial-gradient(900px 500px at 0% 0%, rgba(250, 175, 168, 0.2), transparent 70%),
+                radial-gradient(800px 520px at 100% 10%, rgba(255, 244, 176, 0.32), transparent 70%),
+                radial-gradient(900px 600px at 50% 100%, rgba(185, 224, 214, 0.24), transparent 70%),
+                var(--paper);
+            padding: 36px 24px 56px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        button {
+            font: inherit;
+            color: inherit;
+        }
+
+        :focus-visible {
+            outline: 2px dashed var(--accent);
+            outline-offset: 3px;
+        }
+
+        /* Title */
+        .page-title {
+            font-family: var(--display);
+            font-size: 62px;
+            font-weight: 400;
+            font-style: italic;
+            font-variation-settings: 'SOFT' 100, 'WONK' 1;
+            line-height: 1;
+            letter-spacing: -0.5px;
+            color: var(--accent);
+        }
+
+        .page-sub {
+            font-family: var(--hand);
+            font-size: 27px;
+            line-height: 1.2;
+            color: var(--ink-soft);
+            margin-top: 8px;
+        }
+
+        .tally {
+            font-size: 16px;
+            color: var(--ink-soft);
+            margin-top: 6px;
+        }
+
+        /* Photo ribbon: every photo drifting past in one loop, paused while hovered */
+        .ribbon {
+            margin: 26px -24px 4px;
+            padding: 16px 0 22px;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+        }
+
+        .ribbon-track {
+            display: flex;
+            width: max-content;
+            animation: drift var(--drift, 80s) linear infinite;
+        }
+
+        .ribbon:hover .ribbon-track,
+        .ribbon:focus-within .ribbon-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes drift {
+            to { transform: translateX(-50%); }
+        }
+
+        .snap {
+            --tilt: -2deg;
+            flex: none;
+            margin-right: 22px;
+            border: 0;
+            background: #fffdf8;
+            padding: 8px 8px 2px;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(63, 58, 52, 0.1), 0 8px 20px -8px rgba(63, 58, 52, 0.3);
+            transform: rotate(var(--tilt));
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: zoom-in;
+        }
+
+        .snap:nth-child(5n+2) { --tilt: 1.8deg; }
+        .snap:nth-child(5n+3) { --tilt: -0.8deg; }
+        .snap:nth-child(5n+4) { --tilt: 2.4deg; }
+        .snap:nth-child(5n+5) { --tilt: -1.4deg; }
+
+        .snap:hover {
+            transform: rotate(0deg) translateY(-5px) scale(1.04);
+        }
+
+        .snap img {
+            display: block;
+            height: 132px;
+            width: auto;
+            max-width: 220px;
+            object-fit: cover;
+            border-radius: 2px;
+            background: #efe9dc;
+        }
+
+        .snap span {
+            display: block;
+            max-width: 200px;
+            margin: 0 auto;
+            padding: 3px 4px 4px;
+            font-family: var(--hand);
+            font-size: 20px;
+            line-height: 1.1;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .views {
+            display: inline-flex;
+            padding: 3px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .views button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 15px;
+            border: 0;
+            border-radius: 999px;
+            background: none;
+            font: 500 14px var(--sans);
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .views button:hover {
+            color: var(--ink);
+        }
+
+        .views button[aria-selected="true"] {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .views i {
+            font-size: 16px;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 260px;
+            padding: 7px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--ink-soft);
+        }
+
+        .search:focus-within {
+            border-color: var(--ink-soft);
+        }
+
+        .search input {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            font: 14px var(--sans);
+            color: var(--ink);
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin: 14px 0 28px;
+        }
+
+        #status-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .map-note {
+            margin-bottom: 10px;
+            font: 14px var(--sans);
+            color: var(--ink-soft);
+        }
+
+        .filters .divider {
+            width: 1px;
+            height: 22px;
+            margin: 0 6px;
+            background: var(--line);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            font: 13.5px var(--sans);
+            line-height: 1.3;
+            color: var(--ink);
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--ink-soft);
+        }
+
+        .chip[aria-pressed="true"] {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: #fff;
+        }
+
+        .chip .swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--c);
+            box-shadow: inset 0 0 0 1.5px var(--c-ink);
+        }
+
+        .chip .n {
+            color: var(--ink-soft);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chip[aria-pressed="true"] .n {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .chip.quiet {
+            border-style: dashed;
+            color: var(--ink-soft);
+        }
+
+        /* Board: Keep-style notes in balanced columns */
+        .group-label {
+            margin: 4px 2px 10px;
+            font: 600 11.5px var(--sans);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        .masonry {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--gap);
+            margin-bottom: 30px;
+        }
+
+        .masonry-col {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        .note {
+            position: relative;
+            border: 1px solid rgba(63, 58, 52, 0.09);
+            border-radius: 12px;
+            background: var(--note);
+            box-shadow: 0 1px 2px rgba(63, 58, 52, 0.07);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .note:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(63, 58, 52, 0.08), 0 12px 26px -12px rgba(63, 58, 52, 0.4);
+        }
+
+        .note.flash {
+            animation: flash 1.6s ease-out;
+        }
+
+        @keyframes flash {
+            0%, 40% { box-shadow: 0 0 0 4px var(--c-ink); }
+            100% { box-shadow: 0 0 0 0 transparent; }
+        }
+
+        .note-body {
+            padding: 12px 16px 10px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 6px;
+            padding: 1px 8px 1px 5px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.6);
+            font: 600 10.5px var(--sans);
+            line-height: 1.8;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--c-ink);
+        }
+
+        .status i {
+            font-size: 13px;
+        }
+
+        .note h3 {
+            font-family: var(--display);
+            font-size: 20px;
+            font-weight: 500;
+            font-variation-settings: 'SOFT' 50;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .meta {
+            margin-top: 3px;
+            font: 13px var(--sans);
+            color: var(--ink-soft);
+        }
+
+        .stars {
+            margin-top: 5px;
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: 1px;
+            color: var(--ink);
+        }
+
+        .text {
+            margin-top: 8px;
+            font-size: 15.5px;
+            line-height: 1.5;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+        .text.clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .more {
+            margin-top: 4px;
+            padding: 0;
+            border: 0;
+            background: none;
+            font: 13px var(--sans);
+            color: var(--c-ink);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+        }
+
+        .note-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-height: 30px;
+            margin-top: 8px;
+            font: 12.5px var(--sans);
+            color: var(--ink-soft);
+        }
+
+        .acts {
+            display: flex;
+            gap: 2px;
+            margin-right: -8px;
+        }
+
+        .icon-btn {
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border: 0;
+            border-radius: 50%;
+            background: none;
+            font-size: 17px;
+            color: var(--ink-soft);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .icon-btn:hover {
+            background: rgba(63, 58, 52, 0.09);
+            color: var(--ink);
+        }
+
+        /* A small pile of photos that deals itself, one off the top every few seconds */
+        .pics {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            margin: 14px 14px 4px;
+        }
+
+        .pics img {
+            position: absolute;
+            inset: 0;
+            z-index: var(--z, 1);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 4px solid #fffdf8;
+            border-radius: 6px;
+            background: #efe9dc;
+            box-shadow: 0 1px 3px rgba(63, 58, 52, 0.18);
+            transform: translate(var(--x, 0px), var(--y, 0px)) rotate(var(--r, 0deg));
+            transition: transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.35s;
+            cursor: zoom-in;
+        }
+
+        .pics img[data-pos="0"] { --r: -1deg; --z: 5; }
+        .pics img[data-pos="1"] { --r: 3.5deg; --x: 5px; --y: 3px; --z: 4; }
+        .pics img[data-pos="2"] { --r: -4deg; --x: -6px; --y: 4px; --z: 3; }
+        .pics img[data-pos="deep"] { --z: 1; opacity: 0; }
+
+        .pics:hover img[data-pos="1"] { --r: 6.5deg; --x: 12px; }
+        .pics:hover img[data-pos="2"] { --r: -7.5deg; --x: -13px; }
+
+        .pics img.tossed {
+            --x: 72%;
+            --y: -8%;
+            --r: 15deg;
+            z-index: 6;
+            opacity: 0;
+            transition: transform 0.36s ease-in, opacity 0.36s ease-in;
+        }
+
+        .dots {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            z-index: 7;
+            display: flex;
+            gap: 2px;
+            transform: translateX(-50%);
+        }
+
+        .dots button {
+            display: grid;
+            place-items: center;
+            width: 14px;
+            height: 14px;
+            padding: 0;
+            border: 0;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dots button::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .dots button.on::before {
+            background: #fff;
+            transform: scale(1.35);
+        }
+
+        /* By area: one pile of notes per area, thicker where there are more places */
+        .piles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            align-items: start;
+            gap: 46px 30px;
+            padding: 6px 6px 40px;
+        }
+
+        .pile {
+            position: relative;
+        }
+
+        .pile-sheet {
+            position: absolute;
+            inset: 0;
+            z-index: calc(10 - var(--i));
+            border: 1px solid rgba(63, 58, 52, 0.12);
+            border-radius: 12px;
+            background: var(--note);
+            box-shadow: 0 1px 2px rgba(63, 58, 52, 0.1);
+            transform: translate(calc(var(--i) * 3px), calc(var(--i) * 5px)) rotate(calc(var(--i) * var(--dir) * 1.5deg));
+            transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+        }
+
+        .pile:hover .pile-sheet,
+        .pile:focus-within .pile-sheet {
+            transform: translate(calc(var(--i) * 7px), calc(var(--i) * 8px)) rotate(calc(var(--i) * var(--dir) * 3.2deg));
+        }
+
+        .pile-top {
+            position: relative;
+            z-index: 11;
+            padding: 0 0 14px;
+            border: 1px solid rgba(63, 58, 52, 0.12);
+            border-radius: 12px;
+            background: var(--note);
+            box-shadow: 0 1px 2px rgba(63, 58, 52, 0.08);
+            transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+        }
+
+        .pile:hover .pile-top,
+        .pile:focus-within .pile-top {
+            transform: translateY(-5px) rotate(-1deg);
+        }
+
+        .pile-top .pics {
+            margin-bottom: 8px;
+        }
+
+        .pile-text {
+            display: block;
+            padding: 6px 16px 0;
+        }
+
+        .pile-name {
+            display: block;
+            font-family: var(--hand);
+            font-size: 34px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .pile-count {
+            display: block;
+            margin-top: 6px;
+            font: 600 13px var(--sans);
+            color: var(--c-ink);
+        }
+
+        .pile-names {
+            display: block;
+            margin-top: 6px;
+            font-size: 14.5px;
+            line-height: 1.45;
+            color: var(--ink-soft);
+        }
+
+        .pile-open {
+            position: absolute;
+            inset: 0;
+            z-index: 12;
+            border: 0;
+            border-radius: 12px;
+            background: none;
+            cursor: pointer;
+        }
+
+        .area-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+            margin-bottom: 20px;
+        }
+
+        .area-head h2 {
+            font-family: var(--hand);
+            font-size: 44px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .area-head p {
+            font: 14px var(--sans);
+            color: var(--ink-soft);
+        }
+
+        .area-head .spacer {
+            flex: 1;
+        }
+
+        /* Map */
+        .map-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        #map {
+            z-index: 0;
+            height: clamp(380px, 68vh, 680px);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #f2efe8;
+            box-shadow: 0 10px 30px -16px rgba(63, 58, 52, 0.4);
+        }
+
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 18px;
+            margin-top: 12px;
+            font: 13px var(--sans);
+            color: var(--ink-soft);
+        }
+
+        .key {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+            border-radius: 50%;
+            vertical-align: -1px;
+        }
+
+        .key.been {
+            background: var(--ink);
+            box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(63, 58, 52, 0.3);
+        }
+
+        .key.want {
+            background: #fff;
+            box-shadow: inset 0 0 0 2.5px var(--ink);
+        }
+
+        .key.heat {
+            width: 46px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #b9e0d6, #fff4b0, #f39f76, #c8443a);
+        }
+
+        .area-label {
+            display: inline-block;
+            transform: translate(-50%, calc(-100% - 12px));
+            font-family: var(--hand);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1;
+            white-space: nowrap;
+            color: var(--ink);
+            text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 9px #fff, 0 0 14px #fff;
+            pointer-events: none;
+        }
+
+        .area-label b {
+            margin-left: 5px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: var(--ink);
+            font: 700 12px var(--sans);
+            color: #fff;
+            text-shadow: none;
+            vertical-align: 4px;
+        }
+
+        .hide-labels .area-label {
+            display: none;
+        }
+
+        .leaflet-container {
+            font-family: var(--sans);
+        }
+
+        /* Mutes the OpenStreetMap colors so the density layer and pins carry the color. */
+        .leaflet-tile-pane {
+            filter: grayscale(0.85) sepia(0.12) brightness(1.04) contrast(0.9);
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            background: var(--note, #fff);
+        }
+
+        .leaflet-popup-tip {
+            background: var(--note, #fff);
+        }
+
+        .leaflet-popup-content {
+            margin: 12px 14px;
+            width: 210px;
+        }
+
+        .pop img {
+            display: block;
+            width: 100%;
+            height: 128px;
+            margin-bottom: 8px;
+            border: 3px solid #fffdf8;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: zoom-in;
+        }
+
+        .pop h3 {
+            font-family: var(--display);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .leaflet-popup-content .pop p {
+            margin: 3px 0 0;
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: var(--ink-soft);
+        }
+
+        .pop .status {
+            margin-bottom: 4px;
+        }
+
+        .leaflet-popup-content .pop .stars {
+            margin-top: 5px;
+            color: var(--ink);
+        }
+
+        .pop-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 12.5px;
+        }
+
+        .pop-links a,
+        .pop-links button {
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--ink);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+        }
+
+        .empty {
+            padding: 40px 0;
+            font-family: var(--hand);
+            font-size: 28px;
+            text-align: center;
+            color: var(--ink-soft);
+        }
+
+        .empty .chip {
+            margin-left: 8px;
+            vertical-align: 5px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            max-width: none;
+            max-height: none;
+            margin: auto;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            overflow: visible;
+        }
+
+        .lightbox::backdrop {
+            background: rgba(38, 34, 30, 0.84);
+        }
+
+        .lightbox img {
+            display: block;
+            max-width: min(90vw, 1100px);
+            max-height: 78vh;
+            border: 8px solid #fffdf8;
+            border-radius: 4px;
+            background: #fffdf8;
+        }
+
+        .lightbox figcaption {
+            margin-top: 10px;
+            font-family: var(--hand);
+            font-size: 28px;
+            line-height: 1.1;
+            text-align: center;
+            color: #fffdf8;
+        }
+
+        .lightbox figcaption small {
+            margin-left: 8px;
+            font: 14px var(--sans);
+            opacity: 0.7;
+        }
+
+        .lb-btn {
+            position: fixed;
+            top: 50%;
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255, 253, 248, 0.14);
+            font-size: 24px;
+            color: #fffdf8;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .lb-btn:hover {
+            background: rgba(255, 253, 248, 0.28);
+        }
+
+        .lb-prev { left: 18px; }
+        .lb-next { right: 18px; }
+        .lb-close { top: 34px; right: 18px; }
+
+        @media (max-width: 860px) {
+            body {
+                padding-top: 28px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root {
+                --gap: 10px;
+            }
+
+            body {
+                font-size: 16px;
+                padding: 20px 16px 40px;
+            }
+
+            .page-title {
+                font-size: 48px;
+            }
+
+            .page-sub {
+                font-size: 23px;
+            }
+
+            .ribbon {
+                margin: 18px -16px 0;
+            }
+
+            .snap img {
+                height: 104px;
+                max-width: 170px;
+            }
+
+            .snap span {
+                font-size: 18px;
+            }
+
+            .toolbar {
+                gap: 10px;
+            }
+
+            .views {
+                width: 100%;
+            }
+
+            .views button {
+                flex: 1;
+                justify-content: center;
+                padding: 7px 8px;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            .note-body {
+                padding: 10px 12px 8px;
+            }
+
+            .pics {
+                margin: 10px 10px 2px;
+            }
+
+            .note h3 {
+                font-size: 17px;
+            }
+
+            .text {
+                font-size: 14.5px;
+            }
+
+            .piles {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 34px 18px;
+            }
+
+            .pile-name {
+                font-size: 28px;
+            }
+
+            .lb-prev { left: 6px; }
+            .lb-next { right: 6px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ribbon {
+                overflow-x: auto;
+                -webkit-mask-image: none;
+                mask-image: none;
+            }
+
+            .ribbon-track {
+                animation: none;
+            }
+
+            .ribbon-track [aria-hidden="true"] {
+                display: none;
+            }
+
+            .snap,
+            .note,
+            .pics img,
+            .pile-sheet,
+            .pile-top {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include sidebar.html active="restaurants" %}
+
+    <main class="container">
+        <h1 class="page-title">Restaurants</h1>
+        <p class="page-sub">Places I've eaten at and places I want to try</p>
+        <p class="tally" id="tally"></p>
+
+        <section class="ribbon" id="ribbon" aria-label="Photos" hidden>
+            <div class="ribbon-track" id="ribbon-track"></div>
+        </section>
+
+        <div class="toolbar">
+            <div class="views" role="tablist" aria-label="Views">
+                <button role="tab" id="tab-board" data-view="board" aria-controls="view-board" aria-selected="true"><i class="ri-layout-masonry-line" aria-hidden="true"></i>Board</button>
+                <button role="tab" id="tab-areas" data-view="areas" aria-controls="view-areas" aria-selected="false"><i class="ri-stack-line" aria-hidden="true"></i>By area</button>
+                <button role="tab" id="tab-map" data-view="map" aria-controls="view-map" aria-selected="false"><i class="ri-map-2-line" aria-hidden="true"></i>Map</button>
+            </div>
+            <label class="search">
+                <i class="ri-search-line" aria-hidden="true"></i>
+                <input type="search" id="search" placeholder="Search names, food, notes" aria-label="Search restaurants">
+            </label>
+        </div>
+
+        <div class="filters">
+            <div role="group" aria-label="Status" id="status-chips">
+                <button class="chip" data-status="all" aria-pressed="true">All</button>
+                <button class="chip" data-status="been" aria-pressed="false"><i class="ri-check-line" aria-hidden="true"></i>Been there</button>
+                <button class="chip" data-status="want" aria-pressed="false"><i class="ri-bookmark-line" aria-hidden="true"></i>Want to try</button>
+            </div>
+            <span class="divider" aria-hidden="true"></span>
+            <div role="group" aria-label="Areas" id="area-chips" style="display: contents"></div>
+        </div>
+
+        <section id="view-board" role="tabpanel" aria-labelledby="tab-board"></section>
+        <section id="view-areas" role="tabpanel" aria-labelledby="tab-areas" hidden></section>
+        <section id="view-map" role="tabpanel" aria-labelledby="tab-map" hidden>
+            <div class="map-controls">
+                <button class="chip" data-layer="heat" aria-pressed="true"><i class="ri-fire-line" aria-hidden="true"></i>Density</button>
+                <button class="chip" data-layer="pins" aria-pressed="true"><i class="ri-map-pin-line" aria-hidden="true"></i>Pins</button>
+                <button class="chip" data-layer="labels" aria-pressed="true"><i class="ri-price-tag-3-line" aria-hidden="true"></i>Area names</button>
+                <button class="chip quiet" id="fit-all"><i class="ri-fullscreen-line" aria-hidden="true"></i>Show everywhere</button>
+            </div>
+            <p class="map-note" id="map-note" hidden></p>
+            <div id="map" role="region" aria-label="Map of restaurants"></div>
+            <p class="map-legend">
+                <span><span class="key been"></span>Been there</span>
+                <span><span class="key want"></span>Want to try</span>
+                <span><span class="key heat"></span>Fewer to more places nearby</span>
+            </p>
+        </section>
+        <noscript><p class="empty">This page needs JavaScript to show the restaurants.</p></noscript>
+    </main>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Photo">
+        <figure>
+            <img id="lb-img" alt="">
+            <figcaption id="lb-cap"></figcaption>
+        </figure>
+        <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous photo"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+        <button class="lb-btn lb-next" id="lb-next" aria-label="Next photo"><i class="ri-arrow-right-s-line" aria-hidden="true"></i></button>
+        <button class="lb-btn lb-close" id="lb-close" aria-label="Close"><i class="ri-close-line" aria-hidden="true"></i></button>
+    </dialog>
+
+    <!-- Places come from _data/restaurants.yml and photos from photos/restaurants/<slug>/. -->
+    <script type="application/json" id="restaurant-data">{{ site.data.restaurants.places | jsonify | replace: "</", "<\/" }}</script>
+    {%- assign restaurant_photos = site.static_files | where_exp: "f", "f.path contains '/photos/restaurants/'" %}
+    <script type="application/json" id="restaurant-photos">[{% for f in restaurant_photos %}{{ f.path | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // Keep-style note colors: [note background, darker tone for text, pins and rings]
+        const PALETTE = {
+            coral: ['#fbc2bc', '#b84f45'],
+            peach: ['#f9cfae', '#ad5c2c'],
+            sand: ['#fff3ad', '#8e7b12'],
+            mint: ['#dcf2cc', '#4b8636'],
+            sage: ['#bfe3d9', '#2c7a67'],
+            fog: ['#d6e6ef', '#437392'],
+            storm: ['#bcd5e3', '#2d6286'],
+            dusk: ['#dccde4', '#714c8a'],
+            blossom: ['#f8e0d9', '#a65a4c'],
+            clay: ['#ebe4d3', '#7a6a44'],
+        };
+        const ELSEWHERE = 'Elsewhere';
+        const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const slugify = (s) => String(s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        const num = (v) => (v === null || v === undefined || v === '' || isNaN(+v) ? null : +v);
+        const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
+        const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
+
+        function readJson(id) {
+            try { return JSON.parse($(id).textContent) || []; } catch (e) { return []; }
+        }
+
+        // ---------- Data ----------
+        const photosBySlug = {};
+        for (const path of readJson('restaurant-photos')) {
+            const m = /\/photos\/restaurants\/([^/]+)\/[^/]+\.(jpe?g|png|webp|gif|avif)$/i.exec(path);
+            if (m) (photosBySlug[m[1]] = photosBySlug[m[1]] || []).push(path);
+        }
+        Object.values(photosBySlug).forEach((list) => list.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })));
+
+        const usedIds = new Set();
+        const places = readJson('restaurant-data').filter((p) => p && p.name).map((p, i) => {
+            const slug = slugify(p.slug || p.name) || 'place-' + i;
+            let id = 'note-' + slug;
+            if (usedIds.has(id)) id += '-' + i;
+            usedIds.add(id);
+            const place = Object.assign({}, p, {
+                name: String(p.name),
+                slug,
+                id,
+                status: p.status === 'been' ? 'been' : 'want',
+                area: String(p.area || '').trim() || ELSEWHERE,
+                lat: num(p.lat),
+                lng: num(p.lng),
+                rating: Math.max(0, Math.min(5, Math.round(num(p.rating) || 0))),
+                note: p.note ? String(p.note).trim() : '',
+                photos: photosBySlug[slug] || [],
+            });
+            place.hasCoords = place.lat !== null && place.lng !== null;
+            place.haystack = [place.name, p.cuisine, place.area, place.note, p.address].join(' ').toLowerCase();
+            return place;
+        });
+        const byId = new Map(places.map((p) => [p.id, p]));
+
+        // Areas take colors by size, busiest first, from an order where neighbors contrast, so
+        // the biggest clusters never share a color. Elsewhere is always clay.
+        const AREA_ORDER = ['coral', 'sage', 'sand', 'storm', 'dusk', 'peach', 'mint', 'fog', 'blossom'];
+        const areaCounts = {};
+        places.forEach((p) => { areaCounts[p.area] = (areaCounts[p.area] || 0) + 1; });
+        const areaColor = { [ELSEWHERE]: 'clay' };
+        Object.keys(areaCounts)
+            .filter((area) => area !== ELSEWHERE)
+            .sort((a, b) => areaCounts[b] - areaCounts[a] || a.localeCompare(b))
+            .forEach((area, i) => { areaColor[area] = AREA_ORDER[i % AREA_ORDER.length]; });
+        const colorsOf = (p) => PALETTE[PALETTE[p.color] ? p.color : areaColor[p.area]] || PALETTE.clay;
+        const areaColors = (area) => PALETTE[areaColor[area]] || PALETTE.clay;
+
+        // ---------- State ----------
+        const state = { view: 'board', status: 'all', area: null, q: '', allAreas: false };
+
+        function filtered(opts) {
+            const ignoreArea = opts && opts.ignoreArea;
+            const q = state.q.trim().toLowerCase();
+            return places.filter((p) =>
+                (state.status === 'all' || p.status === state.status) &&
+                (ignoreArea || !state.area || p.area === state.area) &&
+                (!q || p.haystack.includes(q)));
+        }
+
+        function groupByArea(list) {
+            const groups = {};
+            list.forEach((p) => { (groups[p.area] = groups[p.area] || []).push(p); });
+            return Object.entries(groups)
+                .map(([area, items]) => ({ area, items }))
+                .sort((a, b) => (a.area === ELSEWHERE) - (b.area === ELSEWHERE) || b.items.length - a.items.length || a.area.localeCompare(b.area));
+        }
+
+        // ---------- Tally ----------
+        (function tally() {
+            const been = places.filter((p) => p.status === 'been').length;
+            const want = places.length - been;
+            if (!places.length) { $('tally').textContent = 'No places yet.'; return; }
+            let text = been && want
+                ? plural(places.length, 'place', 'places') + ', ' + been + ' been and ' + want + ' on the list.'
+                : been ? plural(been, 'place', 'places') + ' so far.' : plural(want, 'place', 'places') + ' on the list.';
+            const top = groupByArea(places).find((g) => g.area !== ELSEWHERE);
+            if (top && top.items.length > 1) text += ' ' + top.area + ' has the most, with ' + top.items.length + '.';
+            $('tally').textContent = text;
+        })();
+
+        // ---------- Photo stacks ----------
+        const stacks = new Set();
+        const stackState = new WeakMap();
+        let lightboxOpen = false;
+
+        function picsHtml(photos, label, opts) {
+            const shown = photos.slice(0, 12);
+            const dots = !(opts && opts.noDots) && shown.length > 1 && shown.length <= 8
+                ? '<span class="dots">' + shown.map((_, i) => '<button type="button" data-dot="' + i + '" aria-label="Show photo ' + (i + 1) + '"></button>').join('') + '</span>'
+                : '';
+            return '<div class="pics">' + shown.map((src, i) =>
+                '<img src="' + esc(src) + '" alt="' + esc(label) + (shown.length > 1 ? ', photo ' + (i + 1) + ' of ' + shown.length : '') + '" data-i="' + i + '" data-pos="' + (i < 3 ? i : 'deep') + '" loading="lazy" decoding="async">'
+            ).join('') + dots + '</div>';
+        }
+
+        const io = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
+            entries.forEach((e) => { const st = stackState.get(e.target); if (st) st.visible = e.isIntersecting; });
+        }, { rootMargin: '80px' }) : null;
+
+        function registerStacks(root) {
+            root.querySelectorAll('.pics').forEach((el) => {
+                const imgs = Array.from(el.querySelectorAll('img'));
+                if (imgs.length < 2) return;
+                const st = { el, imgs, order: imgs.map((_, i) => i), next: Date.now() + 1500 + Math.random() * 4000, paused: false, visible: !io, busy: false };
+                stackState.set(el, st);
+                stacks.add(st);
+                if (io) io.observe(el);
+                el.addEventListener('mouseenter', () => { st.paused = true; });
+                el.addEventListener('mouseleave', () => { st.paused = false; st.next = Math.max(st.next, Date.now() + 1200); });
+                markDots(st);
+            });
+        }
+
+        function clearStacks(root) {
+            stacks.forEach((st) => {
+                if (!st.el.isConnected || (root && root.contains(st.el))) {
+                    if (io) io.unobserve(st.el);
+                    stacks.delete(st);
+                }
+            });
+        }
+
+        function placePics(st) {
+            st.order.forEach((imgIndex, pos) => { st.imgs[imgIndex].dataset.pos = pos < 3 ? pos : 'deep'; });
+            markDots(st);
+        }
+
+        function markDots(st) {
+            st.el.querySelectorAll('[data-dot]').forEach((d) => d.classList.toggle('on', +d.dataset.dot === st.order[0]));
+        }
+
+        function deal(st) {
+            if (st.busy) return;
+            st.busy = true;
+            const top = st.imgs[st.order[0]];
+            top.classList.add('tossed');
+            setTimeout(() => {
+                top.classList.remove('tossed');
+                st.order.push(st.order.shift());
+                placePics(st);
+                st.busy = false;
+            }, 360);
+            st.next = Date.now() + 3800 + Math.random() * 2800;
+        }
+
+        function jumpTo(st, i) {
+            if (st.busy) return;
+            while (st.order[0] !== i) st.order.push(st.order.shift());
+            placePics(st);
+            st.next = Date.now() + 6000;
+        }
+
+        setInterval(() => {
+            if (reducedMotion.matches || document.hidden || lightboxOpen) return;
+            const now = Date.now();
+            stacks.forEach((st) => {
+                if (!st.el.isConnected) { stacks.delete(st); return; }
+                if (st.visible && !st.paused && now >= st.next) deal(st);
+            });
+        }, 400);
+
+        // ---------- Notes ----------
+        function starsHtml(n) {
+            if (!n) return '';
+            let s = '';
+            for (let i = 1; i <= 5; i++) s += '<i class="ri-star-' + (i <= n ? 'fill' : 'line') + '" aria-hidden="true"></i>';
+            return '<p class="stars" role="img" aria-label="' + n + ' out of 5 stars">' + s + '</p>';
+        }
+
+        // "Nov 22, 2026" for a full date, "Nov 2026" when only the month is known.
+        function dateLabel(v) {
+            const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?/.exec(String(v || ''));
+            if (!m || !MONTHS[+m[2] - 1]) return '';
+            return MONTHS[+m[2] - 1] + ' ' + (m[3] ? +m[3] + ', ' : '') + m[1];
+        }
+
+        function statusHtml(p) {
+            return p.status === 'been'
+                ? '<span class="status"><i class="ri-check-line" aria-hidden="true"></i>Been there</span>'
+                : '<span class="status"><i class="ri-bookmark-line" aria-hidden="true"></i>Want to try</span>';
+        }
+
+        function metaText(p) {
+            return [p.cuisine, p.area !== ELSEWHERE ? p.area : null].filter(Boolean).join(' · ');
+        }
+
+        function noteEl(p) {
+            const [bg, ink] = colorsOf(p);
+            const el = document.createElement('article');
+            el.className = 'note';
+            el.id = p.id;
+            el.dataset.id = p.id;
+            el.style.setProperty('--note', bg);
+            el.style.setProperty('--c-ink', ink);
+            const meta = metaText(p);
+            const url = safeUrl(p.url);
+            el.innerHTML =
+                (p.photos.length ? picsHtml(p.photos, p.name) : '') +
+                '<div class="note-body">' +
+                    statusHtml(p) +
+                    '<h3>' + esc(p.name) + '</h3>' +
+                    (meta ? '<p class="meta">' + esc(meta) + '</p>' : '') +
+                    starsHtml(p.rating) +
+                    (p.note ? '<p class="text clamp">' + esc(p.note) + '</p><button type="button" class="more" hidden>More</button>' : '') +
+                    '<div class="note-foot"><span>' + (p.status === 'been' && dateLabel(p.visited) ? '<time datetime="' + esc(p.visited) + '">Went ' + esc(dateLabel(p.visited)) + '</time>' : '') + '</span><span class="acts">' +
+                        (p.hasCoords ? '<button type="button" class="icon-btn" data-act="map" title="Show on map" aria-label="Show ' + esc(p.name) + ' on the map"><i class="ri-map-2-line" aria-hidden="true"></i></button>' : '') +
+                        (url ? '<a class="icon-btn" href="' + esc(url) + '" target="_blank" rel="noopener" title="Open in Google Maps" aria-label="Open ' + esc(p.name) + ' in Google Maps"><i class="ri-external-link-line" aria-hidden="true"></i></a>' : '') +
+                    '</span></div>' +
+                '</div>';
+            return el;
+        }
+
+        // Balanced columns that keep reading order left to right, like Keep: each note goes
+        // into whichever column is shortest so far.
+        function columnCount(width) {
+            const min = width < 560 ? 150 : 232;
+            return Math.max(1, Math.min(5, Math.floor((width + 16) / (min + 16))));
+        }
+
+        function layoutMasonry(box) {
+            const cols = columnCount(box.clientWidth || box.parentNode.clientWidth);
+            box.dataset.width = box.clientWidth;
+            const columns = [];
+            box.textContent = '';
+            for (let c = 0; c < cols; c++) {
+                const col = document.createElement('div');
+                col.className = 'masonry-col';
+                box.appendChild(col);
+                columns.push(col);
+            }
+            box._notes.forEach((note) => {
+                let shortest = columns[0];
+                for (const col of columns) if (col.offsetHeight < shortest.offsetHeight) shortest = col;
+                shortest.appendChild(note);
+                const text = note.querySelector('.text');
+                if (text && text.classList.contains('clamp')) note.querySelector('.more').hidden = text.scrollHeight <= text.clientHeight + 2;
+            });
+        }
+
+        function masonry(parent, list) {
+            const box = document.createElement('div');
+            box.className = 'masonry';
+            box._notes = list.map(noteEl);
+            parent.appendChild(box);
+            layoutMasonry(box);
+            registerStacks(box);
+            return box;
+        }
+
+        function emptyHtml() {
+            if (!places.length) return '<p class="empty">No restaurants yet.</p>';
+            return '<p class="empty">Nothing matches these filters.<button type="button" class="chip" data-act="clear">Clear filters</button></p>';
+        }
+
+        function renderNotes(parent, list) {
+            const pinned = list.filter((p) => p.pinned);
+            const others = list.filter((p) => !p.pinned);
+            if (!list.length) { parent.insertAdjacentHTML('beforeend', emptyHtml()); return; }
+            if (pinned.length) {
+                parent.insertAdjacentHTML('beforeend', '<p class="group-label">Pinned</p>');
+                masonry(parent, pinned);
+                if (others.length) parent.insertAdjacentHTML('beforeend', '<p class="group-label">Others</p>');
+            }
+            if (others.length) masonry(parent, others);
+        }
+
+        // ---------- Views ----------
+        const views = { board: $('view-board'), areas: $('view-areas'), map: $('view-map') };
+
+        function renderBoard() {
+            clearStacks(views.board);
+            views.board.textContent = '';
+            renderNotes(views.board, filtered());
+        }
+
+        function renderAreas() {
+            const box = views.areas;
+            clearStacks(box);
+            box.textContent = '';
+            if (state.area) {
+                const list = filtered();
+                const [bg, ink] = areaColors(state.area);
+                const been = list.filter((p) => p.status === 'been').length;
+                const head = document.createElement('div');
+                head.className = 'area-head';
+                head.style.setProperty('--c', bg);
+                head.style.setProperty('--c-ink', ink);
+                head.innerHTML =
+                    '<button type="button" class="chip" data-act="all-areas"><i class="ri-arrow-left-line" aria-hidden="true"></i>All areas</button>' +
+                    '<h2>' + esc(state.area) + '</h2>' +
+                    '<p>' + plural(list.length, 'place', 'places') + (list.length ? ', ' + been + ' been and ' + (list.length - been) + ' on the list' : '') + '</p>' +
+                    '<span class="spacer"></span>' +
+                    (list.some((p) => p.hasCoords) ? '<button type="button" class="chip quiet" data-act="area-map"><i class="ri-map-2-line" aria-hidden="true"></i>See on the map</button>' : '');
+                box.appendChild(head);
+                renderNotes(box, list);
+                return;
+            }
+            const groups = groupByArea(filtered({ ignoreArea: true }));
+            if (!groups.length) { box.innerHTML = emptyHtml(); return; }
+            const grid = document.createElement('div');
+            grid.className = 'piles';
+            groups.forEach(({ area, items }) => {
+                const [bg, ink] = areaColors(area);
+                const been = items.filter((p) => p.status === 'been').length;
+                const want = items.length - been;
+                const photos = [];
+                for (let round = 0; photos.length < 10 && round < 3; round++) {
+                    items.forEach((p) => { if (p.photos[round] && photos.length < 10) photos.push(p.photos[round]); });
+                }
+                const sheets = Math.min(items.length, 7) - 1;
+                const names = items.slice(0, 5).map((p) => p.name).join(', ') + (items.length > 5 ? ' and ' + (items.length - 5) + ' more' : '');
+                const split = been && want ? been + ' been, ' + want + ' want to try' : been ? 'been there' : 'want to try';
+                const pile = document.createElement('article');
+                pile.className = 'pile';
+                pile.style.setProperty('--note', bg);
+                pile.style.setProperty('--c-ink', ink);
+                let html = '';
+                for (let i = sheets; i >= 1; i--) html += '<span class="pile-sheet" style="--i:' + i + ';--dir:' + (i % 2 ? 1 : -1) + '"></span>';
+                html += '<div class="pile-top">' + (photos.length ? picsHtml(photos, area, { noDots: true }) : '') +
+                    '<span class="pile-text"' + (photos.length ? '' : ' style="padding-top:16px"') + '>' +
+                    '<span class="pile-name">' + esc(area) + '</span>' +
+                    '<span class="pile-count">' + plural(items.length, 'place', 'places') + ' · ' + split + '</span>' +
+                    '<span class="pile-names">' + esc(names) + '</span></span></div>' +
+                    '<button type="button" class="pile-open" data-area="' + esc(area) + '" aria-label="Open ' + esc(area) + ', ' + plural(items.length, 'place', 'places') + '"></button>';
+                pile.innerHTML = html;
+                grid.appendChild(pile);
+            });
+            box.appendChild(grid);
+            registerStacks(grid);
+        }
+
+        function renderAreaChips() {
+            const groups = groupByArea(filtered({ ignoreArea: true }));
+            const limit = 8;
+            let shown = state.allAreas ? groups : groups.slice(0, limit);
+            if (state.area && !shown.some((g) => g.area === state.area)) {
+                shown = shown.concat({ area: state.area, items: [] });
+            }
+            let html = shown.map(({ area, items }) => {
+                const [bg, ink] = areaColors(area);
+                return '<button class="chip" data-area="' + esc(area) + '" aria-pressed="' + (state.area === area) + '" style="--c:' + bg + ';--c-ink:' + ink + '">' +
+                    '<span class="swatch" aria-hidden="true"></span>' + esc(area) + ' <span class="n">' + items.length + '</span></button>';
+            }).join('');
+            if (groups.length > limit) {
+                html += '<button class="chip quiet" data-act="more-areas">' + (state.allAreas ? 'Fewer areas' : plural(groups.length - limit, 'more area', 'more areas')) + '</button>';
+            }
+            $('area-chips').innerHTML = html;
+            document.querySelector('.filters .divider').hidden = !html;
+        }
+
+        function render() {
+            renderAreaChips();
+            document.querySelectorAll('#status-chips .chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.status === state.status));
+            if (state.view === 'board') renderBoard();
+            else if (state.view === 'areas') renderAreas();
+            else updateMap();
+        }
+
+        function setView(view, opts) {
+            if (!views[view]) view = 'board';
+            state.view = view;
+            Object.entries(views).forEach(([name, el]) => { el.hidden = name !== view; });
+            document.querySelectorAll('.views [role="tab"]').forEach((t) => t.setAttribute('aria-selected', t.dataset.view === view));
+            if (!(opts && opts.keepHash)) history.replaceState(null, '', '#' + view);
+            render();
+            if (view === 'map') ensureMap().then(() => {
+                map.invalidateSize();
+                if (!(opts && opts.noFit)) state.area ? fitArea(state.area) : fitHome();
+                toggleLabels();
+            }).catch(() => {});
+        }
+
+        function setArea(area) {
+            state.area = area;
+            render();
+            if (state.view === 'map' && map) area ? fitArea(area) : fitHome();
+        }
+
+        // ---------- Map ----------
+        let map = null;
+        let mapPromise = null;
+        const layers = {};
+        const markers = new Map();
+        const layerOn = { heat: true, pins: true, labels: true };
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = src;
+                s.onload = resolve;
+                s.onerror = reject;
+                document.head.appendChild(s);
+            });
+        }
+
+        function ensureMap() {
+            if (mapPromise) return mapPromise;
+            const css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+            document.head.appendChild(css);
+            mapPromise = loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js')
+                .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js'))
+                .then(() => {
+                    map = L.map('map', { scrollWheelZoom: false, zoomSnap: 0.5 });
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    }).addTo(map);
+                    map.setView([37.6, -122.2], 9);
+                    // The heat layer always draws into the overlay pane, so pins and area names
+                    // get panes of their own above it.
+                    map.createPane('labels').style.zIndex = 420;
+                    map.getPane('labels').style.pointerEvents = 'none';
+                    map.createPane('pins').style.zIndex = 450;
+                    // Scrolling the page past the map should not zoom it until someone clicks in.
+                    map.on('click', () => map.scrollWheelZoom.enable());
+                    map.on('mouseout', () => map.scrollWheelZoom.disable());
+                    map.on('zoomend', toggleLabels);
+                    $('map').addEventListener('click', onMapPopupClick);
+                    updateMap();
+                })
+                .catch((err) => {
+                    $('map').innerHTML = '<p class="empty">The map could not load.</p>';
+                    throw err;
+                });
+            return mapPromise;
+        }
+
+        function popupHtml(p) {
+            const url = safeUrl(p.url);
+            const meta = metaText(p);
+            return '<div class="pop" style="--c-ink:' + colorsOf(p)[1] + '">' +
+                (p.photos.length ? '<img src="' + esc(p.photos[0]) + '" alt="' + esc(p.name) + '" data-zoom="' + esc(p.id) + '">' : '') +
+                statusHtml(p) +
+                '<h3>' + esc(p.name) + '</h3>' +
+                (meta ? '<p>' + esc(meta) + '</p>' : '') +
+                starsHtml(p.rating) +
+                (p.status === 'been' && dateLabel(p.visited) ? '<p>Went ' + esc(dateLabel(p.visited)) + '</p>' : '') +
+                (p.note ? '<p>' + esc(p.note.length > 140 ? p.note.slice(0, 137).trimEnd() + '...' : p.note) + '</p>' : '') +
+                '<div class="pop-links"><button type="button" data-note="' + esc(p.id) + '">See the note</button>' +
+                (url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">Google Maps</a>' : '') + '</div></div>';
+        }
+
+        function onMapPopupClick(e) {
+            const zoom = e.target.closest('[data-zoom]');
+            if (zoom) { const p = byId.get(zoom.dataset.zoom); openLightbox(p.photos, 0, p.name); return; }
+            const note = e.target.closest('[data-note]');
+            if (note) showNote(note.dataset.note);
+        }
+
+        function updateMap() {
+            if (!map) return;
+            Object.values(layers).forEach((l) => map.removeLayer(l));
+            markers.clear();
+            const list = filtered({ ignoreArea: true }).filter((p) => p.hasCoords);
+
+            layers.heat = L.heatLayer(list.map((p) => [p.lat, p.lng, 1]), {
+                radius: 34,
+                blur: 28,
+                max: 3,
+                maxZoom: 0,
+                minOpacity: 0.25,
+                gradient: { 0.2: '#b9e0d6', 0.45: '#fff4b0', 0.7: '#f39f76', 1: '#c8443a' },
+            });
+
+            layers.pins = L.layerGroup(list.map((p) => {
+                const ink = colorsOf(p)[1];
+                const been = p.status === 'been';
+                const m = L.circleMarker([p.lat, p.lng], {
+                    pane: 'pins',
+                    radius: been ? 6.5 : 5.5,
+                    weight: been ? 2 : 2.5,
+                    color: been ? '#fff' : ink,
+                    fillColor: been ? ink : '#fff',
+                    fillOpacity: 1,
+                });
+                m.bindTooltip(esc(p.name), { direction: 'top', offset: [0, -6] });
+                m.bindPopup(() => popupHtml(p), { maxWidth: 240, autoPanPadding: [20, 20] });
+                m.on('popupopen', (e) => {
+                    const wrap = e.popup.getElement();
+                    if (wrap) wrap.style.setProperty('--note', colorsOf(p)[0]);
+                });
+                markers.set(p.id, m);
+                return m;
+            }));
+
+            layers.labels = L.layerGroup(groupByArea(list).filter((g) => g.area !== ELSEWHERE && g.items.length > 1).map(({ area, items }) => {
+                // The name sits just above the northernmost place, clear of the pins.
+                const lat = Math.max(...items.map((p) => p.lat));
+                const lng = items.reduce((s, p) => s + p.lng, 0) / items.length;
+                return L.marker([lat, lng], {
+                    pane: 'labels',
+                    icon: L.divIcon({ className: '', html: '<span class="area-label">' + esc(area) + '<b>' + items.length + '</b></span>', iconSize: [0, 0] }),
+                    interactive: false,
+                    keyboard: false,
+                });
+            }));
+
+            if (layerOn.heat) layers.heat.addTo(map);
+            if (layerOn.labels) layers.labels.addTo(map);
+            if (layerOn.pins) layers.pins.addTo(map);
+            toggleLabels();
+            const located = places.some((p) => p.hasCoords);
+            $('map-note').hidden = !!list.length;
+            $('map-note').textContent = located ? 'None of the places that match these filters are on the map.' : 'None of the places have a location yet.';
+        }
+
+        // Area names show when zoomed out. Busier areas come first, and a name that would
+        // overlap one already shown stays hidden until zooming in pulls them apart.
+        function toggleLabels() {
+            if (!map) return;
+            $('map').classList.toggle('hide-labels', map.getZoom() > 12.5);
+            if (!layers.labels || !map.hasLayer(layers.labels)) return;
+            const shown = [];
+            layers.labels.eachLayer((m) => {
+                const el = m.getElement() && m.getElement().querySelector('.area-label');
+                if (!el) return;
+                el.style.visibility = '';
+                const r = el.getBoundingClientRect();
+                if (!r.width) return;
+                const hit = shown.some((s) => r.left < s.right + 6 && r.right > s.left - 6 && r.top < s.bottom + 2 && r.bottom > s.top - 2);
+                if (hit) el.style.visibility = 'hidden';
+                else shown.push(r);
+            });
+        }
+
+        function pointsOf(list) {
+            return list.filter((p) => p.hasCoords).map((p) => [p.lat, p.lng]);
+        }
+
+        function fitTo(points, maxZoom) {
+            if (!map || !points.length) return;
+            if (points.length === 1) map.setView(points[0], Math.min(maxZoom || 15, 15));
+            else map.fitBounds(points, { padding: [40, 40], maxZoom: maxZoom || 15 });
+        }
+
+        // Opens on the main cluster (everything within about 150 km of the median place) so a
+        // few far-away trips do not zoom the map out to the whole country.
+        function fitHome() {
+            const pts = pointsOf(filtered({ ignoreArea: true }));
+            if (!pts.length) return;
+            const mid = (arr) => { const s = arr.slice().sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+            const c = [mid(pts.map((p) => p[0])), mid(pts.map((p) => p[1]))];
+            const near = pts.filter((p) => Math.hypot(p[0] - c[0], (p[1] - c[1]) * Math.cos(c[0] * Math.PI / 180)) < 1.35);
+            fitTo(near.length ? near : pts, 14);
+        }
+
+        function fitArea(area) {
+            fitTo(pointsOf(places.filter((p) => p.area === area)), 15);
+        }
+
+        function showOnMap(id) {
+            const p = byId.get(id);
+            if (!p || !p.hasCoords) return;
+            setView('map', { noFit: true });
+            ensureMap().then(() => {
+                map.invalidateSize();
+                map.setView([p.lat, p.lng], 15);
+                const m = markers.get(id);
+                if (m) m.openPopup();
+            });
+        }
+
+        function showNote(id) {
+            const p = byId.get(id);
+            if (!p) return;
+            state.q = '';
+            $('search').value = '';
+            if ((state.status !== 'all' && state.status !== p.status) || (state.area && state.area !== p.area)) {
+                state.status = 'all';
+                state.area = null;
+            }
+            setView('board');
+            const el = $(id);
+            if (!el) return;
+            el.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+            el.classList.remove('flash');
+            void el.offsetWidth;
+            el.classList.add('flash');
+        }
+
+        // ---------- Ribbon ----------
+        (function ribbon() {
+            const withPhotos = places.filter((p) => p.photos.length);
+            const items = [];
+            for (let round = 0; round < 3 && items.length < 60; round++) {
+                withPhotos.forEach((p) => { if (p.photos[round] && items.length < 60) items.push([p, round]); });
+            }
+            if (items.length < 2) return;
+            const snaps = (hidden) => items.map(([p, i]) =>
+                '<button type="button" class="snap" data-photo="' + esc(p.id) + '" data-i="' + i + '"' +
+                (hidden ? ' tabindex="-1" aria-hidden="true"' : ' aria-label="' + esc(p.name) + ', open photo"') + '>' +
+                '<img src="' + esc(p.photos[i]) + '" alt="" loading="lazy" decoding="async"><span>' + esc(p.name) + '</span></button>').join('');
+            // A short set repeats until it is wider than the page, and the track holds two such
+            // copies, so sliding it by half its width loops without a gap.
+            const repeats = Math.ceil(12 / items.length);
+            const copy = snaps(false) + snaps(true).repeat(repeats - 1);
+            const track = $('ribbon-track');
+            track.innerHTML = copy + snaps(true).repeat(repeats);
+            track.style.setProperty('--drift', Math.max(40, items.length * repeats * 5) + 's');
+            $('ribbon').hidden = false;
+        })();
+
+        // ---------- Lightbox ----------
+        const lb = { photos: [], i: 0, name: '' };
+
+        function showLightboxPhoto() {
+            $('lb-img').src = lb.photos[lb.i];
+            $('lb-img').alt = lb.name + (lb.photos.length > 1 ? ', photo ' + (lb.i + 1) + ' of ' + lb.photos.length : '');
+            $('lb-cap').innerHTML = esc(lb.name) + (lb.photos.length > 1 ? '<small>' + (lb.i + 1) + ' of ' + lb.photos.length + '</small>' : '');
+            $('lb-prev').hidden = $('lb-next').hidden = lb.photos.length < 2;
+        }
+
+        function openLightbox(photos, i, name) {
+            if (!photos.length) return;
+            Object.assign(lb, { photos, i: i || 0, name });
+            showLightboxPhoto();
+            const dlg = $('lightbox');
+            if (!dlg.open) dlg.showModal();
+            lightboxOpen = true;
+        }
+
+        function stepLightbox(d) {
+            lb.i = (lb.i + d + lb.photos.length) % lb.photos.length;
+            showLightboxPhoto();
+        }
+
+        $('lb-prev').addEventListener('click', () => stepLightbox(-1));
+        $('lb-next').addEventListener('click', () => stepLightbox(1));
+        $('lb-close').addEventListener('click', () => $('lightbox').close());
+        $('lightbox').addEventListener('close', () => { lightboxOpen = false; });
+        $('lightbox').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+        $('lightbox').addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') stepLightbox(-1);
+            if (e.key === 'ArrowRight') stepLightbox(1);
+        });
+
+        // ---------- Events ----------
+        document.querySelector('.views').addEventListener('click', (e) => {
+            const tab = e.target.closest('[data-view]');
+            if (tab) setView(tab.dataset.view);
+        });
+
+        document.querySelector('.views').addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+            const tabs = Array.from(document.querySelectorAll('.views [role="tab"]'));
+            const i = tabs.indexOf(document.activeElement);
+            if (i < 0) return;
+            const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+            next.focus();
+            setView(next.dataset.view);
+        });
+
+        $('status-chips').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-status]');
+            if (!b) return;
+            state.status = b.dataset.status;
+            render();
+        });
+
+        let searchTimer;
+        $('search').addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => { state.q = e.target.value; render(); }, 120);
+        });
+
+        document.addEventListener('click', (e) => {
+            const t = e.target;
+            const areaBtn = t.closest('[data-area]');
+            if (areaBtn) {
+                const area = areaBtn.dataset.area;
+                setArea(areaBtn.classList.contains('pile-open') ? area : (state.area === area ? null : area));
+                if (areaBtn.classList.contains('pile-open')) window.scrollTo({ top: views.areas.offsetTop - 90, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+                return;
+            }
+            const act = t.closest('[data-act]');
+            if (act) {
+                const a = act.dataset.act;
+                if (a === 'clear') { state.status = 'all'; state.area = null; state.q = ''; $('search').value = ''; render(); }
+                if (a === 'more-areas') { state.allAreas = !state.allAreas; renderAreaChips(); }
+                if (a === 'all-areas') setArea(null);
+                if (a === 'area-map') setView('map');
+                if (a === 'map') showOnMap(act.closest('.note').dataset.id);
+                return;
+            }
+            const dot = t.closest('[data-dot]');
+            if (dot) {
+                const st = stackState.get(dot.closest('.pics'));
+                if (st) jumpTo(st, +dot.dataset.dot);
+                return;
+            }
+            const more = t.closest('.more');
+            if (more) {
+                const text = more.previousElementSibling;
+                const open = text.classList.toggle('clamp');
+                more.textContent = open ? 'More' : 'Less';
+                return;
+            }
+            const snap = t.closest('[data-photo]');
+            if (snap) {
+                const p = byId.get(snap.dataset.photo);
+                openLightbox(p.photos, +snap.dataset.i, p.name);
+                return;
+            }
+            const img = t.closest('.note .pics img');
+            if (img) {
+                const p = byId.get(img.closest('.note').dataset.id);
+                openLightbox(p.photos, +img.dataset.i, p.name);
+            }
+        });
+
+        document.querySelectorAll('[data-layer]').forEach((b) => b.addEventListener('click', () => {
+            const name = b.dataset.layer;
+            layerOn[name] = !layerOn[name];
+            b.setAttribute('aria-pressed', layerOn[name]);
+            if (!map || !layers[name]) return;
+            if (layerOn[name]) layers[name].addTo(map);
+            else map.removeLayer(layers[name]);
+            toggleLabels();
+        }));
+
+        $('fit-all').addEventListener('click', () => {
+            if (state.area) setArea(null);
+            fitTo(pointsOf(filtered({ ignoreArea: true })), 14);
+        });
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                document.querySelectorAll('.masonry').forEach((box) => {
+                    if (+box.dataset.width !== box.clientWidth) layoutMasonry(box);
+                });
+            }, 150);
+        });
+
+        window.addEventListener('hashchange', () => setView(location.hash.slice(1), { keepHash: true }));
+
+        setView(location.hash.slice(1) || 'board', { keepHash: !location.hash });
+    })();
+    </script>
+    <script data-goatcounter="https://sonnetx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

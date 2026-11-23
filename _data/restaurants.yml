@@ -1,0 +1,40 @@
+# Restaurants on the Restaurants page (restaurants.html).
+#
+# scripts/import_maps_takeout.py writes this file from a Google Takeout export of Google Maps
+# reviews and saved lists, and running it again merges new places in without undoing hand
+# edits. Each place has:
+#   name      shown on the note
+#   status    been or want
+#   area      groups the By area view and labels the map; the importer fills in the city
+#   cuisine   optional, shown under the name
+#   pinned    optional, true puts the note in the Pinned group at the top of the board
+#   rating    optional, 1 to 5 stars from the review
+#   visited   optional, the day you went as YYYY-MM-DD (YYYY-MM also works). An import fills
+#             it with the review date only when it is empty.
+#   note      optional, the review text or a note to yourself
+#   lat, lng  where the place sits on the map; places without them stay off the map
+#   url       optional, the Google Maps link
+#   address   optional, for reference only
+#   color     optional, one of coral, peach, sand, mint, sage, fog, storm, dusk, blossom, clay
+#             (by default every place in an area shares that area's color)
+#   slug      optional, overrides the photo folder name
+# Photos for a place go in photos/restaurants/<slug>/, where the slug is the name in lowercase
+# with every run of other characters turned into a hyphen (Zuni Cafe is zuni-cafe). Add them
+# with python3 scripts/add_restaurant_photos.py "Zuni Cafe" ~/Downloads/IMG_1234.HEIC, which
+# resizes them and strips location data. A place without photos shows as a plain note.
+# Names under ignored never come back from an import, so that list is where to put reviews of
+# places that are not restaurants.
+
+places:
+- name: Gao Viet Kitchen
+  status: been
+  area: San Mateo
+  cuisine: Vietnamese
+  visited: 2026-11-22
+  note: Love this place. I thought the menu was super fun, even though I don't usually like Vietnamese
+    food. The big plates are super fun to share with friends.
+  lat: 37.564122
+  lng: -122.323662
+  url: https://maps.app.goo.gl/J8VBttjidvnZv3s59
+
+ignored: []
