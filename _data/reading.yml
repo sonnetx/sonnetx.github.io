@@ -9,12 +9,12 @@
 # photos/books/. Until it has one, the Reading page shows a plain title card.
 
 current:
-  - title: The Gentle Romance
-    author: Richard Ngo
-    added: 2026-11-25
   - title: "Surely You're Joking, Mr. Feynman!"
     author: Richard Feynman
     added: 2026-11-15
+  - title: The Gentle Romance
+    author: Richard Ngo
+    added: 2026-08-01
 
 to_read:
   - title: Of Human Bondage
